@@ -15,7 +15,7 @@ const tiers = [['Verified', '$29', 'one-time', ['Verified maintainer badge', 'Ed
   <li>We mark the listing Verified and apply your edits. You can remove the line afterwards.</li>
 </ol>
 <h2>Tiers</h2>
-<div class="tiers">{tiers.map(([n, p, per, feats, opt, pop]) => <div class={`tier ${pop ? 'pop' : ''}`}><h3 style="margin:0">{n}</h3><div class="price">{p} <span class="muted small">{per}</span></div><ul>{feats.map(f => <li>{f}</li>)}</ul><a class="btn" data-claim data-tier={opt} href="https://github.com/selfhostoffice/site/issues/new?template=claim.yml">Request {n}</a></div>)}</div>
+<div class="tiers">{tiers.map(([n, p, per, feats, opt, pop]) => <div class={`tier ${pop ? 'pop' : ''}`}><h3 style="margin:0">{n}</h3><div class="price">{p} <span class="muted small">{per}</span></div><ul>{feats.map(f => <li>{f}</li>)}</ul><a class="btn" data-claim data-track="claim_submit" data-kind={opt} data-tier={opt} href="https://github.com/selfhostoffice/site/issues/new?template=claim.yml">Request {n}</a></div>)}</div>
 <p class="note">Payments are not open yet; requesting a paid tier just starts a conversation. Early maintainers get a founding rate.</p>
 </div></section>
 <script is:inline define:vars={{ names }}>

@@ -11,7 +11,7 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
 <div class="wrap page-head">
   <div class="tool-head"><img class="logo" src={avatar(l, 144)} alt={`${l.repo.split('/')[0]} avatar on GitHub`} width="72" height="72"/><div><h1 style="margin:0">{l.name}</h1><a class="chip" href={`/alternatives/${slugify(l.replaces)}/`}>Replaces {l.replaces}</a></div></div>
   <p class="lead muted" style="font-size:1.1rem;max-width:65ch">{l.description}</p>
-  <div class="actions"><a class="btn" href={l.repoUrl} rel="nofollow"><Icon name="github" size={18}/>View on GitHub</a>{l.homepage && <a class="btn ghost" href={l.homepage} rel="nofollow"><Icon name="globe" size={18}/>Website</a>}<a class="btn ghost" href={`/alternatives/${slugify(l.replaces)}/`}>Compare {l.replaces} alternatives</a><a class="btn ghost" href={`/claim/?tool=${l.slug}`}>Claim or get featured</a></div>
+  <div class="actions"><a class="btn" href={l.repoUrl} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="repo"><Icon name="github" size={18}/>View on GitHub</a>{l.homepage && <a class="btn ghost" href={l.homepage} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="website"><Icon name="globe" size={18}/>Website</a>}<a class="btn ghost" href={`/alternatives/${slugify(l.replaces)}/`}>Compare {l.replaces} alternatives</a><a class="btn ghost" href={`/claim/?tool=${l.slug}`}>Claim or get featured</a></div>
   <div class="facts">
     <div class="fact"><span>Stars</span><b>{l.stars.toLocaleString('en-US')}</b></div>
     <div class="fact"><span>License</span><b class={`lic-${licFamily(l.license)}`}>{licLabel(l.license)}</b></div>

@@ -22,7 +22,7 @@ const fetched = fmtDate(items[0].fetchedAt);
 <tr><th scope="row">Forks</th>{items.map(l => <td>{(l.forks ?? 0).toLocaleString('en-US')}</td>)}</tr>
 <tr><th scope="row">Open issues + PRs</th>{items.map(l => <td>{(l.openIssues ?? 0).toLocaleString('en-US')}</td>)}</tr>
 <tr><th scope="row">Main language</th>{items.map(l => <td>{l.language ?? 'n/a'}</td>)}</tr>
-<tr><th scope="row">Links</th>{items.map(l => <td><a href={l.repoUrl} rel="nofollow">Repo</a>{l.homepage && <> · <a href={l.homepage} rel="nofollow">Website</a></>}</td>)}</tr>
+<tr><th scope="row">Links</th>{items.map(l => <td><a href={l.repoUrl} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="repo">Repo</a>{l.homepage && <> · <a href={l.homepage} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="website">Website</a></>}</td>)}</tr>
 </tbody></table></div>
 <p class="note">Highlighted cells mark the highest star count and the most recent push. Source: GitHub REST API, per-tool links on each tool page. Copyleft licenses (AGPL/GPL) require sharing modifications if you distribute or (AGPL) serve them; check the repo license before deploying.</p>
 <div style="margin-top:16px"><FeaturedSlot where={`the ${name} alternatives comparison`}/></div>
