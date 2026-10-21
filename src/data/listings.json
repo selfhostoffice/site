@@ -13,7 +13,7 @@
   "category": "e-signature",
   "replaces": "DocuSign",
   "source": "https://api.github.com/repos/docusealco/docuseal",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "documenso--documenso",
@@ -24,12 +24,12 @@
   "description": "The Open Source DocuSign Alternative.",
   "license": "AGPL-3.0",
   "stars": 15497,
-  "lastPush": "2026-10-21T13:17:14Z",
+  "lastPush": "2026-10-21T14:09:05Z",
   "archived": false,
   "category": "e-signature",
   "replaces": "DocuSign",
   "source": "https://api.github.com/repos/documenso/documenso",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "opensignlabs--opensign",
@@ -40,12 +40,12 @@
   "description": "\ud83d\udd25 The free & Open Source DocuSign alternative",
   "license": "NOASSERTION",
   "stars": 7134,
-  "lastPush": "2026-10-21T11:02:09Z",
+  "lastPush": "2026-10-21T14:02:35Z",
   "archived": false,
   "category": "e-signature",
   "replaces": "DocuSign",
   "source": "https://api.github.com/repos/OpenSignLabs/OpenSign",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "calcom--cal.diy",
@@ -55,13 +55,13 @@
   "homepage": "https://cal.diy",
   "description": "Scheduling infrastructure for absolutely everyone.",
   "license": "MIT",
-  "stars": 49197,
+  "stars": 49200,
   "lastPush": "2026-10-19T18:46:00Z",
   "archived": false,
   "category": "scheduling",
   "replaces": "Calendly",
   "source": "https://api.github.com/repos/calcom/cal.diy",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "alextselegidis--easyappointments",
@@ -77,7 +77,7 @@
   "category": "scheduling",
   "replaces": "Calendly",
   "source": "https://api.github.com/repos/alextselegidis/easyappointments",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "invoiceninja--invoiceninja",
@@ -93,7 +93,7 @@
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/invoiceninja/invoiceninja",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "invoiceshelf--invoiceshelf",
@@ -109,7 +109,7 @@
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/InvoiceShelf/InvoiceShelf",
-  "fetchedAt": "2026-10-21T13:31:51Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "crater-invoice-inc--crater",
@@ -119,13 +119,13 @@
   "homepage": "https://craterapp.com",
   "description": "Open Source Invoicing Solution for Individuals & Businesses",
   "license": "AGPL-3.0",
-  "stars": 8356,
+  "stars": 8355,
   "lastPush": "2024-08-10T09:32:07Z",
   "archived": false,
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/crater-invoice-inc/crater",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "invoiceplane--invoiceplane",
@@ -141,7 +141,7 @@
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/InvoicePlane/InvoicePlane",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "akaunting--akaunting",
@@ -151,13 +151,13 @@
   "homepage": "https://akaunting.com",
   "description": "Online Accounting Software",
   "license": "NOASSERTION",
-  "stars": 10198,
+  "stars": 10199,
   "lastPush": "2026-10-08T17:43:07Z",
   "archived": false,
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/akaunting/akaunting",
-  "fetchedAt": "2026-10-21T13:19:12Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "frappe--erpnext",
@@ -168,12 +168,12 @@
   "description": "Free and Open Source Enterprise Resource Planning (ERP)",
   "license": "GPL-3.0",
   "stars": 40420,
-  "lastPush": "2026-10-21T13:49:12Z",
+  "lastPush": "2026-10-21T14:19:44Z",
   "archived": false,
   "category": "accounting",
   "replaces": "NetSuite",
   "source": "https://api.github.com/repos/frappe/erpnext",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "odoo--odoo",
@@ -184,12 +184,12 @@
   "description": "Odoo. Open Source Apps To Grow Your Business.",
   "license": "NOASSERTION",
   "stars": 55225,
-  "lastPush": "2026-10-21T13:54:41Z",
+  "lastPush": "2026-10-21T14:18:31Z",
   "archived": false,
   "category": "accounting",
   "replaces": "NetSuite",
   "source": "https://api.github.com/repos/odoo/odoo",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "dolibarr--dolibarr",
@@ -205,7 +205,7 @@
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/Dolibarr/dolibarr",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "frappe--books",
@@ -215,13 +215,13 @@
   "homepage": "https://frappe.io/books",
   "description": "Free Accounting Software",
   "license": "AGPL-3.0",
-  "stars": 5001,
+  "stars": 5000,
   "lastPush": "2026-10-02T10:56:40Z",
   "archived": true,
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/frappe/books",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "twentyhq--twenty",
@@ -231,13 +231,13 @@
   "homepage": "https://twenty.com",
   "description": "The open alternative to Salesforce, designed for AI.",
   "license": "NOASSERTION",
-  "stars": 58848,
-  "lastPush": "2026-10-21T13:52:27Z",
+  "stars": 58865,
+  "lastPush": "2026-10-21T14:28:24Z",
   "archived": false,
   "category": "crm",
   "replaces": "Salesforce",
   "source": "https://api.github.com/repos/twentyhq/twenty",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "espocrm--espocrm",
@@ -253,7 +253,7 @@
   "category": "crm",
   "replaces": "HubSpot",
   "source": "https://api.github.com/repos/espocrm/espocrm",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "suitecrm--suitecrm",
@@ -269,7 +269,7 @@
   "category": "crm",
   "replaces": "Salesforce",
   "source": "https://api.github.com/repos/SuiteCRM/SuiteCRM",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "krayin--laravel-crm",
@@ -285,7 +285,7 @@
   "category": "crm",
   "replaces": "HubSpot",
   "source": "https://api.github.com/repos/krayin/laravel-crm",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "chatwoot--chatwoot",
@@ -295,13 +295,13 @@
   "homepage": "https://www.chatwoot.com/help-center",
   "description": "Open-source live-chat, email support, omni-channel desk. An alternative to Intercom, Zendesk, Salesforce Service Cloud etc. \ud83d\udd25\ud83d\udcac",
   "license": "NOASSERTION",
-  "stars": 38058,
-  "lastPush": "2026-10-21T13:49:59Z",
+  "stars": 38059,
+  "lastPush": "2026-10-21T14:28:45Z",
   "archived": false,
   "category": "helpdesk",
   "replaces": "Zendesk",
   "source": "https://api.github.com/repos/chatwoot/chatwoot",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "zammad--zammad",
@@ -312,12 +312,28 @@
   "description": "Zammad is a web based open source helpdesk/customer support system.",
   "license": "AGPL-3.0",
   "stars": 6025,
-  "lastPush": "2026-10-21T13:12:26Z",
+  "lastPush": "2026-10-21T13:51:16Z",
   "archived": false,
   "category": "helpdesk",
   "replaces": "Zendesk",
   "source": "https://api.github.com/repos/zammad/zammad",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
+ },
+ {
+  "slug": "freescout-help-desk--freescout",
+  "name": "freescout",
+  "repo": "freescout-help-desk/freescout",
+  "repoUrl": "https://github.com/freescout-help-desk/freescout",
+  "homepage": "https://freescout.net",
+  "description": "FreeScout \u2014 Free self-hosted omnichannel AI-powered helpdesk & shared mailbox",
+  "license": "AGPL-3.0",
+  "stars": 4607,
+  "lastPush": "2026-10-21T10:10:33Z",
+  "archived": false,
+  "category": "helpdesk",
+  "replaces": "Help Scout",
+  "source": "https://api.github.com/repos/freescout-help-desk/freescout",
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "kimai--kimai",
@@ -333,7 +349,7 @@
   "category": "time-tracking",
   "replaces": "Harvest",
   "source": "https://api.github.com/repos/kimai/kimai",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "solidtime-io--solidtime",
@@ -344,12 +360,12 @@
   "description": "Modern open-source time-tracking app",
   "license": "AGPL-3.0",
   "stars": 9023,
-  "lastPush": "2026-10-21T13:18:58Z",
+  "lastPush": "2026-10-21T13:57:32Z",
   "archived": false,
   "category": "time-tracking",
   "replaces": "Toggl",
   "source": "https://api.github.com/repos/solidtime-io/solidtime",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "frappe--hrms",
@@ -365,7 +381,7 @@
   "category": "hr",
   "replaces": "BambooHR",
   "source": "https://api.github.com/repos/frappe/hrms",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "orangehrm--orangehrm",
@@ -381,7 +397,7 @@
   "category": "hr",
   "replaces": "BambooHR",
   "source": "https://api.github.com/repos/orangehrm/orangehrm",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "formbricks--formbricks",
@@ -392,12 +408,12 @@
   "description": "Open Source Qualtrics Alternative",
   "license": "NOASSERTION",
   "stars": 13131,
-  "lastPush": "2026-10-21T13:20:40Z",
+  "lastPush": "2026-10-21T14:27:15Z",
   "archived": false,
   "category": "forms",
   "replaces": "Typeform",
   "source": "https://api.github.com/repos/formbricks/formbricks",
-  "fetchedAt": "2026-10-21T13:31:51Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "baptistearno--typebot.io",
@@ -407,13 +423,13 @@
   "homepage": "https://typebot.io",
   "description": "\ud83d\udcac Typebot is a powerful chatbot builder that you can self-host.",
   "license": "NOASSERTION",
-  "stars": 10568,
+  "stars": 10569,
   "lastPush": "2026-10-21T13:44:13Z",
   "archived": false,
   "category": "forms",
   "replaces": "Typeform",
   "source": "https://api.github.com/repos/baptisteArno/typebot.io",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "knadh--listmonk",
@@ -429,7 +445,7 @@
   "category": "email-marketing",
   "replaces": "Mailchimp",
   "source": "https://api.github.com/repos/knadh/listmonk",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "mautic--mautic",
@@ -439,13 +455,13 @@
   "homepage": "https://www.mautic.org",
   "description": "Mautic: Open Source Marketing Automation Software.",
   "license": "NOASSERTION",
-  "stars": 10820,
+  "stars": 10821,
   "lastPush": "2026-10-21T12:10:30Z",
   "archived": false,
   "category": "email-marketing",
   "replaces": "Mailchimp",
   "source": "https://api.github.com/repos/mautic/mautic",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "paperless-ngx--paperless-ngx",
@@ -455,13 +471,13 @@
   "homepage": "http://docs.paperless-ngx.com/",
   "description": "A community-supported supercharged document management system: scan, index and archive all your documents",
   "license": "GPL-3.0",
-  "stars": 46960,
-  "lastPush": "2026-10-21T12:29:31Z",
+  "stars": 46962,
+  "lastPush": "2026-10-21T14:06:46Z",
   "archived": false,
   "category": "documents",
   "replaces": "Adobe Acrobat",
   "source": "https://api.github.com/repos/paperless-ngx/paperless-ngx",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "stirling-tools--stirling-pdf",
@@ -471,13 +487,13 @@
   "homepage": "https://stirling.com",
   "description": "#1 PDF Application on GitHub that lets you edit PDFs on any device anywhere",
   "license": "NOASSERTION",
-  "stars": 94661,
-  "lastPush": "2026-10-21T13:46:13Z",
+  "stars": 94663,
+  "lastPush": "2026-10-21T14:26:34Z",
   "archived": false,
   "category": "documents",
   "replaces": "Adobe Acrobat",
   "source": "https://api.github.com/repos/Stirling-Tools/Stirling-PDF",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "makeplane--plane",
@@ -493,7 +509,7 @@
   "category": "project-management",
   "replaces": "Asana",
   "source": "https://api.github.com/repos/makeplane/plane",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "plausible--analytics",
@@ -503,13 +519,13 @@
   "homepage": "https://plausible.io",
   "description": "Open source, privacy-first web analytics. Lightweight, cookie-free Google Analytics alternative. Self-hosted or cloud.",
   "license": "AGPL-3.0",
-  "stars": 29585,
-  "lastPush": "2026-10-21T13:51:58Z",
+  "stars": 29586,
+  "lastPush": "2026-10-21T14:18:28Z",
   "archived": false,
   "category": "analytics",
   "replaces": "Google Analytics",
   "source": "https://api.github.com/repos/plausible/analytics",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "umami-software--umami",
@@ -519,13 +535,13 @@
   "homepage": "https://umami.is",
   "description": "Umami is a privacy-first analytics platform. Traffic, campaigns, behavior, conversions, and revenue in one place \u2014 no cookies, no surveillance, self-hosted or in the cloud.",
   "license": "MIT",
-  "stars": 39506,
+  "stars": 39507,
   "lastPush": "2026-10-20T23:27:19Z",
   "archived": false,
   "category": "analytics",
   "replaces": "Google Analytics",
   "source": "https://api.github.com/repos/umami-software/umami",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "inventree--inventree",
@@ -535,13 +551,13 @@
   "homepage": "https://docs.inventree.org",
   "description": "Open Source Inventory Management System",
   "license": "MIT",
-  "stars": 7741,
+  "stars": 7740,
   "lastPush": "2026-10-21T13:13:25Z",
   "archived": false,
   "category": "inventory",
   "replaces": "Sortly",
   "source": "https://api.github.com/repos/inventree/InvenTree",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "opensourcepos--opensourcepos",
@@ -557,7 +573,7 @@
   "category": "pos",
   "replaces": "Square POS",
   "source": "https://api.github.com/repos/opensourcepos/opensourcepos",
-  "fetchedAt": "2026-10-21T13:31:51Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "bigcapitalhq--bigcapital",
@@ -573,7 +589,7 @@
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/bigcapitalhq/bigcapital",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "leantime--leantime",
@@ -589,7 +605,7 @@
   "category": "project-management",
   "replaces": "Asana",
   "source": "https://api.github.com/repos/Leantime/leantime",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "nextcloud--server",
@@ -599,13 +615,13 @@
   "homepage": "https://nextcloud.com",
   "description": "\u2601\ufe0f Nextcloud server, a safe home for all your data",
   "license": "AGPL-3.0",
-  "stars": 37194,
-  "lastPush": "2026-10-21T13:45:13Z",
+  "stars": 37197,
+  "lastPush": "2026-10-21T14:23:20Z",
   "archived": false,
   "category": "documents",
   "replaces": "Dropbox",
   "source": "https://api.github.com/repos/nextcloud/server",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  },
  {
   "slug": "lukevella--rallly",
@@ -616,11 +632,11 @@
   "description": "Rallly is an open-source scheduling and collaboration tool designed to make organizing events and meetings easier.",
   "license": "AGPL-3.0",
   "stars": 5314,
-  "lastPush": "2026-10-21T13:43:48Z",
+  "lastPush": "2026-10-21T14:12:18Z",
   "archived": false,
   "category": "scheduling",
   "replaces": "Doodle",
   "source": "https://api.github.com/repos/lukevella/rallly",
-  "fetchedAt": "2026-10-21T13:55:09Z"
+  "fetchedAt": "2026-10-21T14:28:49Z"
  }
 ]
