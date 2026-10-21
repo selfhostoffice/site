@@ -1,5 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro'; import Directory from '../../components/Directory.astro'; import Icon from '../../components/Icon.astro';
+import Base from '../../layouts/Base.astro'; import Directory from '../../components/Directory.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro';
 import { listings, cats, CATS, slugify } from '../../lib/data';
 export function getStaticPaths() { return cats.map(cat => ({ params: { cat } })); }
 const { cat } = Astro.params; const items = listings.filter(l => l.category === cat); const C = CATS[cat!];
@@ -9,5 +9,5 @@ const schema = { '@context': 'https://schema.org', '@type': 'ItemList', name: `O
 <Base title={`Best open-source ${C.name} software for small businesses`} description={`${items.length} self-hostable open-source ${C.name.toLowerCase()} tools compared by license, GitHub stars and recent activity.`} schema={schema} crumbs={[['Home', '/'], [C.name, `/category/${cat}/`]]}>
 <div class="wrap page-head"><span class="eyebrow"><Icon name={C.icon} size={16}/> Category</span><h1>Open-source {C.name.toLowerCase()} software</h1><p class="muted">{C.blurb}. {items.length} self-hostable tools.</p>
 <div class="quick">{reps.map(r => <a class="chip" href={`/alternatives/${slugify(r)}/`}>Compare alternatives to {r}</a>)}</div></div>
-<section style="padding-top:18px"><div class="wrap"><Directory items={items} showCat={false}/></div></section>
+<section style="padding-top:18px"><div class="wrap"><FeaturedSlot where={C.name}/><Directory items={items} showCat={false}/></div></section>
 </Base>

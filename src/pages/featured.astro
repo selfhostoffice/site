@@ -1,8 +1,3 @@
 ---
-import Base from '../layouts/Base.astro';
-const tiers = [['Claimed', '$29', 'one-time', ['Verified maintainer badge', 'Edit your description', 'Add your hosted-plan link'], false], ['Featured', '$49', 'per month', ['Top slot in your category', 'Clearly labeled "Featured"', 'Everything in Claimed'], true], ['Sponsor', '$99', 'per month', ['Homepage spotlight', 'Top of your alternatives pages', 'Everything in Featured'], false]] as const;
 ---
-<Base title="Claim or feature your listing" description="Maintainers of open-source business software can claim their listing or buy a clearly labeled featured placement." crumbs={[['Home', '/'], ['Get featured', '/featured/']]}>
-<div class="wrap page-head"><h1>Claim or feature your listing</h1><p class="muted prose">Listing is free and always will be. Paid placements are clearly labeled and never change the facts we show: license, stars, activity and source links stay exactly as GitHub reports them.</p></div>
-<section style="padding-top:10px"><div class="wrap"><div class="tiers">{tiers.map(([n, p, per, feats, pop]) => <div class={`tier ${pop ? 'pop' : ''}`}><h2 style="margin:0">{n}</h2><div class="price">{p} <span class="muted small">{per}</span></div><ul>{feats.map(f => <li>{f}</li>)}</ul><p class="note">Payments are not open yet. Placeholder pricing.</p></div>)}</div></div></section>
-</Base>
+<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="refresh" content="0;url=/claim/"/><link rel="canonical" href="https://selfhostoffice.com/claim/"/><meta name="robots" content="noindex"/><title>Moved to /claim/</title></head><body><a href="/claim/">Claim or feature a listing</a></body></html>

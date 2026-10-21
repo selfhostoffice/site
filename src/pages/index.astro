@@ -1,5 +1,5 @@
 ---
-import Base from '../layouts/Base.astro'; import Icon from '../components/Icon.astro'; import Directory from '../components/Directory.astro';
+import Base from '../layouts/Base.astro'; import Icon from '../components/Icon.astro'; import Directory from '../components/Directory.astro'; import FeaturedSlot from '../components/FeaturedSlot.astro';
 import { listings, cats, CATS, products, slugify, SITE_NAME, activity } from '../lib/data';
 const schema = { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE_NAME, url: Astro.site?.toString(), potentialAction: { '@type': 'SearchAction', target: new URL('/?q={query}', Astro.site).toString(), 'query-input': 'required name=query' } };
 const active = listings.filter(l => activity(l) === 'active').length;
@@ -20,5 +20,5 @@ const popular = ['DocuSign', 'Calendly', 'QuickBooks', 'Zendesk', 'Salesforce', 
 <section id="alternatives" style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>Replace a SaaS subscription</h2></div>
   <div class="alt-grid">{products.map(p => <a class="chip" href={`/alternatives/${slugify(p)}/`}>Alternatives to {p} · {listings.filter(l => l.replaces === p).length}</a>)}</div>
 </div></section>
-<section id="directory" style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>All tools</h2><span class="muted small">Filter and sort in place.</span></div><Directory items={listings}/></div></section>
+<section id="directory" style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>All tools</h2><span class="muted small">Filter and sort in place.</span></div><FeaturedSlot where="the homepage"/><Directory items={listings}/></div></section>
 </Base>

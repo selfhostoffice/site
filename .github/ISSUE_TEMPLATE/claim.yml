@@ -1,0 +1,28 @@
+name: Claim or feature a listing
+description: Maintainers can claim a SelfHost Office listing or request a featured placement.
+title: "Claim: "
+labels: ["claim"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for claiming your listing. Payments are not open yet; tier choice is just a request. We will reply on this issue.
+  - type: input
+    id: tool
+    attributes: { label: Tool slug, description: "From the listing URL, e.g. docusealco--docuseal" }
+    validations: { required: true }
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Requested tier
+      options: ["Verified claim (free for now; $29 one-time later)", "Featured in category ($49/mo, founding rate on request)", "Homepage + category ($99/mo)"]
+    validations: { required: true }
+  - type: dropdown
+    id: method
+    attributes:
+      label: How will you prove you maintain this project?
+      options: ["I'll add the line `selfhostoffice-claim: <this issue number>` to the repo README or a file .github/selfhostoffice.txt", "I'll reply from an email address on the project's own domain when you contact me"]
+    validations: { required: true }
+  - type: textarea
+    id: notes
+    attributes: { label: Corrections or anything else, description: "Description edits, hosted-plan link, etc. Do not paste secrets." }

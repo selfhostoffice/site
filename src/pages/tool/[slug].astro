@@ -11,7 +11,7 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
 <div class="wrap page-head">
   <div class="tool-head"><img class="logo" src={avatar(l, 144)} alt={`${l.repo.split('/')[0]} avatar on GitHub`} width="72" height="72"/><div><h1 style="margin:0">{l.name}</h1><a class="chip" href={`/alternatives/${slugify(l.replaces)}/`}>Replaces {l.replaces}</a></div></div>
   <p class="lead muted" style="font-size:1.1rem;max-width:65ch">{l.description}</p>
-  <div class="actions"><a class="btn" href={l.repoUrl} rel="nofollow"><Icon name="github" size={18}/>View on GitHub</a>{l.homepage && <a class="btn ghost" href={l.homepage} rel="nofollow"><Icon name="globe" size={18}/>Website</a>}<a class="btn ghost" href={`/alternatives/${slugify(l.replaces)}/`}>Compare {l.replaces} alternatives</a></div>
+  <div class="actions"><a class="btn" href={l.repoUrl} rel="nofollow"><Icon name="github" size={18}/>View on GitHub</a>{l.homepage && <a class="btn ghost" href={l.homepage} rel="nofollow"><Icon name="globe" size={18}/>Website</a>}<a class="btn ghost" href={`/alternatives/${slugify(l.replaces)}/`}>Compare {l.replaces} alternatives</a><a class="btn ghost" href={`/claim/?tool=${l.slug}`}>Claim this listing</a></div>
   <div class="facts">
     <div class="fact"><span>Stars</span><b>{l.stars.toLocaleString('en-US')}</b></div>
     <div class="fact"><span>License</span><b class={`lic-${licFamily(l.license)}`}>{licLabel(l.license)}</b></div>
@@ -21,7 +21,7 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
     <div class="fact"><span>Language</span><b>{l.language ?? 'n/a'}</b></div>
   </div>
   {l.topics?.length > 0 && <div class="quick"><span>GitHub topics:</span>{l.topics.map((t: string) => <span class="badge">{t}</span>)}</div>}
-  <p class="note">Source: <a href={l.source}>{l.source}</a>, fetched {fmtDate(l.fetchedAt)}. "Active" means a push within 30 days of that fetch. Maintainer? <a href="/featured/">Claim this listing</a>.</p>
+  <p class="note">Source: <a href={l.source}>{l.source}</a>, fetched {fmtDate(l.fetchedAt)}. "Active" means a push within 30 days of that fetch. Maintainer? <a href={`/claim/?tool=${l.slug}`}>Claim this listing</a>.</p>
 </div>
 {same.length > 0 && <section><div class="wrap"><div class="sec-head"><h2>Other {l.replaces} alternatives</h2><a href={`/alternatives/${slugify(l.replaces)}/`}>Side-by-side comparison →</a></div><div class="grid">{same.map(x => <Card l={x}/>)}</div></div></section>}
 {related.length > 0 && <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>Related in {catName(l.category)}</h2></div><div class="grid">{related.map(x => <Card l={x}/>)}</div></div></section>}

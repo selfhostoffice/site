@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import { listings } from '../lib/data';
+const names = Object.fromEntries(listings.map(l => [l.slug, l.name]));
+const tiers = [['Verified', '$29', 'one-time', ['Verified maintainer badge', 'Edit description, add hosted-plan link'], 'Verified claim (free for now; $29 one-time later)', false], ['Featured', '$49', 'per month', ['Top slot in your category', 'Clearly labeled "Featured"', 'Includes Verified'], 'Featured in category ($49/mo, founding rate on request)', true], ['Homepage', '$99', 'per month', ['Homepage featured slot', 'Plus top slot in your category', 'Includes Verified'], 'Homepage + category ($99/mo)', false]] as const;
+---
+<Base title="Claim or feature your listing" description="Maintainers can verify a SelfHost Office listing via GitHub and request a clearly labeled featured placement." crumbs={[['Home', '/'], ['Claim', '/claim/']]}>
+<div class="wrap page-head prose"><h1>Claim <span data-tool-name>your listing</span></h1>
+<p class="muted">Listing is free and always will be. Claiming lets you correct your description and add a hosted-plan link. Paid placements are clearly labeled and never change the facts we show (license, stars, activity, sources).</p></div>
+<section style="padding-top:8px"><div class="wrap">
+<h2>How verification works</h2>
+<ol class="steps prose">
+  <li>Open a claim request below. It creates a public GitHub issue on <a href="https://github.com/selfhostoffice/site">selfhostoffice/site</a>, so no account with us is needed, just GitHub.</li>
+  <li>Prove you maintain the project, either way works: add the line <code>selfhostoffice-claim: &lt;issue number&gt;</code> to your README or a file <code>.github/selfhostoffice.txt</code> in the listed repo, <em>or</em> reply from an email address on the project's own domain when we contact you.</li>
+  <li>We mark the listing Verified and apply your edits. You can remove the line afterwards.</li>
+</ol>
+<h2>Tiers</h2>
+<div class="tiers">{tiers.map(([n, p, per, feats, opt, pop]) => <div class={`tier ${pop ? 'pop' : ''}`}><h3 style="margin:0">{n}</h3><div class="price">{p} <span class="muted small">{per}</span></div><ul>{feats.map(f => <li>{f}</li>)}</ul><a class="btn" data-claim data-tier={opt} href="https://github.com/selfhostoffice/site/issues/new?template=claim.yml">Request {n}</a></div>)}</div>
+<p class="note">Payments are not open yet; requesting a paid tier just starts a conversation. Early maintainers get a founding rate.</p>
+</div></section>
+<script is:inline define:vars={{ names }}>
+  const slug = new URLSearchParams(location.search).get('tool') || '';
+  const name = names[slug];
+  if (name) document.querySelector('[data-tool-name]').textContent = name;
+  for (const a of document.querySelectorAll('[data-claim]')) {
+    const u = new URL(a.href);
+    u.searchParams.set('title', 'Claim: ' + (name || slug || 'tool'));
+    if (slug) u.searchParams.set('tool', slug);
+    u.searchParams.set('tier', a.dataset.tier);
+    a.href = u.toString();
+  }
+</script>
+</Base>
