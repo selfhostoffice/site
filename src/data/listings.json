@@ -10,10 +10,24 @@
   "stars": 18762,
   "lastPush": "2026-10-19T12:29:41Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/138379721?v=4",
+  "language": "Ruby",
+  "forks": 1897,
+  "openIssues": 128,
+  "topics": [
+   "document-signing",
+   "documents",
+   "e-signature",
+   "hotwired-turbo",
+   "open-source",
+   "pdf",
+   "pdf-sign",
+   "pdf-signature"
+  ],
   "category": "e-signature",
   "replaces": "DocuSign",
   "source": "https://api.github.com/repos/docusealco/docuseal",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "documenso--documenso",
@@ -26,10 +40,24 @@
   "stars": 15497,
   "lastPush": "2026-10-21T14:09:05Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/127681099?v=4",
+  "language": "TypeScript",
+  "forks": 3380,
+  "openIssues": 217,
+  "topics": [
+   "digital-signature",
+   "document-signing",
+   "docusign-alternative",
+   "e-signature",
+   "esign",
+   "esignature",
+   "next-auth",
+   "nextjs"
+  ],
   "category": "e-signature",
   "replaces": "DocuSign",
   "source": "https://api.github.com/repos/documenso/documenso",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "opensignlabs--opensign",
@@ -42,10 +70,24 @@
   "stars": 7134,
   "lastPush": "2026-10-21T14:02:35Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/146751146?v=4",
+  "language": "JavaScript",
+  "forks": 847,
+  "openIssues": 167,
+  "topics": [
+   "digital-signature",
+   "document-signing",
+   "docusign-alternative",
+   "docusign-free",
+   "e-signature",
+   "electronic-signature",
+   "electronic-signatures",
+   "esign"
+  ],
   "category": "e-signature",
   "replaces": "DocuSign",
   "source": "https://api.github.com/repos/OpenSignLabs/OpenSign",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "calcom--cal.diy",
@@ -58,10 +100,24 @@
   "stars": 49200,
   "lastPush": "2026-10-19T18:46:00Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/79145102?v=4",
+  "language": "TypeScript",
+  "forks": 15398,
+  "openIssues": 1514,
+  "topics": [
+   "next-auth",
+   "nextjs",
+   "open-source",
+   "postgresql",
+   "prisma",
+   "t3-stack",
+   "tailwindcss",
+   "trpc"
+  ],
   "category": "scheduling",
   "replaces": "Calendly",
   "source": "https://api.github.com/repos/calcom/cal.diy",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "alextselegidis--easyappointments",
@@ -74,10 +130,24 @@
   "stars": 4452,
   "lastPush": "2026-10-19T12:47:00Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/4527441?v=4",
+  "language": "PHP",
+  "forks": 1581,
+  "openIssues": 178,
+  "topics": [
+   "appointments",
+   "codeigniter",
+   "events",
+   "google-calendar",
+   "javascript",
+   "mysql",
+   "php",
+   "rest-api"
+  ],
   "category": "scheduling",
   "replaces": "Calendly",
   "source": "https://api.github.com/repos/alextselegidis/easyappointments",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "invoiceninja--invoiceninja",
@@ -90,10 +160,24 @@
   "stars": 10311,
   "lastPush": "2026-10-20T19:09:32Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/15712270?v=4",
+  "language": "PHP",
+  "forks": 2762,
+  "openIssues": 237,
+  "topics": [
+   "einvoicing",
+   "expenses",
+   "flutter",
+   "hacktoberfest",
+   "invoice",
+   "invoiceninja",
+   "invoices",
+   "javascript"
+  ],
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/invoiceninja/invoiceninja",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "invoiceshelf--invoiceshelf",
@@ -106,10 +190,15 @@
   "stars": 1865,
   "lastPush": "2026-10-21T11:06:09Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/157853350?v=4",
+  "language": "PHP",
+  "forks": 387,
+  "openIssues": 64,
+  "topics": [],
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/InvoiceShelf/InvoiceShelf",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "crater-invoice-inc--crater",
@@ -122,10 +211,23 @@
   "stars": 8355,
   "lastPush": "2024-08-10T09:32:07Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/79325907?v=4",
+  "language": "PHP",
+  "forks": 1713,
+  "openIssues": 425,
+  "topics": [
+   "invoices",
+   "javascript",
+   "laravel",
+   "laravel-framework",
+   "payment",
+   "php",
+   "vue"
+  ],
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/crater-invoice-inc/crater",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "invoiceplane--invoiceplane",
@@ -138,10 +240,24 @@
   "stars": 3221,
   "lastPush": "2026-10-21T12:59:53Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/7656602?v=4",
+  "language": "PHP",
+  "forks": 884,
+  "openIssues": 69,
+  "topics": [
+   "billing",
+   "codeigniter",
+   "crm",
+   "invoiceplane",
+   "invoices",
+   "invoicing",
+   "open-source",
+   "php"
+  ],
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/InvoicePlane/InvoicePlane",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "akaunting--akaunting",
@@ -154,10 +270,24 @@
   "stars": 10199,
   "lastPush": "2026-10-08T17:43:07Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/26357771?v=4",
+  "language": "PHP",
+  "forks": 3002,
+  "openIssues": 8,
+  "topics": [
+   "accounting",
+   "akaunting",
+   "balance",
+   "billing",
+   "bookkeeping",
+   "budget",
+   "crm",
+   "erp"
+  ],
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/akaunting/akaunting",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "frappe--erpnext",
@@ -168,12 +298,26 @@
   "description": "Free and Open Source Enterprise Resource Planning (ERP)",
   "license": "GPL-3.0",
   "stars": 40420,
-  "lastPush": "2026-10-21T14:19:44Z",
+  "lastPush": "2026-10-21T14:37:08Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/836974?v=4",
+  "language": "Python",
+  "forks": 13224,
+  "openIssues": 1381,
+  "topics": [
+   "accounting",
+   "asset-management",
+   "crm",
+   "distribution",
+   "erp",
+   "erpnext",
+   "frappe",
+   "healthcare"
+  ],
   "category": "accounting",
   "replaces": "NetSuite",
   "source": "https://api.github.com/repos/frappe/erpnext",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "odoo--odoo",
@@ -186,10 +330,23 @@
   "stars": 55225,
   "lastPush": "2026-10-21T14:18:31Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/6368483?v=4",
+  "language": "Python",
+  "forks": 34070,
+  "openIssues": 11056,
+  "topics": [
+   "apps",
+   "business",
+   "erp",
+   "management",
+   "odoo",
+   "odoo-apps",
+   "python"
+  ],
   "category": "accounting",
   "replaces": "NetSuite",
   "source": "https://api.github.com/repos/odoo/odoo",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "dolibarr--dolibarr",
@@ -202,10 +359,24 @@
   "stars": 7758,
   "lastPush": "2026-10-21T03:03:17Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/877491?v=4",
+  "language": "PHP",
+  "forks": 3583,
+  "openIssues": 957,
+  "topics": [
+   "accounting",
+   "agenda",
+   "crm",
+   "erp",
+   "hacktoberfest",
+   "human-resource-managment",
+   "invoice",
+   "invoices"
+  ],
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/Dolibarr/dolibarr",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "frappe--books",
@@ -218,10 +389,24 @@
   "stars": 5000,
   "lastPush": "2026-10-02T10:56:40Z",
   "archived": true,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/836974?v=4",
+  "language": "TypeScript",
+  "forks": 1164,
+  "openIssues": 144,
+  "topics": [
+   "accounting",
+   "book-keeping",
+   "desktop",
+   "double-entry-accounting",
+   "electron",
+   "frappe",
+   "hacktoberfest",
+   "inventory-management"
+  ],
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/frappe/books",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "twentyhq--twenty",
@@ -231,13 +416,27 @@
   "homepage": "https://twenty.com",
   "description": "The open alternative to Salesforce, designed for AI.",
   "license": "NOASSERTION",
-  "stars": 58865,
-  "lastPush": "2026-10-21T14:28:24Z",
+  "stars": 58874,
+  "lastPush": "2026-10-21T14:37:28Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/119600397?v=4",
+  "language": "TypeScript",
+  "forks": 9645,
+  "openIssues": 139,
+  "topics": [
+   "crm",
+   "crm-system",
+   "customer",
+   "good-first-issue",
+   "graphql",
+   "hacktoberfest",
+   "javascript",
+   "marketing"
+  ],
   "category": "crm",
   "replaces": "Salesforce",
   "source": "https://api.github.com/repos/twentyhq/twenty",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "espocrm--espocrm",
@@ -250,10 +449,24 @@
   "stars": 3506,
   "lastPush": "2026-10-21T10:20:15Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/6860351?v=4",
+  "language": "PHP",
+  "forks": 1013,
+  "openIssues": 64,
+  "topics": [
+   "calendar",
+   "contacts",
+   "crm",
+   "crm-platform",
+   "crm-system",
+   "customer-portal",
+   "customer-support",
+   "customizable"
+  ],
   "category": "crm",
   "replaces": "HubSpot",
   "source": "https://api.github.com/repos/espocrm/espocrm",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "suitecrm--suitecrm",
@@ -266,10 +479,24 @@
   "stars": 5804,
   "lastPush": "2026-10-20T16:03:54Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/45451151?v=4",
+  "language": "PHP",
+  "forks": 2432,
+  "openIssues": 1369,
+  "topics": [
+   "accounts",
+   "agplv3",
+   "cases",
+   "contacts",
+   "contracts",
+   "crm",
+   "documents",
+   "leads"
+  ],
   "category": "crm",
   "replaces": "Salesforce",
   "source": "https://api.github.com/repos/SuiteCRM/SuiteCRM",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "krayin--laravel-crm",
@@ -282,10 +509,24 @@
   "stars": 24040,
   "lastPush": "2026-10-21T11:44:20Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/86250863?v=4",
+  "language": "PHP",
+  "forks": 1674,
+  "openIssues": 107,
+  "topics": [
+   "cloud",
+   "cloudhosting",
+   "crm",
+   "crm-multi-tenant-saas",
+   "crm-platform",
+   "hacktoberfest",
+   "laravel",
+   "laravel-application"
+  ],
   "category": "crm",
   "replaces": "HubSpot",
   "source": "https://api.github.com/repos/krayin/laravel-crm",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "chatwoot--chatwoot",
@@ -298,10 +539,24 @@
   "stars": 38059,
   "lastPush": "2026-10-21T14:28:45Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/23416667?v=4",
+  "language": "Ruby",
+  "forks": 9280,
+  "openIssues": 1599,
+  "topics": [
+   "actioncable",
+   "chat-widget",
+   "conversation",
+   "customer-support",
+   "dashboard",
+   "design",
+   "docker",
+   "docker-image"
+  ],
   "category": "helpdesk",
   "replaces": "Zendesk",
   "source": "https://api.github.com/repos/chatwoot/chatwoot",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "zammad--zammad",
@@ -314,10 +569,24 @@
   "stars": 6025,
   "lastPush": "2026-10-21T13:51:16Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/1380327?v=4",
+  "language": "Ruby",
+  "forks": 1079,
+  "openIssues": 473,
+  "topics": [
+   "coffeescript",
+   "customer-care",
+   "customer-support",
+   "graphql",
+   "helpdesk",
+   "javascript",
+   "rails",
+   "ruby"
+  ],
   "category": "helpdesk",
   "replaces": "Zendesk",
   "source": "https://api.github.com/repos/zammad/zammad",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "freescout-help-desk--freescout",
@@ -330,10 +599,24 @@
   "stars": 4607,
   "lastPush": "2026-10-21T10:10:33Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/152988407?v=4",
+  "language": "PHP",
+  "forks": 734,
+  "openIssues": 22,
+  "topics": [
+   "customer-support",
+   "help-desk",
+   "helpdesk",
+   "helpdesk-ticketing",
+   "helpscout",
+   "laravel",
+   "osticket-alternative",
+   "php"
+  ],
   "category": "helpdesk",
   "replaces": "Help Scout",
   "source": "https://api.github.com/repos/freescout-help-desk/freescout",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "kimai--kimai",
@@ -346,10 +629,24 @@
   "stars": 5085,
   "lastPush": "2026-10-21T13:45:57Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/981996?v=4",
+  "language": "PHP",
+  "forks": 862,
+  "openIssues": 357,
+  "topics": [
+   "doctrine",
+   "invoice",
+   "invoicing",
+   "kimai",
+   "multilanguage",
+   "php",
+   "self-hosted",
+   "symfony"
+  ],
   "category": "time-tracking",
   "replaces": "Harvest",
   "source": "https://api.github.com/repos/kimai/kimai",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "solidtime-io--solidtime",
@@ -362,10 +659,24 @@
   "stars": 9023,
   "lastPush": "2026-10-21T13:57:32Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/156823565?v=4",
+  "language": "PHP",
+  "forks": 516,
+  "openIssues": 33,
+  "topics": [
+   "laravel",
+   "self-hosted",
+   "time-tracker",
+   "time-tracking",
+   "timetracker",
+   "timetracking",
+   "timetrackingapp",
+   "vue"
+  ],
   "category": "time-tracking",
   "replaces": "Toggl",
   "source": "https://api.github.com/repos/solidtime-io/solidtime",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "frappe--hrms",
@@ -378,10 +689,24 @@
   "stars": 8947,
   "lastPush": "2026-10-21T13:17:00Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/836974?v=4",
+  "language": "Python",
+  "forks": 2811,
+  "openIssues": 486,
+  "topics": [
+   "attendance",
+   "employee",
+   "erpnext",
+   "exits",
+   "frappe",
+   "frappe-framework",
+   "hcm",
+   "hr"
+  ],
   "category": "hr",
   "replaces": "BambooHR",
   "source": "https://api.github.com/repos/frappe/hrms",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "orangehrm--orangehrm",
@@ -394,10 +719,24 @@
   "stars": 1155,
   "lastPush": "2026-06-28T23:52:36Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/11557709?v=4",
+  "language": "PHP",
+  "forks": 760,
+  "openIssues": 111,
+  "topics": [
+   "enterprise",
+   "hr",
+   "human-resources-management-system",
+   "leave-management",
+   "mysql",
+   "open-source",
+   "orangehrm",
+   "php"
+  ],
   "category": "hr",
   "replaces": "BambooHR",
   "source": "https://api.github.com/repos/orangehrm/orangehrm",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "formbricks--formbricks",
@@ -410,10 +749,24 @@
   "stars": 13131,
   "lastPush": "2026-10-21T14:27:15Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/105877416?v=4",
+  "language": "TypeScript",
+  "forks": 2583,
+  "openIssues": 173,
+  "topics": [
+   "experience-management",
+   "form",
+   "forms",
+   "nextjs",
+   "open-source",
+   "react",
+   "reactjs",
+   "survey"
+  ],
   "category": "forms",
   "replaces": "Typeform",
   "source": "https://api.github.com/repos/formbricks/formbricks",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "baptistearno--typebot.io",
@@ -426,10 +779,22 @@
   "stars": 10569,
   "lastPush": "2026-10-21T13:44:13Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/16015833?v=4",
+  "language": "TypeScript",
+  "forks": 3240,
+  "openIssues": 12,
+  "topics": [
+   "chat-application",
+   "chatbot",
+   "conversational-bots",
+   "form-builder",
+   "nextjs",
+   "tailwindcss"
+  ],
   "category": "forms",
   "replaces": "Typeform",
   "source": "https://api.github.com/repos/baptisteArno/typebot.io",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "knadh--listmonk",
@@ -442,10 +807,24 @@
   "stars": 23895,
   "lastPush": "2026-10-21T05:25:39Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/547147?v=4",
+  "language": "Go",
+  "forks": 2710,
+  "openIssues": 58,
+  "topics": [
+   "campaign",
+   "campaign-management",
+   "email-marketing",
+   "email-subscription",
+   "listmonk",
+   "mailing-list",
+   "newsletter",
+   "newsletter-management"
+  ],
   "category": "email-marketing",
   "replaces": "Mailchimp",
   "source": "https://api.github.com/repos/knadh/listmonk",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "mautic--mautic",
@@ -456,12 +835,26 @@
   "description": "Mautic: Open Source Marketing Automation Software.",
   "license": "NOASSERTION",
   "stars": 10821,
-  "lastPush": "2026-10-21T12:10:30Z",
+  "lastPush": "2026-10-21T14:33:41Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/5257677?v=4",
+  "language": "PHP",
+  "forks": 3505,
+  "openIssues": 309,
+  "topics": [
+   "digital-experience-platform",
+   "digitalexperienceplatform",
+   "dxp",
+   "email-marketing",
+   "email-marketing-automation",
+   "email-marketing-software",
+   "hacktoberfest",
+   "marketing-automation"
+  ],
   "category": "email-marketing",
   "replaces": "Mailchimp",
   "source": "https://api.github.com/repos/mautic/mautic",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "paperless-ngx--paperless-ngx",
@@ -471,13 +864,27 @@
   "homepage": "http://docs.paperless-ngx.com/",
   "description": "A community-supported supercharged document management system: scan, index and archive all your documents",
   "license": "GPL-3.0",
-  "stars": 46962,
-  "lastPush": "2026-10-21T14:06:46Z",
+  "stars": 46963,
+  "lastPush": "2026-10-21T14:42:00Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/99562962?v=4",
+  "language": "Python",
+  "forks": 3255,
+  "openIssues": 11,
+  "topics": [
+   "ai",
+   "angular",
+   "archiving",
+   "django",
+   "dms",
+   "document-management",
+   "document-management-system",
+   "llm"
+  ],
   "category": "documents",
   "replaces": "Adobe Acrobat",
   "source": "https://api.github.com/repos/paperless-ngx/paperless-ngx",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "stirling-tools--stirling-pdf",
@@ -488,12 +895,26 @@
   "description": "#1 PDF Application on GitHub that lets you edit PDFs on any device anywhere",
   "license": "NOASSERTION",
   "stars": 94663,
-  "lastPush": "2026-10-21T14:26:34Z",
+  "lastPush": "2026-10-21T14:40:10Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/139791695?v=4",
+  "language": "TypeScript",
+  "forks": 11296,
+  "openIssues": 534,
+  "topics": [
+   "docker",
+   "hacktoberfest",
+   "java",
+   "pdf",
+   "pdf-converter",
+   "pdf-editor",
+   "pdf-manipulation",
+   "pdf-merger"
+  ],
   "category": "documents",
   "replaces": "Adobe Acrobat",
   "source": "https://api.github.com/repos/Stirling-Tools/Stirling-PDF",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "makeplane--plane",
@@ -503,13 +924,27 @@
   "homepage": "http://plane.so",
   "description": "\ud83d\udd25\ud83d\udd25\ud83d\udd25 Open-source Jira, Linear, Monday, and ClickUp alternative. Plane is a modern project management platform to manage tasks, sprints, docs, and triage.",
   "license": "AGPL-3.0",
-  "stars": 61232,
+  "stars": 61235,
   "lastPush": "2026-10-21T12:24:37Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/115727700?v=4",
+  "language": "TypeScript",
+  "forks": 6147,
+  "openIssues": 1139,
+  "topics": [
+   "boards",
+   "bug-tracker",
+   "django",
+   "docker",
+   "gantt",
+   "issue-tracker",
+   "jira",
+   "jira-alternative"
+  ],
   "category": "project-management",
   "replaces": "Asana",
   "source": "https://api.github.com/repos/makeplane/plane",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "plausible--analytics",
@@ -522,10 +957,24 @@
   "stars": 29586,
   "lastPush": "2026-10-21T14:18:28Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/54802774?v=4",
+  "language": "Elixir",
+  "forks": 1914,
+  "openIssues": 55,
+  "topics": [
+   "analytics",
+   "analytics-dashboard",
+   "clickhouse",
+   "elixir",
+   "google-analytics",
+   "marketing",
+   "open-source-analytics",
+   "phoenix"
+  ],
   "category": "analytics",
   "replaces": "Google Analytics",
   "source": "https://api.github.com/repos/plausible/analytics",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "umami-software--umami",
@@ -538,10 +987,24 @@
   "stars": 39507,
   "lastPush": "2026-10-20T23:27:19Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/105618662?v=4",
+  "language": "TypeScript",
+  "forks": 8364,
+  "openIssues": 123,
+  "topics": [
+   "analytics",
+   "audience-segmentation",
+   "charts",
+   "cohort-analysis",
+   "google-analytics",
+   "product-analytics",
+   "statistics",
+   "user-journey"
+  ],
   "category": "analytics",
   "replaces": "Google Analytics",
   "source": "https://api.github.com/repos/umami-software/umami",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "inventree--inventree",
@@ -554,10 +1017,19 @@
   "stars": 7740,
   "lastPush": "2026-10-21T13:13:25Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/26612639?v=4",
+  "language": "Python",
+  "forks": 1590,
+  "openIssues": 147,
+  "topics": [
+   "django",
+   "hacktoberfest",
+   "python"
+  ],
   "category": "inventory",
   "replaces": "Sortly",
   "source": "https://api.github.com/repos/inventree/InvenTree",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "opensourcepos--opensourcepos",
@@ -567,13 +1039,25 @@
   "homepage": "http://www.opensourcepos.org",
   "description": "Open Source Point of Sale is a web based point of sale application written in PHP using CodeIgniter framework. It uses MySQL as the data back end and has a Bootstrap 3 based user interface. If you like this project, please give it a star! Doing so helps maintain Popular OSS status for the project.",
   "license": "NOASSERTION",
-  "stars": 4452,
+  "stars": 4453,
   "lastPush": "2026-10-21T12:45:34Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/31845758?v=4",
+  "language": "PHP",
+  "forks": 2639,
+  "openIssues": 268,
+  "topics": [
+   "bootstrap3",
+   "codeigniter3",
+   "inventory-management",
+   "php",
+   "point-of-sale",
+   "reporting"
+  ],
   "category": "pos",
   "replaces": "Square POS",
   "source": "https://api.github.com/repos/opensourcepos/opensourcepos",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "bigcapitalhq--bigcapital",
@@ -586,10 +1070,24 @@
   "stars": 3950,
   "lastPush": "2026-10-21T08:50:36Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/63662386?v=4",
+  "language": "TypeScript",
+  "forks": 547,
+  "openIssues": 282,
+  "topics": [
+   "accounting",
+   "bills",
+   "double-entry-accounting",
+   "expenses",
+   "financial",
+   "inventory",
+   "invoicing",
+   "payments"
+  ],
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/bigcapitalhq/bigcapital",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "leantime--leantime",
@@ -599,13 +1097,27 @@
   "homepage": "https://leantime.io",
   "description": "Leantime is a goals focused project management system for non-project managers. Building with ADHD, Autism, and dyslexia in mind.",
   "license": "AGPL-3.0",
-  "stars": 11878,
+  "stars": 11879,
   "lastPush": "2026-10-21T00:07:12Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/11252321?v=4",
+  "language": "PHP",
+  "forks": 1155,
+  "openIssues": 238,
+  "topics": [
+   "agile",
+   "asana",
+   "calendar",
+   "clickup",
+   "gantt",
+   "hacktoberfest",
+   "jira",
+   "kanban"
+  ],
   "category": "project-management",
   "replaces": "Asana",
   "source": "https://api.github.com/repos/Leantime/leantime",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "nextcloud--server",
@@ -616,12 +1128,26 @@
   "description": "\u2601\ufe0f Nextcloud server, a safe home for all your data",
   "license": "AGPL-3.0",
   "stars": 37197,
-  "lastPush": "2026-10-21T14:23:20Z",
+  "lastPush": "2026-10-21T14:40:05Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/19211038?v=4",
+  "language": "PHP",
+  "forks": 5289,
+  "openIssues": 3837,
+  "topics": [
+   "cloud",
+   "collaboration",
+   "decentralized",
+   "design",
+   "distributed",
+   "enterprise",
+   "federation",
+   "file-sharing"
+  ],
   "category": "documents",
   "replaces": "Dropbox",
   "source": "https://api.github.com/repos/nextcloud/server",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  },
  {
   "slug": "lukevella--rallly",
@@ -634,9 +1160,23 @@
   "stars": 5314,
   "lastPush": "2026-10-21T14:12:18Z",
   "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/676849?v=4",
+  "language": "TypeScript",
+  "forks": 575,
+  "openIssues": 3,
+  "topics": [
+   "i18next",
+   "next-auth",
+   "nextjs",
+   "postgresql",
+   "prisma",
+   "react-email",
+   "t3-stack",
+   "tailwindcss"
+  ],
   "category": "scheduling",
   "replaces": "Doodle",
   "source": "https://api.github.com/repos/lukevella/rallly",
-  "fetchedAt": "2026-10-21T14:28:49Z"
+  "fetchedAt": "2026-10-21T14:42:09Z"
  }
 ]

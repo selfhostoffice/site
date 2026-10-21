@@ -1,18 +1,28 @@
 ---
-import Base from '../../layouts/Base.astro';
-import { listings, CATS, slugify, fmtDate } from '../../lib/data';
-export function getStaticPaths(){ return listings.map(l=>({params:{slug:l.slug},props:{l}})); }
-const { l } = Astro.props; const peers = listings.filter(x=>x.category===l.category && x.slug!==l.slug);
-const schema = {'@context':'https://schema.org','@type':'SoftwareApplication',name:l.name,description:l.description,applicationCategory:'BusinessApplication',operatingSystem:'Self-hosted',url:l.homepage||l.repoUrl,sameAs:[l.repoUrl],license:l.license,offers:{'@type':'Offer',price:'0',priceCurrency:'USD'}};
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro';
+import { listings, catName, slugify, fmtDate, licLabel, licFamily, activity, activityLabel, avatar, kfmt } from '../../lib/data';
+export function getStaticPaths() { return listings.map(l => ({ params: { slug: l.slug }, props: { l } })); }
+const { l } = Astro.props;
+const same = listings.filter(x => x.replaces === l.replaces && x.slug !== l.slug);
+const related = listings.filter(x => x.category === l.category && x.slug !== l.slug && x.replaces !== l.replaces).slice(0, 6);
+const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: l.name, description: l.description, applicationCategory: 'BusinessApplication', operatingSystem: 'Self-hosted', url: l.homepage || l.repoUrl, sameAs: [l.repoUrl], image: l.ownerAvatar, license: l.license === 'NOASSERTION' ? undefined : `https://spdx.org/licenses/${l.license}.html`, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } };
 ---
-<Base title={`${l.name}: open-source ${CATS[l.category]} (alternative to ${l.replaces})`} description={`${l.name}: ${l.description}`.slice(0,155)} schema={schema}>
-<h1>{l.name}</h1><p>{l.description}</p>
-<table><tr><th>Repository</th><td><a href={l.repoUrl} rel="nofollow">{l.repo}</a></td></tr>
-{l.homepage && <tr><th>Website</th><td><a href={l.homepage} rel="nofollow">{l.homepage}</a></td></tr>}
-<tr><th>License (SPDX)</th><td>{l.license==='NOASSERTION'?'Custom/undetected (see repo)':l.license}</td></tr><tr><th>GitHub stars</th><td>{l.stars.toLocaleString('en-US')}</td></tr>
-<tr><th>Last push</th><td>{fmtDate(l.lastPush)}{l.archived && ' (archived)'}</td></tr>
-<tr><th>Category</th><td><a href={`/category/${l.category}/`}>{CATS[l.category]}</a></td></tr>
-<tr><th>Alternative to</th><td><a href={`/alternatives/${slugify(l.replaces)}/`}>{l.replaces}</a></td></tr></table>
-<p class="muted">Source: <a href={l.source}>{l.source}</a>, fetched {fmtDate(l.fetchedAt)}. Maintainer? <a href="/featured/">Claim this listing</a>.</p>
-{peers.length>0 && <><h2>Similar tools</h2><ul>{peers.map(p=> <li><a href={`/tool/${p.slug}/`}>{p.name}</a></li>)}</ul></>}
+<Base title={`${l.name}: self-hosted, open-source alternative to ${l.replaces}`} description={`${l.name}: ${l.description}`.slice(0, 155)} schema={schema} crumbs={[['Home', '/'], [catName(l.category), `/category/${l.category}/`], [l.name, `/tool/${l.slug}/`]]}>
+<div class="wrap page-head">
+  <div class="tool-head"><img class="logo" src={avatar(l, 144)} alt={`${l.repo.split('/')[0]} avatar on GitHub`} width="72" height="72"/><div><h1 style="margin:0">{l.name}</h1><a class="chip" href={`/alternatives/${slugify(l.replaces)}/`}>Replaces {l.replaces}</a></div></div>
+  <p class="lead muted" style="font-size:1.1rem;max-width:65ch">{l.description}</p>
+  <div class="actions"><a class="btn" href={l.repoUrl} rel="nofollow"><Icon name="github" size={18}/>View on GitHub</a>{l.homepage && <a class="btn ghost" href={l.homepage} rel="nofollow"><Icon name="globe" size={18}/>Website</a>}<a class="btn ghost" href={`/alternatives/${slugify(l.replaces)}/`}>Compare {l.replaces} alternatives</a></div>
+  <div class="facts">
+    <div class="fact"><span>Stars</span><b>{l.stars.toLocaleString('en-US')}</b></div>
+    <div class="fact"><span>License</span><b class={`lic-${licFamily(l.license)}`}>{licLabel(l.license)}</b></div>
+    <div class="fact"><span>Last push</span><b>{fmtDate(l.lastPush)}</b><div><span class={`badge act-${activity(l)}`}>{activityLabel(l)}</span></div></div>
+    <div class="fact"><span>Forks</span><b>{(l.forks ?? 0).toLocaleString('en-US')}</b></div>
+    <div class="fact"><span>Open issues + PRs</span><b>{(l.openIssues ?? 0).toLocaleString('en-US')}</b></div>
+    <div class="fact"><span>Language</span><b>{l.language ?? 'n/a'}</b></div>
+  </div>
+  {l.topics?.length > 0 && <div class="quick"><span>GitHub topics:</span>{l.topics.map((t: string) => <span class="badge">{t}</span>)}</div>}
+  <p class="note">Source: <a href={l.source}>{l.source}</a>, fetched {fmtDate(l.fetchedAt)}. "Active" means a push within 30 days of that fetch. Maintainer? <a href="/featured/">Claim this listing</a>.</p>
+</div>
+{same.length > 0 && <section><div class="wrap"><div class="sec-head"><h2>Other {l.replaces} alternatives</h2><a href={`/alternatives/${slugify(l.replaces)}/`}>Side-by-side comparison →</a></div><div class="grid">{same.map(x => <Card l={x}/>)}</div></div></section>}
+{related.length > 0 && <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>Related in {catName(l.category)}</h2></div><div class="grid">{related.map(x => <Card l={x}/>)}</div></div></section>}
 </Base>

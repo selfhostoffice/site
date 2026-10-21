@@ -1,8 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
-const tiers=[['Claimed','$29 one-time','Verified-maintainer badge, edit your description, add hosted-plan link'],['Featured','$49 / month','Top slot in your category + "Featured" label'],['Sponsor','$99 / month','Homepage spotlight + category top slot + alternatives pages']];
+const tiers = [['Claimed', '$29', 'one-time', ['Verified maintainer badge', 'Edit your description', 'Add your hosted-plan link'], false], ['Featured', '$49', 'per month', ['Top slot in your category', 'Clearly labeled "Featured"', 'Everything in Claimed'], true], ['Sponsor', '$99', 'per month', ['Homepage spotlight', 'Top of your alternatives pages', 'Everything in Featured'], false]] as const;
 ---
-<Base title="Claim or feature your listing" description="Maintainers of open-source business software can claim their listing or buy a clearly labeled featured placement.">
-<h1>Claim or feature your listing</h1><p>Listing is free and always will be. Paid placements are clearly labeled and never change the facts we show (license, stars, activity).</p>
-<div class="grid">{tiers.map(([n,p,d])=> <div class="card"><h3>{n}</h3><p><strong>{p}</strong></p><p>{d}</p><p class="muted">Payment not yet available. Placeholder pricing.</p></div>)}</div>
+<Base title="Claim or feature your listing" description="Maintainers of open-source business software can claim their listing or buy a clearly labeled featured placement." crumbs={[['Home', '/'], ['Get featured', '/featured/']]}>
+<div class="wrap page-head"><h1>Claim or feature your listing</h1><p class="muted prose">Listing is free and always will be. Paid placements are clearly labeled and never change the facts we show: license, stars, activity and source links stay exactly as GitHub reports them.</p></div>
+<section style="padding-top:10px"><div class="wrap"><div class="tiers">{tiers.map(([n, p, per, feats, pop]) => <div class={`tier ${pop ? 'pop' : ''}`}><h2 style="margin:0">{n}</h2><div class="price">{p} <span class="muted small">{per}</span></div><ul>{feats.map(f => <li>{f}</li>)}</ul><p class="note">Payments are not open yet. Placeholder pricing.</p></div>)}</div></div></section>
 </Base>

@@ -1,0 +1,36 @@
+---
+import Card from './Card.astro';
+import { cats, catName } from '../lib/data';
+const { items, showCat = true, id = 'directory' } = Astro.props;
+---
+<div class="toolbar" data-dir={id}>
+  <input id={`${id}-q`} type="search" placeholder="Filter by name, feature or product…" data-f="q" aria-label="Filter tools"/>
+  {showCat && <select data-f="cat" aria-label="Category"><option value="">All categories</option>{cats.map(c => <option value={c}>{catName(c)}</option>)}</select>}
+  <select data-f="lic" aria-label="License type"><option value="">Any license</option><option value="copyleft">Copyleft (AGPL/GPL…)</option><option value="permissive">Permissive (MIT/Apache…)</option><option value="other">Custom / other</option></select>
+  <select data-f="sort" aria-label="Sort"><option value="stars">Most stars</option><option value="recent">Recently updated</option><option value="name">Name A–Z</option></select>
+  <span class="count" aria-live="polite" data-count>{items.length} tools</span>
+</div>
+<div class="grid" data-grid={id}>{items.map((l: any) => <Card l={l}/>)}</div>
+<p class="note" data-empty={id} hidden>No tools match. Try clearing filters.</p>
+<script>
+  for (const bar of document.querySelectorAll<HTMLElement>('[data-dir]')) {
+    const id = bar.dataset.dir!, grid = document.querySelector<HTMLElement>(`[data-grid="${id}"]`)!;
+    const cards = [...grid.querySelectorAll<HTMLElement>('[data-card]')];
+    const f = (k: string) => bar.querySelector<HTMLInputElement | HTMLSelectElement>(`[data-f="${k}"]`);
+    const params = new URLSearchParams(location.search);
+    if (params.get('q') && f('q')) f('q')!.value = params.get('q')!;
+    if (params.get('cat') && f('cat')) f('cat')!.value = params.get('cat')!;
+    const run = () => {
+      const q = (f('q')?.value || '').trim().toLowerCase(), cat = f('cat')?.value || '', lic = f('lic')?.value || '', sort = f('sort')?.value || 'stars';
+      let n = 0;
+      for (const c of cards) { const ok = (!q || q.split(/\s+/).every(w => c.dataset.search!.includes(w))) && (!cat || c.dataset.cat === cat) && (!lic || c.dataset.lic === lic); c.hidden = !ok; if (ok) n++; }
+      const key = (c: HTMLElement) => sort === 'name' ? c.dataset.name! : sort === 'recent' ? +c.dataset.age! : -+c.dataset.stars!;
+      cards.sort((a, b) => { const x = key(a), y = key(b); return x < y ? -1 : x > y ? 1 : 0; }).forEach(c => grid.appendChild(c));
+      bar.querySelector('[data-count]')!.textContent = `${n} of ${cards.length} tools`;
+      document.querySelector<HTMLElement>(`[data-empty="${id}"]`)!.hidden = n > 0;
+    };
+    bar.addEventListener('input', run); run();
+  }
+  const hero = document.querySelector<HTMLFormElement>('[data-hero-search]');
+  hero?.addEventListener('submit', e => { e.preventDefault(); const v = (hero.querySelector('input') as HTMLInputElement).value; const t = document.querySelector<HTMLInputElement>('[data-f="q"]'); if (t) { t.value = v; t.dispatchEvent(new Event('input', { bubbles: true })); document.getElementById('directory')?.scrollIntoView({ behavior: 'smooth' }); } });
+</script>

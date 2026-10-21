@@ -1,6 +1,20 @@
 ---
-import { CATS, fmtDate } from '../lib/data';
-const { l } = Astro.props;
+import Icon from './Icon.astro';
+import { catName, licLabel, licFamily, kfmt, activity, activityLabel, fmtDate, avatar, slugify, daysSincePush } from '../lib/data';
+const { l, compact = false } = Astro.props;
+const search = [l.name, l.description, l.replaces, catName(l.category), ...(l.topics || [])].join(' ').toLowerCase();
 ---
-<div class="card"><h3><a href={`/tool/${l.slug}/`}>{l.name}</a></h3><p>{l.description}</p>
-<p class="muted">{CATS[l.category]} · ★ {l.stars.toLocaleString('en-US')} · {l.license==='NOASSERTION'?'Custom/undetected (see repo)':l.license} · last push {fmtDate(l.lastPush)}{l.archived && ' · ARCHIVED'}</p></div>
+<article class="card" data-card data-cat={l.category} data-lic={licFamily(l.license)} data-stars={l.stars} data-age={daysSincePush(l)} data-name={l.name.toLowerCase()} data-search={search}>
+  <a class="card-link" href={`/tool/${l.slug}/`} aria-label={`${l.name} details`}></a>
+  <div class="card-head">
+    <img class="logo" src={avatar(l, 80)} alt="" width="40" height="40" loading="lazy" decoding="async" />
+    <div class="card-title"><h3>{l.name}</h3><span class="muted small">{catName(l.category)}</span></div>
+  </div>
+  {!compact && <p class="desc">{l.description}</p>}
+  <div class="badges">
+    <span class="badge" title="GitHub stars"><Icon name="star" size={14}/>{kfmt(l.stars)}</span>
+    <span class={`badge lic-${licFamily(l.license)}`} title="License (SPDX, from GitHub)"><Icon name="scale" size={14}/>{licLabel(l.license)}</span>
+    <span class={`badge act-${activity(l)}`} title={`Last push ${fmtDate(l.lastPush)}`}><Icon name="pulse" size={14}/>{activityLabel(l)}</span>
+  </div>
+  <a class="chip" href={`/alternatives/${slugify(l.replaces)}/`}>Replaces {l.replaces}</a>
+</article>

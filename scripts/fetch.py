@@ -19,7 +19,7 @@ for repo,cat,rep in csv.reader(open(os.path.join(os.path.dirname(__file__),"repo
     out.append({"slug":d["full_name"].replace("/","--").lower(),"name":d["name"],"repo":d["full_name"],
       "repoUrl":d["html_url"],"homepage":d.get("homepage") or None,"description":d.get("description") or "",
       "license":lic,"stars":d["stargazers_count"],"lastPush":d["pushed_at"],"archived":d["archived"],
-      "category":cat,"replaces":rep,"source":f"https://api.github.com/repos/{d['full_name']}","fetchedAt":now})
+      "ownerAvatar":d["owner"]["avatar_url"],"language":d.get("language"),"forks":d["forks_count"],"openIssues":d["open_issues_count"],"topics":d.get("topics",[])[:8],"category":cat,"replaces":rep,"source":f"https://api.github.com/repos/{d['full_name']}","fetchedAt":now})
     print("ok",repo,file=sys.stderr)
 json.dump(out,open(P,"w"),indent=1)
 print(len(out),"listings")
