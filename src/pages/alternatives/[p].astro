@@ -1,5 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro';
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro';
 import { listings, products, slugify, catName, licLabel, licFamily, kfmt, fmtDate, activityLabel, activity, avatar, daysSincePush } from '../../lib/data';
 export function getStaticPaths() { return products.map(p => ({ params: { p: slugify(p) }, props: { name: p } })); }
 const { name } = Astro.props; const items = listings.filter(l => l.replaces === name);
@@ -25,6 +25,7 @@ const fetched = fmtDate(items[0].fetchedAt);
 <tr><th scope="row">Links</th>{items.map(l => <td><a href={l.repoUrl} rel="nofollow">Repo</a>{l.homepage && <> · <a href={l.homepage} rel="nofollow">Website</a></>}</td>)}</tr>
 </tbody></table></div>
 <p class="note">Highlighted cells mark the highest star count and the most recent push. Source: GitHub REST API, per-tool links on each tool page. Copyleft licenses (AGPL/GPL) require sharing modifications if you distribute or (AGPL) serve them; check the repo license before deploying.</p>
+<div style="margin-top:16px"><FeaturedSlot where={`the ${name} alternatives comparison`}/></div>
 </div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>The options</h2></div><div class="grid">{items.map(l => <Card l={l}/>)}</div></div></section>
 {related.length > 0 && <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>More in {catName(cat)}</h2></div><div class="grid">{related.map(l => <Card l={l}/>)}</div></div></section>}

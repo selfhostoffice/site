@@ -18,6 +18,10 @@ export const CATS: Record<string, { name: string; icon: string; blurb: string }>
   analytics: { name: 'Web analytics', icon: 'chart', blurb: 'Privacy-friendly site stats' },
   inventory: { name: 'Inventory', icon: 'box', blurb: 'Stock, parts and suppliers' },
   pos: { name: 'Point of sale', icon: 'store', blurb: 'Checkout and retail sales' },
+  'team-chat': { name: 'Team chat', icon: 'chat', blurb: 'Channels, DMs and calls' },
+  'knowledge-base': { name: 'Wiki & docs', icon: 'file', blurb: 'Team wikis and shared notes' },
+  databases: { name: 'No-code databases', icon: 'form', blurb: 'Spreadsheet-style databases' },
+  passwords: { name: 'Password managers', icon: 'badge', blurb: 'Shared vaults and credentials' },
 };
 export const catName = (c: string) => CATS[c]?.name ?? c;
 export const cats = Object.keys(CATS).filter(c => listings.some(l => l.category === c));

@@ -1,40 +1,57 @@
-docusealco/docuseal	e-signature	DocuSign
-documenso/documenso	e-signature	DocuSign
-OpenSignLabs/OpenSign	e-signature	DocuSign
-calcom/cal.com	scheduling	Calendly
-alextselegidis/easyappointments	scheduling	Calendly
-invoiceninja/invoiceninja	invoicing	FreshBooks
-InvoiceShelf/InvoiceShelf	invoicing	FreshBooks
-crater-invoice/crater	invoicing	FreshBooks
-InvoicePlane/InvoicePlane	invoicing	FreshBooks
-akaunting/akaunting	accounting	QuickBooks
-frappe/erpnext	accounting	NetSuite
-odoo/odoo	accounting	NetSuite
-Dolibarr/dolibarr	accounting	QuickBooks
-frappe/books	accounting	QuickBooks
-twentyhq/twenty	crm	Salesforce
-espocrm/espocrm	crm	HubSpot
-salesagility/SuiteCRM	crm	Salesforce
-krayin/laravel-crm	crm	HubSpot
-chatwoot/chatwoot	helpdesk	Zendesk
-zammad/zammad	helpdesk	Zendesk
-freescout-helpdesk/freescout	helpdesk	Help Scout
-kimai/kimai	time-tracking	Harvest
-solidtime-io/solidtime	time-tracking	Toggl
-frappe/hrms	hr	BambooHR
-orangehrm/orangehrm	hr	BambooHR
-formbricks/formbricks	forms	Typeform
-baptisteArno/typebot.io	forms	Typeform
-knadh/listmonk	email-marketing	Mailchimp
-mautic/mautic	email-marketing	Mailchimp
-paperless-ngx/paperless-ngx	documents	Adobe Acrobat
-Stirling-Tools/Stirling-PDF	documents	Adobe Acrobat
-makeplane/plane	project-management	Asana
-plausible/analytics	analytics	Google Analytics
-umami-software/umami	analytics	Google Analytics
-inventree/InvenTree	inventory	Sortly
-opensourcepos/opensourcepos	pos	Square POS
-bigcapitalhq/bigcapital	accounting	QuickBooks
-Leantime/leantime	project-management	Asana
-nextcloud/server	documents	Dropbox
-lukevella/rallly	scheduling	Doodle
+docusealco/docuseal	e-signature	DocuSign	DocuSeal
+documenso/documenso	e-signature	DocuSign	Documenso
+OpenSignLabs/OpenSign	e-signature	DocuSign	
+calcom/cal.com	scheduling	Calendly	Cal.com
+alextselegidis/easyappointments	scheduling	Calendly	Easy!Appointments
+invoiceninja/invoiceninja	invoicing	FreshBooks	Invoice Ninja
+InvoiceShelf/InvoiceShelf	invoicing	FreshBooks	
+crater-invoice/crater	invoicing	FreshBooks	Crater
+InvoicePlane/InvoicePlane	invoicing	FreshBooks	
+akaunting/akaunting	accounting	QuickBooks	Akaunting
+frappe/erpnext	accounting	NetSuite	ERPNext
+odoo/odoo	accounting	NetSuite	Odoo
+Dolibarr/dolibarr	accounting	QuickBooks	Dolibarr
+frappe/books	accounting	QuickBooks	Frappe Books
+twentyhq/twenty	crm	Salesforce	Twenty
+espocrm/espocrm	crm	HubSpot	EspoCRM
+salesagility/SuiteCRM	crm	Salesforce	
+krayin/laravel-crm	crm	HubSpot	Krayin CRM
+chatwoot/chatwoot	helpdesk	Zendesk	Chatwoot
+zammad/zammad	helpdesk	Zendesk	Zammad
+freescout-helpdesk/freescout	helpdesk	Help Scout	FreeScout
+kimai/kimai	time-tracking	Harvest	Kimai
+solidtime-io/solidtime	time-tracking	Toggl	solidtime
+frappe/hrms	hr	BambooHR	Frappe HR
+orangehrm/orangehrm	hr	BambooHR	OrangeHRM
+formbricks/formbricks	forms	Typeform	Formbricks
+baptisteArno/typebot.io	forms	Typeform	Typebot
+knadh/listmonk	email-marketing	Mailchimp	listmonk
+mautic/mautic	email-marketing	Mailchimp	Mautic
+paperless-ngx/paperless-ngx	documents	Adobe Acrobat	Paperless-ngx
+Stirling-Tools/Stirling-PDF	documents	Adobe Acrobat	
+makeplane/plane	project-management	Asana	Plane
+plausible/analytics	analytics	Google Analytics	Plausible
+umami-software/umami	analytics	Google Analytics	Umami
+inventree/InvenTree	inventory	Sortly	
+opensourcepos/opensourcepos	pos	Square POS	Open Source POS
+bigcapitalhq/bigcapital	accounting	QuickBooks	Bigcapital
+Leantime/leantime	project-management	Asana	Leantime
+nextcloud/server	documents	Dropbox	Nextcloud
+lukevella/rallly	scheduling	Doodle	Rallly
+nocodb/nocodb	databases	Airtable	NocoDB
+mattermost/mattermost	team-chat	Slack	Mattermost
+RocketChat/Rocket.Chat	team-chat	Slack	Rocket.Chat
+outline/outline	knowledge-base	Confluence	Outline
+AppFlowy-IO/AppFlowy	knowledge-base	Notion	AppFlowy
+opf/openproject	project-management	Microsoft Project	OpenProject
+go-vikunja/vikunja	project-management	Todoist	Vikunja
+frappe/helpdesk	helpdesk	Zendesk	Frappe Helpdesk
+heyform/heyform	forms	Typeform	HeyForm
+matomo-org/matomo	analytics	Google Analytics	Matomo
+PostHog/posthog	analytics	Mixpanel	PostHog
+getlago/lago	invoicing	Chargebee	Lago
+midday-ai/midday	accounting	QuickBooks	Midday
+grokability/snipe-it	inventory	Asset Panda	Snipe-IT
+pentacent/keila	email-marketing	Mailchimp	Keila
+bitwarden/server	passwords	1Password	Bitwarden
+passbolt/passbolt_api	passwords	1Password	Passbolt

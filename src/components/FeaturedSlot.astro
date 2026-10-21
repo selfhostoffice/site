@@ -1,8 +1,8 @@
 ---
-const { where = 'this category' } = Astro.props;
+const { where = 'this category', href = '/claim/', title = 'Your tool here' } = Astro.props;
 ---
 <aside class="featured-slot" aria-label="Featured placement">
   <span class="feat-tag">Featured</span>
-  <div><b>Your tool here</b><p class="muted small">Maintain an open-source business tool? A clearly labeled featured slot in {where}. Facts and rankings never change.</p></div>
-  <a class="btn ghost" href="/claim/">Claim or feature a listing</a>
+  <div><b>{title}</b><p class="muted small">Maintain an open-source business tool? A clearly labeled featured slot in {where}. Facts and rankings never change.</p></div>
+  <a class="btn" href={href}>Claim or get featured</a>
 </aside>
