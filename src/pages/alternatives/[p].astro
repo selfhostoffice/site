@@ -1,0 +1,11 @@
+---
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro';
+import { listings, products, slugify } from '../../lib/data';
+export function getStaticPaths(){ return products.map(p=>({params:{p:slugify(p)},props:{name:p}})); }
+const { name } = Astro.props; const items = listings.filter(l=>l.replaces===name);
+const schema = {'@context':'https://schema.org','@type':'ItemList',name:`Open-source alternatives to ${name}`,itemListElement: items.map((l,i)=>({'@type':'ListItem',position:i+1,url:new URL(`/tool/${l.slug}/`,Astro.site).toString(),name:l.name}))};
+---
+<Base title={`Open-source alternatives to ${name} (self-hosted)`} description={`${items.length} self-hostable open-source alternatives to ${name}, with license, stars and last activity from GitHub.`} schema={schema}>
+<h1>Open-source alternatives to {name}</h1>
+<table><tr><th>Tool</th><th>License</th><th>Stars</th><th>Last push</th></tr>{items.map(l=> <tr><td><a href={`/tool/${l.slug}/`}>{l.name}</a></td><td>{l.license==='NOASSERTION'?'Custom/undetected (see repo)':l.license}</td><td>{l.stars.toLocaleString('en-US')}</td><td>{l.lastPush.slice(0,10)}</td></tr>)}</table>
+<div class="grid" style="margin-top:1rem">{items.map(l=> <Card l={l}/>)}</div></Base>

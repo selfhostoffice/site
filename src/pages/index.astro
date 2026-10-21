@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro'; import Card from '../components/Card.astro';
+import { listings, cats, CATS, products, slugify, SITE_NAME } from '../lib/data';
+const schema = { '@context':'https://schema.org','@type':'WebSite', name: SITE_NAME, url: Astro.site?.toString() };
+---
+<Base title="Open-source, self-hostable back-office software for small businesses" description="Self-hostable open-source alternatives to DocuSign, Calendly, QuickBooks, Zendesk and more, with license, GitHub stars and last activity for each." schema={schema}>
+<h1>Run your small business on open-source software you can self-host</h1>
+<p>{listings.length} tools across {cats.length} back-office categories. Facts (license, stars, last push) are pulled from GitHub and dated.</p>
+<h2>Categories</h2><ul>{cats.map(c=> <li><a href={`/category/${c}/`}>{CATS[c]}</a> ({listings.filter(l=>l.category===c).length})</li>)}</ul>
+<h2>Alternatives to</h2><p>{products.map(p=> <a href={`/alternatives/${slugify(p)}/`} style="margin-right:.8rem">{p}</a>)}</p>
+<h2>Most-starred</h2><div class="grid">{listings.slice(0,12).map(l=> <Card l={l}/>)}</div>
+</Base>

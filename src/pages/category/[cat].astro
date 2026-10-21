@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro';
+import { listings, cats, CATS } from '../../lib/data';
+export function getStaticPaths(){ return cats.map(cat=>({params:{cat}})); }
+const { cat } = Astro.params; const items = listings.filter(l=>l.category===cat);
+const schema = {'@context':'https://schema.org','@type':'ItemList',name:`Open-source ${CATS[cat]} software`,itemListElement: items.map((l,i)=>({'@type':'ListItem',position:i+1,url:new URL(`/tool/${l.slug}/`,Astro.site).toString(),name:l.name}))};
+---
+<Base title={`Best open-source ${CATS[cat]} software for small businesses`} description={`${items.length} self-hostable open-source ${CATS[cat].toLowerCase()} tools compared by license, GitHub stars and recent activity.`} schema={schema}>
+<h1>Open-source {CATS[cat]} software</h1><p>{items.length} tools, sorted by GitHub stars.</p><div class="grid">{items.map(l=> <Card l={l}/>)}</div></Base>

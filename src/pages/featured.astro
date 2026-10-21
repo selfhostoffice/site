@@ -1,0 +1,8 @@
+---
+import Base from '../layouts/Base.astro';
+const tiers=[['Claimed','$29 one-time','Verified-maintainer badge, edit your description, add hosted-plan link'],['Featured','$49 / month','Top slot in your category + "Featured" label'],['Sponsor','$99 / month','Homepage spotlight + category top slot + alternatives pages']];
+---
+<Base title="Claim or feature your listing" description="Maintainers of open-source business software can claim their listing or buy a clearly labeled featured placement.">
+<h1>Claim or feature your listing</h1><p>Listing is free and always will be. Paid placements are clearly labeled and never change the facts we show (license, stars, activity).</p>
+<div class="grid">{tiers.map(([n,p,d])=> <div class="card"><h3>{n}</h3><p><strong>{p}</strong></p><p>{d}</p><p class="muted">Payment not yet available. Placeholder pricing.</p></div>)}</div>
+</Base>

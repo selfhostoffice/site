@@ -1,0 +1,19 @@
+{
+ "name": "site",
+ "version": "1.0.0",
+ "description": "",
+ "main": "index.js",
+ "scripts": {
+  "seed": "python3 scripts/fetch.py",
+  "build": "astro build",
+  "dev": "astro dev"
+ },
+ "keywords": [],
+ "author": "",
+ "license": "ISC",
+ "type": "module",
+ "dependencies": {
+  "@astrojs/sitemap": "^3.7.4",
+  "astro": "^5.18.2"
+ }
+}

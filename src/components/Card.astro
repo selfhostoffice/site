@@ -1,0 +1,6 @@
+---
+import { CATS, fmtDate } from '../lib/data';
+const { l } = Astro.props;
+---
+<div class="card"><h3><a href={`/tool/${l.slug}/`}>{l.name}</a></h3><p>{l.description}</p>
+<p class="muted">{CATS[l.category]} · ★ {l.stars.toLocaleString('en-US')} · {l.license==='NOASSERTION'?'Custom/undetected (see repo)':l.license} · last push {fmtDate(l.lastPush)}{l.archived && ' · ARCHIVED'}</p></div>

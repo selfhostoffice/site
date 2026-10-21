@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, CATS, slugify, fmtDate } from '../../lib/data';
+export function getStaticPaths(){ return listings.map(l=>({params:{slug:l.slug},props:{l}})); }
+const { l } = Astro.props; const peers = listings.filter(x=>x.category===l.category && x.slug!==l.slug);
+const schema = {'@context':'https://schema.org','@type':'SoftwareApplication',name:l.name,description:l.description,applicationCategory:'BusinessApplication',operatingSystem:'Self-hosted',url:l.homepage||l.repoUrl,sameAs:[l.repoUrl],license:l.license,offers:{'@type':'Offer',price:'0',priceCurrency:'USD'}};
+---
+<Base title={`${l.name}: open-source ${CATS[l.category]} (alternative to ${l.replaces})`} description={`${l.name}: ${l.description}`.slice(0,155)} schema={schema}>
+<h1>{l.name}</h1><p>{l.description}</p>
+<table><tr><th>Repository</th><td><a href={l.repoUrl} rel="nofollow">{l.repo}</a></td></tr>
+{l.homepage && <tr><th>Website</th><td><a href={l.homepage} rel="nofollow">{l.homepage}</a></td></tr>}
+<tr><th>License (SPDX)</th><td>{l.license==='NOASSERTION'?'Custom/undetected (see repo)':l.license}</td></tr><tr><th>GitHub stars</th><td>{l.stars.toLocaleString('en-US')}</td></tr>
+<tr><th>Last push</th><td>{fmtDate(l.lastPush)}{l.archived && ' (archived)'}</td></tr>
+<tr><th>Category</th><td><a href={`/category/${l.category}/`}>{CATS[l.category]}</a></td></tr>
+<tr><th>Alternative to</th><td><a href={`/alternatives/${slugify(l.replaces)}/`}>{l.replaces}</a></td></tr></table>
+<p class="muted">Source: <a href={l.source}>{l.source}</a>, fetched {fmtDate(l.fetchedAt)}. Maintainer? <a href="/featured/">Claim this listing</a>.</p>
+{peers.length>0 && <><h2>Similar tools</h2><ul>{peers.map(p=> <li><a href={`/tool/${p.slug}/`}>{p.name}</a></li>)}</ul></>}
+</Base>

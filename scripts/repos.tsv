@@ -1,0 +1,40 @@
+docusealco/docuseal	e-signature	DocuSign
+documenso/documenso	e-signature	DocuSign
+OpenSignLabs/OpenSign	e-signature	DocuSign
+calcom/cal.com	scheduling	Calendly
+alextselegidis/easyappointments	scheduling	Calendly
+invoiceninja/invoiceninja	invoicing	FreshBooks
+InvoiceShelf/InvoiceShelf	invoicing	FreshBooks
+crater-invoice/crater	invoicing	FreshBooks
+InvoicePlane/InvoicePlane	invoicing	FreshBooks
+akaunting/akaunting	accounting	QuickBooks
+frappe/erpnext	accounting	NetSuite
+odoo/odoo	accounting	NetSuite
+Dolibarr/dolibarr	accounting	QuickBooks
+frappe/books	accounting	QuickBooks
+twentyhq/twenty	crm	Salesforce
+espocrm/espocrm	crm	HubSpot
+salesagility/SuiteCRM	crm	Salesforce
+krayin/laravel-crm	crm	HubSpot
+chatwoot/chatwoot	helpdesk	Zendesk
+zammad/zammad	helpdesk	Zendesk
+freescout-helpdesk/freescout	helpdesk	Help Scout
+kimai/kimai	time-tracking	Harvest
+solidtime-io/solidtime	time-tracking	Toggl
+frappe/hrms	hr	BambooHR
+orangehrm/orangehrm	hr	BambooHR
+formbricks/formbricks	forms	Typeform
+baptisteArno/typebot.io	forms	Typeform
+knadh/listmonk	email-marketing	Mailchimp
+mautic/mautic	email-marketing	Mailchimp
+paperless-ngx/paperless-ngx	documents	Adobe Acrobat
+Stirling-Tools/Stirling-PDF	documents	Adobe Acrobat
+makeplane/plane	project-management	Asana
+plausible/analytics	analytics	Google Analytics
+umami-software/umami	analytics	Google Analytics
+inventree/InvenTree	inventory	Sortly
+opensourcepos/opensourcepos	pos	Square POS
+bigcapitalhq/bigcapital	accounting	QuickBooks
+Leantime/leantime	project-management	Asana
+nextcloud/server	documents	Dropbox
+lukevella/rallly	scheduling	Doodle
