@@ -1,8 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro';
-import { listings, products, slugify, catName, licLabel, licFamily, kfmt, fmtDate, activityLabel, activity, avatar, daysSincePush } from '../../lib/data';
+import { listings, products, slugify, catName, licLabel, licFamily, kfmt, fmtDate, activityLabel, activity, avatar, daysSincePush, GUIDES } from '../../lib/data';
 export function getStaticPaths() { return products.map(p => ({ params: { p: slugify(p) }, props: { name: p } })); }
-const { name } = Astro.props; const items = listings.filter(l => l.replaces === name);
+const { name } = Astro.props; const items = listings.filter(l => l.replaces === name); const guides = GUIDES.filter(g => items.some(l => g.tools.includes(l.slug)));
 const cat = items[0].category; const related = listings.filter(l => l.category === cat && l.replaces !== name);
 const maxStars = Math.max(...items.map(l => l.stars)); const minAge = Math.min(...items.map(daysSincePush));
 const schema = { '@context': 'https://schema.org', '@type': 'ItemList', name: `Open-source alternatives to ${name}`, itemListElement: items.map((l, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(`/tool/${l.slug}/`, Astro.site).toString(), name: l.name })) };
@@ -29,4 +29,5 @@ const fetched = fmtDate(items[0].fetchedAt);
 </div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>The options</h2></div><div class="grid">{items.map(l => <Card l={l}/>)}</div></div></section>
 {related.length > 0 && <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>More in {catName(cat)}</h2></div><div class="grid">{related.map(l => <Card l={l}/>)}</div></div></section>}
+{guides.length > 0 && <div class="wrap">{guides.map(g => <p class="note"><b>Cost guide:</b> <a href={g.href}>{g.title}</a> (prices checked {g.checked})</p>)}</div>}
 </Base>
