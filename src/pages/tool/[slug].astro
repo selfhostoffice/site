@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro';
-import { listings, catName, slugify, fmtDate, licLabel, licFamily, activity, activityLabel, avatar, kfmt } from '../../lib/data';
+import { listings, catName, slugify, fmtDate, licLabel, licFamily, activity, activityLabel, avatar, kfmt, GUIDES } from '../../lib/data';
 export function getStaticPaths() { return listings.map(l => ({ params: { slug: l.slug }, props: { l } })); }
 const { l } = Astro.props;
 const same = listings.filter(x => x.replaces === l.replaces && x.slug !== l.slug);
@@ -22,6 +22,7 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
   </div>
   <div style="margin-top:18px"><FeaturedSlot where={catName(l.category)} href={`/claim/?tool=${l.slug}`} title={`Maintain ${l.name}?`}/></div>
   {l.topics?.length > 0 && <div class="quick"><span>GitHub topics:</span>{l.topics.map((t: string) => <span class="badge">{t}</span>)}</div>}
+  {GUIDES.filter(g => g.tools.includes(l.slug)).map(g => <p class="note"><b>Cost guide:</b> <a href={g.href}>{g.title}</a> (prices checked {g.checked})</p>)}
   <p class="note">Source: <a href={l.source}>{l.source}</a>, fetched {fmtDate(l.fetchedAt)}. "Active" means a push within 30 days of that fetch. Maintainer? <a href={`/claim/?tool=${l.slug}`}>Claim or get featured</a>.</p>
 </div>
 {same.length > 0 && <section><div class="wrap"><div class="sec-head"><h2>Other {l.replaces} alternatives</h2><a href={`/alternatives/${slugify(l.replaces)}/`}>Side-by-side comparison →</a></div><div class="grid">{same.map(x => <Card l={x}/>)}</div></div></section>}

@@ -1666,5 +1666,35 @@
   "replaces": "1Password",
   "source": "https://api.github.com/repos/passbolt/passbolt_api",
   "fetchedAt": "2026-10-21T16:16:10Z"
+ },
+ {
+  "slug": "n8n-io--n8n",
+  "name": "n8n",
+  "repo": "n8n-io/n8n",
+  "repoUrl": "https://github.com/n8n-io/n8n",
+  "homepage": "https://n8n.io",
+  "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+  "license": "NOASSERTION",
+  "stars": 208269,
+  "lastPush": "2026-10-22T04:03:03Z",
+  "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/45487711?v=4",
+  "language": "TypeScript",
+  "forks": 61218,
+  "openIssues": 1227,
+  "topics": [
+   "ai",
+   "apis",
+   "automation",
+   "cli",
+   "data-flow",
+   "development",
+   "integration-framework",
+   "integrations"
+  ],
+  "category": "automation",
+  "replaces": "Zapier",
+  "source": "https://api.github.com/repos/n8n-io/n8n",
+  "fetchedAt": "2026-10-22T04:06:11Z"
  }
 ]

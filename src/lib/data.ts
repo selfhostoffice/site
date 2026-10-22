@@ -21,6 +21,7 @@ export const CATS: Record<string, { name: string; icon: string; blurb: string }>
   'team-chat': { name: 'Team chat', icon: 'chat', blurb: 'Channels, DMs and calls' },
   'knowledge-base': { name: 'Wiki & docs', icon: 'file', blurb: 'Team wikis and shared notes' },
   databases: { name: 'No-code databases', icon: 'form', blurb: 'Spreadsheet-style databases' },
+  automation: { name: 'Workflow automation', icon: 'pulse', blurb: 'Zapier-style workflows and integrations' },
   passwords: { name: 'Password managers', icon: 'badge', blurb: 'Shared vaults and credentials' },
 };
 export const catName = (c: string) => CATS[c]?.name ?? c;
@@ -38,3 +39,7 @@ export const activity = (l: L) => l.archived ? 'archived' : daysSincePush(l) <= 
 export const activityLabel = (l: L) => ({ archived: 'Archived', active: 'Active', slowing: 'Slowing', stale: 'Stale' } as any)[activity(l)];
 export const kfmt = (n: number) => n >= 1000 ? (n / 1000).toFixed(n >= 10000 ? 0 : 1) + 'k' : String(n);
 export const avatar = (l: L, s = 64) => `${l.ownerAvatar}${l.ownerAvatar.includes('?') ? '&' : '?'}s=${s}`;
+/** Editorial guides (pricing / cost pages), linked from the tool pages they cover */
+export const GUIDES = [
+  { href: '/pricing/n8n/', title: 'n8n pricing: Cloud vs self-hosted, real monthly cost', tools: ['n8n-io--n8n'], checked: 'Oct 2026' },
+];
