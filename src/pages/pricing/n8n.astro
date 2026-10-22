@@ -44,14 +44,14 @@ const schema = [
 ---
 <Base title="n8n pricing (Oct 2026): Cloud vs self-hosted, real monthly cost" description="n8n Cloud costs about $22–56/mo (€20–50) billed annually; self-hosting is free but needs a server from ~$10/mo. Verified prices from n8n, Hetzner, DigitalOcean and Vultr, checked Oct 2026." schema={schema} crumbs={[['Home', '/'], ['n8n pricing', '/pricing/n8n/']]}>
 <div class="wrap page-head prose">
-  <span class="eyebrow">Pricing guide · prices checked Oct 21, 2026</span>
+  <span class="eyebrow">Pricing guide · Checked on Oct 22, 2026 · prices read Oct 21, 2026</span>
   <h1>n8n pricing: Cloud vs self-hosted, real monthly cost</h1>
-  <p class="muted">Every price below was read from the vendor’s own page on {CHECKED}, with links. Prices change, so check the source before you buy. We note where something is our reading rather than a published number.</p>
+  <p class="muted">I read every price below off the vendor’s own page on {CHECKED} and linked it, so you can check me. I went back over the page on Oct 22, 2026. Prices move, so look at the source before you pay for anything. Where something is my opinion rather than a published number, I say so.</p>
   <p class="note"><b>Disclosure:</b> we may later add affiliate links to some providers on this page. There are none yet; all links below are plain links. <a href="/disclosure/">How we make money</a>.</p>
 
-  <h2>The short answer</h2>
+  <h2>The short version</h2>
   <ul>
-    <li><b>n8n Cloud:</b> Starter <b>≈ $22/mo</b> (€20), Pro <b>≈ $56/mo</b> (€50), both billed annually (<a href={S.pricing}>n8n pricing</a>). n8n runs the servers, upgrades and backups.</li>
+    <li><b>n8n Cloud:</b> Starter <b>≈ $22/mo</b> (€20), Pro <b>≈ $56/mo</b> (€50), both billed annually (<a href={S.pricing}>n8n pricing</a>). n8n looks after the servers, upgrades and backups for you.</li>
     <li><b>Self-hosted Community edition:</b> $0 license. You pay for a VPS, roughly <b>$10–24/mo</b> for a 2–4 GB server on Vultr or DigitalOcean, plus your own time on updates, backups and security.</li>
     <li><b>Self-hosted Business:</b> <b>≈ $749/mo</b> (€667) billed annually, for SSO, environments, Git version control and queue mode on your own servers.</li>
   </ul>
@@ -63,7 +63,7 @@ const schema = [
 <thead><tr><th scope="col">Plan</th><th scope="col">Price</th><th scope="col">What you get (from n8n’s page)</th></tr></thead>
 <tbody>{cloud.map(c => <tr><th scope="row">{c.plan}</th><td><b class="usd">{c.usd}</b><br /><small class="eur">{c.price} (official)</small></td><td>{c.note}</td></tr>)}</tbody>
 </table></div>
-<p class="note">Source: <a href={S.pricing}>n8n.io/pricing</a>, checked {CHECKED}. n8n lists Cloud prices in euros, billed annually; it bills by workflow executions (one run of a whole workflow, however many steps). All plans include unlimited users, workflows and integrations. We did not verify the monthly-billing price.</p>
+<p class="note">Source: <a href={S.pricing}>n8n.io/pricing</a>, checked {CHECKED}. n8n lists Cloud prices in euros, billed annually; it bills by workflow executions (one run of a whole workflow, however many steps). All plans include unlimited users, workflows and integrations. I didn’t verify the monthly-billing price, so I’ve left it out.</p>
 <p class="note">{FX_NOTE}</p>
 </div></section>
 
@@ -75,7 +75,7 @@ const schema = [
   <li>n8n’s <a href={S.awsDoc}>Kubernetes guides</a> list the resources behind its own Cloud tiers: Starter 320 MB RAM, Pro (10k executions) 640 MB, Pro (50k executions) 1,280 MB.</li>
   <li>The default Docker setup uses SQLite. n8n’s docs say to use Postgres for production instances with more than a handful of users or round-the-clock workflows. That can run on the same server.</li>
 </ul>
-<p>Our reading: a 2 GB server covers a small team’s workflows; pick 4 GB if you use Assistant, Postgres on the same box, or heavy code steps.</p>
+<p>My take: a 2 GB server is plenty for a small team’s workflows. I’d go to 4 GB if you want Assistant, plan to run Postgres on the same box, or lean on heavy code steps. That’s my judgment from n8n’s numbers above, not something I load-tested.</p>
 </div>
 </div></section>
 
@@ -95,10 +95,10 @@ const schema = [
   <li><b>A 4 GB self-hosted server:</b> $20/mo (Vultr Regular) or $24/mo (DigitalOcean Basic), before backups.</li>
   <li><b>A 2 GB self-hosted server:</b> $10/mo (Vultr Regular) or $12/mo (DigitalOcean Basic).</li>
 </ul>
-<p>The server bill alone is close to Starter. Self-hosting saves money mainly when you would otherwise need Pro’s limits, or when you run many workflows: Community edition has no execution quota of its own, so your limit is the server.</p>
+<p>Here’s what surprised me: the server bill on its own is close to the price of Starter. So if Starter’s limits fit you, I don’t think self-hosting is worth it just to save money. It starts to pay off when you’d otherwise need Pro, or when you run a lot of workflows, because Community edition has no execution quota of its own. The server is your only limit.</p>
 
 <h2>License: the Sustainable Use License</h2>
-<p>n8n is “fair-code”, not OSI open source. Its <a href={S.license}>Sustainable Use License</a> lets you use and modify n8n “only for your own internal business purposes or for non-commercial or personal use”, and distribute it only “free of charge for non-commercial purposes”. Files marked <code>.ee</code> need a paid Enterprise license. Running n8n for your own company is fine; reselling it as a hosted service to clients is not. Read the license or ask n8n if you are unsure.</p>
+<p>n8n is “fair-code”, not OSI open source. Its <a href={S.license}>Sustainable Use License</a> lets you use and modify n8n “only for your own internal business purposes or for non-commercial or personal use”, and distribute it only “free of charge for non-commercial purposes”. Files marked <code>.ee</code> need a paid Enterprise license. As I read it, running n8n for your own company is fine and reselling it to clients as a hosted service is not. I’m not a lawyer, so if your case is borderline, read the license yourself or ask n8n.</p>
 
 <h2>What you give up by self-hosting</h2>
 <p>From n8n’s <a href={S.editions}>edition comparison</a>, the free Community edition does not include:</p>
@@ -108,8 +108,8 @@ const schema = [
   <li>SSO (SAML, LDAP), external secrets, log streaming</li>
   <li>Git version control, multi-main mode, external storage for binary data</li>
 </ul>
-<p>Registering your instance by email (free) adds folders, debug in editor and custom execution data. You also take on the work: n8n’s own guide says self-hosting “requires technical knowledge” and recommends n8n Cloud if you aren’t experienced at managing servers, since “mistakes can lead to data loss, security issues, and downtime”. n8n ships a new minor version most weeks, so plan for updates.</p>
-<p>Some things go the other way: per n8n’s pricing page, running bash scripts and custom nodes are only available self-hosted.</p>
+<p>Registering your instance by email (free) adds folders, debug in editor and custom execution data. You also take on the work: n8n’s own guide says self-hosting “requires technical knowledge” and recommends n8n Cloud if you aren’t experienced at managing servers, since “mistakes can lead to data loss, security issues, and downtime”. n8n ships a new minor version most weeks, so budget real time for updates. Honestly, that upkeep is the part people underestimate.</p>
+<p>It isn’t all loss, though. Per n8n’s pricing page, running bash scripts and custom nodes only works self-hosted.</p>
 
 <h2>FAQ</h2>
 {faq.map(f => <><h3>{f.q}</h3><p>{f.a}</p></>)}
