@@ -1,0 +1,136 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+import affiliates from '../../data/affiliates.json';
+const cal = listings.find(l => l.slug === 'calcom--cal.diy')!;
+const aff = (affiliates as Record<string, { href: string; label: string; terms: string }>)['calcom--cal.diy'];
+const CHECKED = 'Oct 22, 2026';
+const S = {
+  pricing: 'https://cal.com/pricing',
+  diy: 'https://www.cal.diy/',
+  repo: 'https://github.com/calcom/cal.diy',
+  hubDiy: 'https://hub.docker.com/r/calcom/cal.diy',
+  hubCom: 'https://hub.docker.com/r/calcom/cal.com/tags',
+  sales: 'https://cal.com/sales',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  vultr: 'https://www.vultr.com/pricing/',
+};
+const plans = [
+  { plan: 'Free', price: '$0', note: '1 user; unlimited event types and calendars; email and SMS notifications; Stripe and PayPal payments; Salesforce and HubSpot sync' },
+  { plan: 'Teams', price: '$12 per user/mo', note: 'billed yearly (the page says “Save 25%”); 1 team with shared availability, round-robin, managed and collective events, routing forms, remove Cal.com branding, booking analytics; 14-day trial' },
+  { plan: 'Organizations', price: '$28 per user/mo', note: 'billed yearly; unlimited sub-teams, yourcompany.cal.com subdomain, SAML SSO and SCIM, SOC 2 / HIPAA / ISO 27001, role-based permissions; 14-day trial' },
+  { plan: 'Enterprise', price: 'Custom', note: 'annual; dedicated onboarding, SLA, dedicated database. Cal.com’s on-prem option is offered through sales' },
+];
+const sizes = [1, 3, 5, 10, 25];
+const yr = (seats: number, per: number) => seats * per * 12;
+const maxV = yr(25, 28);
+const vps = [
+  { host: 'Vultr', plan: 'Cloud Compute, Regular', spec: '2 vCPU · 4 GB · 80 GB SSD', price: '$20.00/mo', src: S.vultr },
+  { host: 'DigitalOcean', plan: 'Basic Droplet', spec: '2 vCPU · 4 GiB · 80 GiB SSD', price: '$24.00/mo', src: S.do },
+  { host: 'Vultr', plan: 'Cloud Compute, Regular', spec: '1 vCPU · 2 GB · 55 GB SSD', price: '$10.00/mo', src: S.vultr },
+];
+const faq = [
+  { q: 'How much does Cal.com cost?', a: 'Cal.com is free for one person. Teams is $12 per user per month and Organizations is $28 per user per month, both billed yearly; Enterprise is custom (cal.com/pricing, checked Oct 22, 2026).' },
+  { q: 'Can I self-host Cal.com for free?', a: 'You can self-host Cal.diy, the MIT-licensed community edition spun out of Cal.com, with no license key. It drops Teams, round-robin, Workflows, Routing Forms, Insights and SSO, and Cal.com says it is for personal, non-production use. The commercial Cal.com app on your own servers is an Enterprise deal through sales.' },
+  { q: 'Is self-hosting cheaper than Cal.com Teams?', a: 'Not in a like-for-like way, because Cal.diy has no team features. For one person, Cal.com’s Free plan already costs $0, so a $10–24/mo server only makes sense if you need the data on your own machine.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Cal.com pricing: cloud plans vs self-hosting Cal.diy', dateModified: '2026-10-22', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/pricing/cal-com/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title="Cal.com pricing (Oct 2026): cloud plans vs self-hosting Cal.diy" description="Cal.com is free for one user, $12/user/mo for Teams and $28 for Organizations (billed yearly). What self-hosting Cal.diy really gets you, and what it leaves out. Checked Oct 22, 2026." schema={schema} crumbs={[['Home', '/'], ['Cal.com pricing', '/pricing/cal-com/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Pricing guide · Checked on {CHECKED}</span>
+  <h1>Cal.com pricing: cloud plans vs self-hosting Cal.diy</h1>
+  <p class="muted">I read the prices below off <a href={S.pricing}>cal.com/pricing</a> and the feature list off <a href={S.diy}>Cal.diy’s own docs</a> on {CHECKED}. Everything is linked so you can check me. Prices change, so look at the source before you pay.</p>
+  <p class="note"><b>Disclosure:</b> the “{aff.label}” link on this page is an affiliate link. If you buy a paid Cal.com plan through it, we may earn {aff.terms}, at no extra cost to you. Self-hosting earns us nothing, and I’ve tried to be straight about when it’s the better pick. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>One person:</b> Cal.com’s Free plan is $0 and covers unlimited event types, calendars and bookings. Hard to beat.</li>
+    <li><b>A team:</b> <b>$12 per user/mo</b> (Teams) or <b>$28 per user/mo</b> (Organizations), billed yearly.</li>
+    <li><b>Self-hosting:</b> the free, open-source version is now <a href={S.repo}>Cal.diy</a> (MIT). It has <b>no team features</b>, and Cal.com says it is for personal, non-production use. The full Cal.com app on your own servers is an Enterprise conversation with <a href={S.sales}>sales</a>.</li>
+  </ul>
+  <p>That last point is the one most older “self-host Cal.com for free” posts miss. The open-source repo used to be the whole product with enterprise bits behind a license key. Now the enterprise code is gone from it entirely, so self-hosting stops being a cheap way to get Teams.</p>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Cal.com cloud plans</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Plan</th><th scope="col">Price</th><th scope="col">What you get (from Cal.com’s page)</th></tr></thead>
+<tbody>{plans.map(p => <tr><th scope="row">{p.plan}</th><td><b class="usd">{p.price}</b></td><td>{p.note}</td></tr>)}</tbody>
+</table></div>
+<p class="note">Source: <a href={S.pricing}>cal.com/pricing</a>, checked {CHECKED}. The page shows yearly billing with a “Save 25%” tag. I didn’t record the month-to-month price, so I’ve left it out rather than work it backwards.</p>
+<p><a class="btn ghost" href={aff.href} rel="sponsored nofollow" data-track="outbound" data-tool={cal.slug} data-kind="affiliate">{aff.label} (affiliate link)</a></p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>What a team actually pays per year</h2>
+<p class="muted">Plain multiplication of the yearly-billed prices above: seats × per-user price × 12. No discounts assumed.</p>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 250" width="100%" role="img" aria-labelledby="calchart-t">
+  <title id="calchart-t">Yearly cost of Cal.com Teams and Organizations for 1, 3, 5, 10 and 25 users</title>
+  {sizes.map((n, i) => {
+    const y = 18 + i * 46; const wT = (yr(n, 12) / maxV) * 430; const wO = (yr(n, 28) / maxV) * 430;
+    return <g>
+      <text x="0" y={y + 14} font-size="13" fill="currentColor">{n} {n === 1 ? 'user' : 'users'}</text>
+      <rect x="70" y={y} width={Math.max(wT, 2)} height="14" fill="#8a8f98" />
+      <text x={76 + wT} y={y + 12} font-size="12" fill="currentColor">${yr(n, 12).toLocaleString('en-US')} Teams</text>
+      <rect x="70" y={y + 17} width={Math.max(wO, 2)} height="14" fill="#2f3a4a" />
+      <text x={76 + wO} y={y + 29} font-size="12" fill="currentColor">${yr(n, 28).toLocaleString('en-US')} Orgs</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">Grey: Teams at $12/user/mo. Dark: Organizations at $28/user/mo. Both billed yearly, prices from <a href={S.pricing}>cal.com/pricing</a> on {CHECKED}.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>Self-hosting: what Cal.diy is, and what it isn’t</h2>
+<p>Cal.diy’s README calls it “a fork of Cal.com with all enterprise/commercial code removed”, 100% MIT, no license key, community-maintained, with no hosted version. Its docs open with a warning that it is “strictly recommended for personal, non-production use”. I’d take that warning at face value: it’s the company telling you it won’t stand behind it.</p>
+<p>From the <a href={S.diy}>feature table in Cal.diy’s docs</a>, these are in Cal.com but <b>not</b> in Cal.diy:</p>
+<ul>
+  <li>Teams, round-robin and collective team events, managed event types, Organizations</li>
+  <li>Workflows (automated reminders and follow-ups) and Routing Forms</li>
+  <li>Insights dashboard, SAML SSO, SCIM, impersonation, admin panel</li>
+  <li>Cal.com video recordings, instant meetings, API v1</li>
+</ul>
+<p>What stays is still a solid personal booking page: event types, recurring and seated events, paid bookings through Stripe or PayPal, Google/Outlook/Apple/CalDAV calendars, Zoom, Meet and Teams, webhooks, embeds and API v2.</p>
+
+<h3>Things I found when checking the setup</h3>
+<ul>
+  <li>The README points to a <a href={S.hubDiy}>calcom/cal.diy image on Docker Hub</a>. When I queried Docker Hub’s API on {CHECKED}, that repository had <b>no published tags and 0 pulls</b> (registered Apr 14, 2026). So for now you build the image yourself from the repo, which the README also documents.</li>
+  <li>The last image on the old <a href={S.hubCom}>calcom/cal.com</a> Docker Hub repo is v6.2.0 from Mar 2, 2026, about 1.6 GB compressed for amd64. That’s a big Next.js app, not a tiny service.</li>
+  <li>Stated prerequisites: Node.js 18 or newer and PostgreSQL 13 or newer. Cal.diy doesn’t publish a RAM figure.</li>
+</ul>
+<p>My take on sizing, and it is a judgment call, not a load test: I’d start on a 4 GB server so the app and Postgres sit comfortably on one box, and build the image somewhere else rather than on a small VPS.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>Servers that fit</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Host</th><th scope="col">Plan</th><th scope="col">Spec</th><th scope="col">Price</th></tr></thead>
+<tbody>{vps.map(v => <tr><th scope="row"><a href={v.src} rel="nofollow">{v.host}</a></th><td>{v.plan}</td><td>{v.spec}</td><td>{v.price}</td></tr>)}</tbody>
+</table></div>
+<p class="note">Prices read from <a href={S.vultr}>Vultr</a> and <a href={S.do}>DigitalOcean</a> on Oct 21, 2026. Backups cost extra (DigitalOcean 20% weekly or 30% daily; Vultr 20%). You’ll also want a domain and an email-sending service for booking confirmations.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>So which should you pick?</h2>
+<ul>
+  <li><b>Solo, just need a booking link:</b> Cal.com Free. A $10–24/mo server to replace a $0 plan only makes sense if keeping booking data on your own machine is the point.</li>
+  <li><b>Solo, and you want it on your own server:</b> Cal.diy is a good fit. Budget roughly $20–24/mo for a 4 GB box plus your time on updates.</li>
+  <li><b>A team that needs round-robin, routing or reminders:</b> Cal.com Teams. Cal.diy can’t do those at any price, so self-hosting isn’t a real alternative here.</li>
+  <li><b>A company that must run it in-house with SSO:</b> that’s Cal.com Enterprise on-prem, priced by sales.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(f => <><h3>{f.q}</h3><p>{f.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>Cal.diy on SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${cal.slug}/`}><img src={avatar(cal, 56)} alt="" width="28" height="28" loading="lazy"/> Cal.diy</a>: {cal.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(cal.lastPush)} (GitHub API, fetched {fmtDate(cal.fetchedAt)}). <a href="/alternatives/calendly/">Other Calendly alternatives</a>.</p>
+</div></section>
+</Base>

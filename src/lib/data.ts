@@ -42,4 +42,5 @@ export const avatar = (l: L, s = 64) => `${l.ownerAvatar}${l.ownerAvatar.include
 /** Editorial guides (pricing / cost pages), linked from the tool pages they cover */
 export const GUIDES = [
   { href: '/pricing/n8n/', title: 'n8n pricing: Cloud vs self-hosted, real monthly cost', tools: ['n8n-io--n8n'], checked: 'Oct 2026' },
+  { href: '/pricing/cal-com/', title: 'Cal.com pricing: cloud plans vs self-hosting Cal.diy', tools: ['calcom--cal.diy'], checked: 'Oct 2026' },
 ];
