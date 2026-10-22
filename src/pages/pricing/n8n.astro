@@ -1,4 +1,5 @@
 ---
+const FX_NOTE = 'USD shown at the ECB reference rate of 1.1234 on Oct 21, 2026; providers bill in EUR, so your card charge may differ.';
 import Base from '../../layouts/Base.astro'; import Icon from '../../components/Icon.astro';
 import { listings, avatar, fmtDate } from '../../lib/data';
 const n8n = listings.find(l => l.slug === 'n8n-io--n8n')!;
@@ -15,16 +16,16 @@ const S = {
   vultr: 'https://www.vultr.com/pricing/',
 };
 const cloud = [
-  { plan: 'Starter', price: '€20/mo', note: 'billed annually; 5 concurrent executions, 2.5k saved executions, 1 shared project, forum support' },
-  { plan: 'Pro', price: '€50/mo', note: 'billed annually; up to 50 concurrent executions, 25k saved executions, 3 shared projects, admin roles' },
-  { plan: 'Business', price: '€667/mo', note: 'billed annually; self-hosted only (license key); SSO/LDAP, environments, Git version control, queue mode' },
+  { plan: 'Starter', price: '€20/mo', usd: '≈ $22/mo', note: 'billed annually; 5 concurrent executions, 2.5k saved executions, 1 shared project, forum support' },
+  { plan: 'Pro', price: '€50/mo', usd: '≈ $56/mo', note: 'billed annually; up to 50 concurrent executions, 25k saved executions, 3 shared projects, admin roles' },
+  { plan: 'Business', price: '€667/mo', usd: '≈ $749/mo', note: 'billed annually; self-hosted only (license key); SSO/LDAP, environments, Git version control, queue mode' },
   { plan: 'Enterprise', price: 'Contact sales', note: 'cloud or self-hosted; SLA support, log streaming, external secrets' },
-  { plan: 'Community edition', price: '€0 license', note: 'self-hosted; you pay for the server and your time' },
+  { plan: 'Community edition', price: '€0 license', usd: '$0', note: 'self-hosted; you pay for the server and your time' },
 ];
 const vps = [
-  { host: 'Hetzner', plan: 'CX23 (Cost-Optimized)', spec: '2 vCPU · 4 GB · 40 GB NVMe', price: 'from €5.99/mo excl. VAT', src: S.hzCost, note: 'listed as "not available" when checked' },
-  { host: 'Hetzner', plan: 'CPX22 (Regular Performance)', spec: '2 vCPU · 4 GB · 80 GB NVMe', price: 'from €19.99/mo excl. VAT', src: S.hzReg, note: '' },
-  { host: 'Hetzner', plan: 'CPX11 (US locations)', spec: '2 vCPU · 2 GB · 40 GB NVMe', price: '€17.99/mo excl. VAT', src: S.hzReg, note: 'the type n8n’s Hetzner guide names' },
+  { host: 'Hetzner', plan: 'CX23 (Cost-Optimized)', spec: '2 vCPU · 4 GB · 40 GB NVMe', price: '€5.99/mo excl. VAT', usd: 'from ≈ $6.73/mo', src: S.hzCost, note: 'listed as "not available" when checked' },
+  { host: 'Hetzner', plan: 'CPX22 (Regular Performance)', spec: '2 vCPU · 4 GB · 80 GB NVMe', price: '€19.99/mo excl. VAT', usd: 'from ≈ $22/mo', src: S.hzReg, note: '' },
+  { host: 'Hetzner', plan: 'CPX11 (US locations)', spec: '2 vCPU · 2 GB · 40 GB NVMe', price: '€17.99/mo excl. VAT', usd: '≈ $20/mo', src: S.hzReg, note: 'the type n8n’s Hetzner guide names' },
   { host: 'DigitalOcean', plan: 'Basic Droplet', spec: '1 vCPU · 2 GiB · 50 GiB SSD', price: '$12.00/mo', src: S.do, note: '' },
   { host: 'DigitalOcean', plan: 'Basic Droplet', spec: '2 vCPU · 4 GiB · 80 GiB SSD', price: '$24.00/mo', src: S.do, note: 'meets the 4 GB / 2 vCPU guidance for Assistant' },
   { host: 'Vultr', plan: 'Cloud Compute, Regular', spec: '1 vCPU · 2 GB · 55 GB SSD', price: '$10.00/mo', src: S.vultr, note: '' },
@@ -32,7 +33,7 @@ const vps = [
   { host: 'Vultr', plan: 'Cloud Compute, High Performance', spec: '2 vCPU · 4 GB · 100 GB NVMe', price: '$24.00/mo', src: S.vultr, note: '' },
 ];
 const faq = [
-  { q: 'How much does n8n cost per month?', a: 'On n8n Cloud, Starter is €20/mo and Pro is €50/mo, both billed annually (n8n.io/pricing, checked Oct 21, 2026). Self-hosting the Community edition has no license fee; you pay for a server, which starts around $10–24/mo on DigitalOcean or Vultr for a 2–4 GB machine.' },
+  { q: 'How much does n8n cost per month?', a: 'On n8n Cloud, Starter is about $22/mo (€20) and Pro about $56/mo (€50), both billed annually (n8n.io/pricing, checked Oct 21, 2026). Self-hosting the Community edition has no license fee; you pay for a server, which starts around $10–24/mo on DigitalOcean or Vultr for a 2–4 GB machine.' },
   { q: 'Is self-hosted n8n free?', a: 'The Community edition is free to self-host under the Sustainable Use License, for your own internal business purposes or personal use. Features like SSO, environments, Git version control and workflow sharing need a paid Business or Enterprise license.' },
   { q: 'What server do I need for n8n?', a: 'n8n’s Hetzner guide says the CPX11 type (2 vCPU, 2 GB) is enough for most usage, and recommends at least 4 GB RAM and 2 vCPU if you add n8n Assistant. n8n’s docs list its own Cloud Starter tier at 320 MB RAM.' },
 ];
@@ -41,7 +42,7 @@ const schema = [
   { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
 ];
 ---
-<Base title="n8n pricing (Oct 2026): Cloud vs self-hosted, real monthly cost" description="n8n Cloud costs €20–50/mo billed annually; self-hosting is free but needs a server from ~$10/mo. Verified prices from n8n, Hetzner, DigitalOcean and Vultr, checked Oct 2026." schema={schema} crumbs={[['Home', '/'], ['n8n pricing', '/pricing/n8n/']]}>
+<Base title="n8n pricing (Oct 2026): Cloud vs self-hosted, real monthly cost" description="n8n Cloud costs about $22–56/mo (€20–50) billed annually; self-hosting is free but needs a server from ~$10/mo. Verified prices from n8n, Hetzner, DigitalOcean and Vultr, checked Oct 2026." schema={schema} crumbs={[['Home', '/'], ['n8n pricing', '/pricing/n8n/']]}>
 <div class="wrap page-head prose">
   <span class="eyebrow"><Icon name="receipt" size={16}/> Pricing guide · prices checked Oct 2026</span>
   <h1>n8n pricing: Cloud vs self-hosted, real monthly cost</h1>
@@ -50,9 +51,9 @@ const schema = [
 
   <h2>The short answer</h2>
   <ul>
-    <li><b>n8n Cloud:</b> Starter €20/mo, Pro €50/mo, both billed annually (<a href={S.pricing}>n8n pricing</a>). n8n runs the servers, upgrades and backups.</li>
-    <li><b>Self-hosted Community edition:</b> €0 license. You pay for a VPS, roughly <b>$10–24/mo</b> for a 2–4 GB server on Vultr or DigitalOcean, plus your own time on updates, backups and security.</li>
-    <li><b>Self-hosted Business:</b> €667/mo billed annually, for SSO, environments, Git version control and queue mode on your own servers.</li>
+    <li><b>n8n Cloud:</b> Starter <b>≈ $22/mo</b> (€20), Pro <b>≈ $56/mo</b> (€50), both billed annually (<a href={S.pricing}>n8n pricing</a>). n8n runs the servers, upgrades and backups.</li>
+    <li><b>Self-hosted Community edition:</b> $0 license. You pay for a VPS, roughly <b>$10–24/mo</b> for a 2–4 GB server on Vultr or DigitalOcean, plus your own time on updates, backups and security.</li>
+    <li><b>Self-hosted Business:</b> <b>≈ $749/mo</b> (€667) billed annually, for SSO, environments, Git version control and queue mode on your own servers.</li>
   </ul>
 </div>
 
@@ -60,9 +61,10 @@ const schema = [
 <h2>n8n Cloud and license plans</h2>
 <div class="compare-wrap"><table class="compare">
 <thead><tr><th scope="col">Plan</th><th scope="col">Price</th><th scope="col">What you get (from n8n’s page)</th></tr></thead>
-<tbody>{cloud.map(c => <tr><th scope="row">{c.plan}</th><td>{c.price}</td><td>{c.note}</td></tr>)}</tbody>
+<tbody>{cloud.map(c => <tr><th scope="row">{c.plan}</th><td><b class="usd">{c.usd}</b><br /><small class="eur">{c.price} (official)</small></td><td>{c.note}</td></tr>)}</tbody>
 </table></div>
 <p class="note">Source: <a href={S.pricing}>n8n.io/pricing</a>, checked {CHECKED}. n8n lists Cloud prices in euros, billed annually; it bills by workflow executions (one run of a whole workflow, however many steps). All plans include unlimited users, workflows and integrations. We did not verify the monthly-billing price.</p>
+<p class="note">{FX_NOTE}</p>
 </div></section>
 
 <section style="padding-top:0"><div class="wrap">
@@ -81,15 +83,15 @@ const schema = [
 <h2>Self-hosting: VPS prices that fit</h2>
 <div class="compare-wrap"><table class="compare">
 <thead><tr><th scope="col">Host</th><th scope="col">Plan</th><th scope="col">Spec</th><th scope="col">Price</th><th scope="col">Note</th></tr></thead>
-<tbody>{vps.map(v => <tr><th scope="row"><a href={v.src} rel="nofollow">{v.host}</a></th><td>{v.plan}</td><td>{v.spec}</td><td>{v.price}</td><td>{v.note}</td></tr>)}</tbody>
+<tbody>{vps.map(v => <tr><th scope="row"><a href={v.src} rel="nofollow">{v.host}</a></th><td>{v.plan}</td><td>{v.spec}</td><td>{v.usd ? <><b class="usd">{v.usd}</b><br /><small class="eur">{v.price} (official)</small></> : v.price}</td><td>{v.note}</td></tr>)}</tbody>
 </table></div>
-<p class="note">Sources, checked {CHECKED}: <a href={S.hzCost}>Hetzner Cost-Optimized</a>, <a href={S.hzReg}>Hetzner Regular Performance</a>, <a href={S.do}>DigitalOcean Droplets</a>, <a href={S.vultr}>Vultr</a>. Hetzner prices are in euros, excluding VAT, and vary by location. Add-ons cost extra: DigitalOcean backups are 20% (weekly) or 30% (daily) of the Droplet price; Vultr automatic backups add 20%. A domain name is extra too.</p>
+<p class="note">Sources, checked {CHECKED}: <a href={S.hzCost}>Hetzner Cost-Optimized</a>, <a href={S.hzReg}>Hetzner Regular Performance</a>, <a href={S.do}>DigitalOcean Droplets</a>, <a href={S.vultr}>Vultr</a>. Hetzner prices are in euros, excluding VAT, and vary by location. {FX_NOTE} Add-ons cost extra: DigitalOcean backups are 20% (weekly) or 30% (daily) of the Droplet price; Vultr automatic backups add 20%. A domain name is extra too.</p>
 </div></section>
 
 <section style="padding-top:0"><div class="wrap prose">
 <h2>Cloud vs self-hosted at a glance</h2>
 <ul>
-  <li><b>Cheapest Cloud plan:</b> €20/mo (Starter, annual).</li>
+  <li><b>Cheapest Cloud plan:</b> ≈ $22/mo (€20) (Starter, annual).</li>
   <li><b>A 4 GB self-hosted server:</b> $20/mo (Vultr Regular) or $24/mo (DigitalOcean Basic), before backups.</li>
   <li><b>A 2 GB self-hosted server:</b> $10/mo (Vultr Regular) or $12/mo (DigitalOcean Basic).</li>
 </ul>
