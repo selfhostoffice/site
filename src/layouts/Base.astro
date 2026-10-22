@@ -18,15 +18,15 @@ const bc = crumbs && { '@context': 'https://schema.org', '@type': 'BreadcrumbLis
 </head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap nav">
-  <a class="brand" href="/"><span class="brand-mark" aria-hidden="true">S</span><span>SelfHost<b>Office</b></span></a>
-  <form class="nav-search" action="/" role="search"><Icon name="search" size={16}/><input name="q" type="search" placeholder="Search tools, e.g. DocuSign" aria-label="Search tools"/></form>
+  <a class="brand" href="/"><span class="brand-mark" aria-hidden="true">S</span>SelfHost <b>Office</b></a>
+  <form class="nav-search" action="/" role="search"><Icon name="search" size={16}/><input name="q" type="search" placeholder="Search, e.g. DocuSign" aria-label="Search tools"/></form>
   <nav class="nav-links" aria-label="Main"><a href="/#categories">Categories</a><a href="/#alternatives">Alternatives</a><a href="/claim/">Get featured</a>
   <button class="theme" type="button" aria-label="Toggle dark mode" data-theme-toggle><span class="i-sun"><Icon name="sun" size={18}/></span><span class="i-moon"><Icon name="moon" size={18}/></span></button></nav>
 </div></header>
 {crumbs && <nav class="wrap crumbs" aria-label="Breadcrumb">{crumbs.map(([n, u]: [string, string], i: number) => i < crumbs.length - 1 ? <><a href={u}>{n}</a><span aria-hidden="true">/</span></> : <span aria-current="page">{n}</span>)}</nav>}
 <main id="main"><slot/></main>
 <footer class="site-footer"><div class="wrap foot">
-  <div><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">S</span><span>SelfHost<b>Office</b></span></a><p class="muted small">Open-source back-office software a small business can run on its own server. Every fact links to its source on GitHub.</p></div>
+  <div><a class="brand" href="/">SelfHost <b>Office</b></a><p class="muted small">I keep this list by hand: open-source back-office software a small business can run on its own server. The numbers come from GitHub and each one links to where I got it. Nobody can pay to move up the list.</p></div>
   <div class="foot-links"><a href="/claim/">Claim or feature a listing</a><a href="/disclosure/">Affiliate & sponsor disclosure</a><a href="https://github.com/selfhostoffice/site">Source & data on GitHub</a></div>
 </div></footer>
 <script is:inline>document.querySelector('[data-theme-toggle]').addEventListener('click',()=>{const d=document.documentElement,cur=d.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=cur==='dark'?'light':'dark';d.dataset.theme=n;localStorage.setItem('theme',n)})</script>

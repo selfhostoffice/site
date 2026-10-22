@@ -9,10 +9,10 @@ const schema = { '@context': 'https://schema.org', '@type': 'ItemList', name: `O
 const fetched = fmtDate(items[0].fetchedAt);
 ---
 <Base title={`${items.length} open-source alternatives to ${name} (self-hosted, compared)`} description={`Compare ${items.map(l => l.name).join(', ')}: self-hostable open-source alternatives to ${name}, side by side on license, stars and activity.`} schema={schema} crumbs={[['Home', '/'], ['Alternatives', '/#alternatives'], [name, `/alternatives/${slugify(name)}/`]]}>
-<div class="wrap page-head"><span class="eyebrow"><Icon name="arrow" size={16}/> {catName(cat)}</span><h1>Open-source alternatives to {name}</h1>
+<div class="wrap page-head"><span class="eyebrow">{catName(cat)}</span><h1>Open-source alternatives to {name}</h1>
 <p class="muted">{items.length} self-hostable {items.length === 1 ? 'option' : 'options'} you can run on your own server, compared on facts from GitHub (fetched {fetched}).</p></div>
 <section style="padding-top:14px"><div class="wrap">
-<h2 class="sr-title">Side-by-side comparison</h2>
+<h2 class="sr-title">Side by side</h2>
 <div class="compare-wrap"><table class="compare">
 <thead><tr><th scope="col"><span class="muted small">Tool</span></th>{items.map(l => <th scope="col"><a class="tool" href={`/tool/${l.slug}/`}><img src={avatar(l, 56)} alt="" width="28" height="28" loading="lazy"/>{l.name}</a></th>)}</tr></thead>
 <tbody>
@@ -27,7 +27,7 @@ const fetched = fmtDate(items[0].fetchedAt);
 <p class="note">Highlighted cells mark the highest star count and the most recent push. Source: GitHub REST API, per-tool links on each tool page. Copyleft licenses (AGPL/GPL) require sharing modifications if you distribute or (AGPL) serve them; check the repo license before deploying.</p>
 <div style="margin-top:16px"><FeaturedSlot where={`the ${name} alternatives comparison`}/></div>
 </div></section>
-<section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>The options</h2></div><div class="grid">{items.map(l => <Card l={l}/>)}</div></div></section>
+<section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>Each one, briefly</h2></div><div class="grid">{items.map(l => <Card l={l}/>)}</div></div></section>
 {related.length > 0 && <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>More in {catName(cat)}</h2></div><div class="grid">{related.map(l => <Card l={l}/>)}</div></div></section>}
 {guides.length > 0 && <div class="wrap">{guides.map(g => <p class="note"><b>Cost guide:</b> <a href={g.href}>{g.title}</a> (prices checked {g.checked})</p>)}</div>}
 </Base>

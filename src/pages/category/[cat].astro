@@ -7,7 +7,7 @@ const reps = [...new Set(items.map(l => l.replaces))];
 const schema = { '@context': 'https://schema.org', '@type': 'ItemList', name: `Open-source ${C.name} software`, itemListElement: items.map((l, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(`/tool/${l.slug}/`, Astro.site).toString(), name: l.name })) };
 ---
 <Base title={`Best open-source ${C.name} software for small businesses`} description={`${items.length} self-hostable open-source ${C.name.toLowerCase()} tools compared by license, GitHub stars and recent activity.`} schema={schema} crumbs={[['Home', '/'], [C.name, `/category/${cat}/`]]}>
-<div class="wrap page-head"><span class="eyebrow"><Icon name={C.icon} size={16}/> Category</span><h1>Open-source {C.name.toLowerCase()} software</h1><p class="muted">{C.blurb}. {items.length} self-hostable tools.</p>
+<div class="wrap page-head"><span class="eyebrow">Category</span><h1>Open-source {C.name.toLowerCase()} software</h1><p class="muted">{C.blurb}. {items.length} self-hostable tools.</p>
 <div class="quick">{reps.map(r => <a class="chip" href={`/alternatives/${slugify(r)}/`}>Compare alternatives to {r}</a>)}</div></div>
 <section style="padding-top:18px"><div class="wrap"><FeaturedSlot where={C.name}/><Directory items={items} showCat={false}/></div></section>
 </Base>

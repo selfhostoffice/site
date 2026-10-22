@@ -7,18 +7,18 @@ const popular = ['DocuSign', 'Calendly', 'QuickBooks', 'Zendesk', 'Salesforce', 
 ---
 <Base title="Open-source back-office software for small businesses" description={`Compare ${listings.length} self-hostable, open-source alternatives to DocuSign, Calendly, QuickBooks, Zendesk and more, with license, stars and activity straight from GitHub.`} schema={schema}>
 <section class="hero"><div class="wrap">
-  <span class="eyebrow"><Icon name="box" size={16}/> For small businesses that want to own their tools</span>
-  <h1>Run your back office on open source.</h1>
-  <p class="lead">Self-hostable alternatives to the SaaS you pay for every month, from e-signatures to invoicing. Every number is pulled from GitHub and dated, with no paid rankings.</p>
+  <span class="eyebrow">A directory for small businesses</span>
+  <h1>Stop renting your back office.</h1>
+  <p class="lead">I list open-source tools you can run on your own server instead of paying monthly for DocuSign, Calendly, QuickBooks and the rest. Stars, license and last commit come straight from GitHub, with the date I pulled them.</p>
   <form class="big-search" role="search" action="/" data-hero-search><Icon name="search" size={20}/><input name="q" type="search" placeholder="What do you want to replace? e.g. Calendly" aria-label="Search tools"/><button class="btn" type="submit">Search</button></form>
-  <div class="quick"><span>Popular:</span>{popular.map(p => <a class="chip" href={`/alternatives/${slugify(p)}/`}>{p}</a>)}</div>
-  <div class="stats"><div><b>{listings.length}</b><span>tools tracked</span></div><div><b>{cats.length}</b><span>categories</span></div><div><b>{products.length}</b><span>SaaS products replaced</span></div><div><b>{active}</b><span>pushed to in the last 30 days</span></div></div>
+  <div class="quick"><span>People usually start with</span>{popular.map(p => <a class="chip" href={`/alternatives/${slugify(p)}/`}>{p}</a>)}</div>
+  <div class="stats"><div><b>{listings.length}</b><span>tools tracked</span></div><div><b>{cats.length}</b><span>categories</span></div><div><b>{products.length}</b><span>SaaS products replaced</span></div><div><b>{active}</b><span>committed to in the last 30 days</span></div></div>
 </div></section>
-<section id="categories"><div class="wrap"><div class="sec-head"><h2>Browse by job to be done</h2></div>
+<section id="categories"><div class="wrap"><div class="sec-head"><h2>By the job it does</h2></div>
   <div class="cat-grid">{cats.map(c => <a class="cat" href={`/category/${c}/`}><span class="ic"><Icon name={CATS[c].icon}/></span><span><b>{CATS[c].name}</b><small>{CATS[c].blurb} · {listings.filter(l => l.category === c).length}</small></span></a>)}</div>
 </div></section>
-<section id="alternatives" style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>Replace a SaaS subscription</h2></div>
-  <div class="alt-grid">{products.map(p => <a class="chip" href={`/alternatives/${slugify(p)}/`}>Alternatives to {p} · {listings.filter(l => l.replaces === p).length}</a>)}</div>
+<section id="alternatives" style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>By the bill you want to cancel</h2></div>
+  <div class="alt-grid">{products.map(p => <a class="chip" href={`/alternatives/${slugify(p)}/`}>{p} <span class="muted">({listings.filter(l => l.replaces === p).length})</span></a>)}</div>
 </div></section>
-<section id="directory" style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>All tools</h2><span class="muted small">Filter and sort in place.</span></div><FeaturedSlot where="the homepage"/><Directory items={listings}/></div></section>
+<section id="directory" style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>Everything, in one list</h2><span class="muted small">Sorted by GitHub stars. Filter below.</span></div><FeaturedSlot where="the homepage"/><Directory items={listings}/></div></section>
 </Base>
