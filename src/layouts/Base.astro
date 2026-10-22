@@ -10,7 +10,7 @@ const bc = crumbs && { '@context': 'https://schema.org', '@type': 'BreadcrumbLis
 <title>{title} | {SITE_NAME}</title><meta name="description" content={description}/><link rel="canonical" href={canonical}/>
 <meta property="og:type" content="website"/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/>
 <meta name="twitter:card" content="summary"/><meta name="color-scheme" content="light dark"/>
-<link rel="icon" href="/favicon.svg" type="image/svg+xml"/><link rel="preconnect" href="https://avatars.githubusercontent.com"/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="preconnect" href="https://avatars.githubusercontent.com"/>
 <script is:inline>(()=>{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t})()</script>
 {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 {bc && <script type="application/ld+json" set:html={JSON.stringify(bc)} />}
