@@ -1,8 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro';
+import affiliates from '../../data/affiliates.json';
 import { listings, catName, slugify, fmtDate, licLabel, licFamily, activity, activityLabel, avatar, kfmt, GUIDES } from '../../lib/data';
 export function getStaticPaths() { return listings.map(l => ({ params: { slug: l.slug }, props: { l } })); }
 const { l } = Astro.props;
+const aff = (affiliates as Record<string, {href: string; label: string; terms: string}>)[l.slug];
 const same = listings.filter(x => x.replaces === l.replaces && x.slug !== l.slug);
 const related = listings.filter(x => x.category === l.category && x.slug !== l.slug && x.replaces !== l.replaces).slice(0, 6);
 const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: l.name, description: l.description, applicationCategory: 'BusinessApplication', operatingSystem: 'Self-hosted', url: l.homepage || l.repoUrl, sameAs: [l.repoUrl], image: l.ownerAvatar, license: l.license === 'NOASSERTION' ? undefined : `https://spdx.org/licenses/${l.license}.html`, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } };
@@ -11,7 +13,8 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
 <div class="wrap page-head">
   <div class="tool-head"><img class="logo" src={avatar(l, 144)} alt={`${l.repo.split('/')[0]} avatar on GitHub`} width="72" height="72"/><div><h1 style="margin:0">{l.name}</h1><a class="chip" href={`/alternatives/${slugify(l.replaces)}/`}>Replaces {l.replaces}</a></div></div>
   <p class="lead muted" style="font-size:1.1rem;max-width:65ch">{l.description}</p>
-  <div class="actions"><a class="btn" href={l.repoUrl} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="repo"><Icon name="github" size={18}/>View on GitHub</a>{l.homepage && <a class="btn ghost" href={l.homepage} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="website"><Icon name="globe" size={18}/>Website</a>}<a class="btn ghost" href={`/alternatives/${slugify(l.replaces)}/`}>Compare {l.replaces} alternatives</a><a class="btn ghost" href={`/claim/?tool=${l.slug}`}>Claim or get featured</a></div>
+  <div class="actions"><a class="btn" href={l.repoUrl} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="repo"><Icon name="github" size={18}/>View on GitHub</a>{l.homepage && <a class="btn ghost" href={l.homepage} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="website"><Icon name="globe" size={18}/>Website</a>}{aff && <a class="btn ghost" href={aff.href} rel="sponsored nofollow" data-track="outbound" data-tool={l.slug} data-kind="affiliate">{aff.label} (affiliate link)</a>}<a class="btn ghost" href={`/alternatives/${slugify(l.replaces)}/`}>Compare {l.replaces} alternatives</a><a class="btn ghost" href={`/claim/?tool=${l.slug}`}>Claim or get featured</a></div>
+  {aff && <p class="note"><b>Affiliate disclosure:</b> the "{aff.label}" link is an affiliate link. If you sign up for a paid plan through it, we may earn {aff.terms}, at no extra cost to you. It does not change this listing's data. Self-hosting stays free. <a href="/disclosure/">How we make money</a>.</p>}
   <div class="facts">
     <div class="fact"><span>Stars</span><b>{l.stars.toLocaleString('en-US')}</b></div>
     <div class="fact"><span>License</span><b class={`lic-${licFamily(l.license)}`}>{licLabel(l.license)}</b></div>
