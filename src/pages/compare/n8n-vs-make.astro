@@ -1,0 +1,144 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const n8n = listings.find(l => l.slug === 'n8n-io--n8n')!;
+const CHECKED = 'Oct 22, 2026';
+const S = {
+  make: 'https://www.make.com/en/pricing',
+  makeSubs: 'https://help.make.com/monthly-and-annual-subscriptions',
+  n8n: 'https://n8n.io/pricing/',
+  vultr: 'https://www.vultr.com/pricing/',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// Make: credits tier -> [Core monthly, Core annual, Pro monthly, Pro annual, Teams monthly, Teams annual], read off make.com/en/pricing Oct 22, 2026 (US$ per month)
+const makeTiers: [string, number | null, number | null, number, number, number, number][] = [
+  ['10,000', 16, 12, 28, 21, 51, 38],
+  ['20,000', 28, 21, 51, 38, 94, 69],
+  ['40,000', 51, 38, 94, 69, 175, 129],
+  ['80,000', 97, 72, 161, 118, 305, 225],
+  ['150,000', 175, 129, 271, 199, 515, 379],
+  ['300,000', 321, 237, 474, 349, 900, 663],
+  ['500,000', null, null, 724, 533, 1376, 1013],
+];
+const n8nCloud = [
+  { plan: 'Starter', ex: '2,500', m: 24, a: 20 },
+  { plan: 'Pro', ex: '10,000', m: 60, a: 50 },
+  { plan: 'Pro', ex: '50,000', m: 144, a: 120 },
+  { plan: 'Business (self-hosted license)', ex: '40,000', m: 960, a: 800 },
+];
+// Worked scenario: a 5-step workflow (trigger + 4 actions) = 5 Make credits per run.
+const rows = [
+  { runs: '2,500', credits: '12,500', tier: '20,000', core: [28, 21], pro: [51, 38], n8nPlan: 'Starter', n8nc: [24, 20] },
+  { runs: '10,000', credits: '50,000', tier: '80,000', core: [97, 72], pro: [161, 118], n8nPlan: 'Pro 10k', n8nc: [60, 50] },
+  { runs: '50,000', credits: '250,000', tier: '300,000', core: [321, 237], pro: [474, 349], n8nPlan: 'Pro 50k', n8nc: [144, 120] },
+];
+const rows10 = [
+  { runs: '2,500', credits: '25,000', tier: '40,000', core: 51, pro: 94 },
+  { runs: '10,000', credits: '100,000', tier: '150,000', core: 175, pro: 271 },
+  { runs: '50,000', credits: '500,000', tier: '500,000', core: null, pro: 724 },
+];
+const SELF = 20; // Vultr Regular 2 vCPU / 4 GB, $20/mo, read Oct 21, 2026
+const bars = rows.map(r => ({ label: `${r.runs} runs`, v: [['Make Core', r.core[0]], ['Make Pro', r.pro[0]], ['n8n Cloud', r.n8nc[0]], ['n8n self-hosted', SELF]] as [string, number][] }));
+const maxV = 474; const colors = ['#b9bcc2', '#7d828b', '#2f3a4a', '#a0522d'];
+const heads = bars.map((g, gi) => ({ label: g.label, y: 20 + gi * 96 }));
+const flat = bars.flatMap((g, gi) => g.v.map(([name, val], i) => ({ name, val, color: colors[i], y: 28 + gi * 96 + i * 15, w: Math.max(2, (val / maxV) * 400) })));
+const faq = [
+  { q: 'Is n8n cheaper than Make?', a: 'It depends on how many steps your workflows have. Make bills per credit (most module actions use 1), n8n Cloud bills per full workflow run. For a 5-step workflow at 10,000 runs a month, Make Core is $97/mo and n8n Cloud Pro is $60/mo on monthly billing (both pricing pages, checked Oct 22, 2026). For short 1–2 step workflows, Make usually comes out cheaper.' },
+  { q: 'How does Make count credits?', a: 'Each module action in a scenario uses credits, most use 1. Reading, searching, creating, updating and deleting data all count, and so do iterating and aggregating rows. Router and error-handler modules don’t count. Credits expire at the end of the term.' },
+  { q: 'Can I self-host Make?', a: 'No. Make is cloud only. n8n’s Community edition can be self-hosted with no license fee and no execution quota of its own; you pay for the server.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'n8n vs Make: what 2,500, 10,000 and 50,000 runs a month really cost', dateModified: '2026-10-22', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/n8n-vs-make/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title="n8n vs Make cost (Oct 2026): 2.5K, 10K and 50K runs a month, worked out" description="Make bills per credit, n8n per workflow run. Worked monthly costs for a 5-step and a 10-step workflow at 2,500, 10,000 and 50,000 runs, from both pricing pages, checked Oct 22, 2026." schema={schema} crumbs={[['Home', '/'], ['n8n vs Make', '/compare/n8n-vs-make/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Cost comparison · Checked on {CHECKED}</span>
+  <h1>n8n vs Make: what 2,500, 10,000 and 50,000 runs a month really cost</h1>
+  <p class="muted">I moved the sliders and dropdowns on <a href={S.make}>Make’s pricing page</a> and <a href={S.n8n}>n8n’s pricing page</a> on {CHECKED} and wrote down every tier. All prices here are what those pages showed in US dollars. The cost math is mine, and I show it so you can redo it with your own numbers.</p>
+  <p class="note"><b>Disclosure:</b> there are no affiliate links on this page. We’ve applied to n8n’s affiliate program; if it’s approved I’ll add a marked link and update this note. Make no longer runs one. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>The billing unit is the whole story.</b> Make charges per credit, and most module actions use one. n8n Cloud charges per execution, one run of a whole workflow however many steps it has.</li>
+    <li>For a <b>5-step workflow at 10,000 runs a month</b>, Make Core is <b>$97/mo</b> and n8n Cloud Pro is <b>$60/mo</b> (monthly billing).</li>
+    <li>At <b>50,000 runs</b> the gap widens: Make Core <b>$321/mo</b> vs n8n Pro <b>$144/mo</b>. Self-hosted n8n is a ~$20/mo server either way.</li>
+    <li>For <b>short 1–2 step workflows at low volume</b>, Make is the cheaper of the two hosted options. Its 10,000-credit Core tier is $16/mo.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Worked example: a 5-step workflow</h2>
+<p class="muted">Say a form submission triggers a workflow that looks up a contact, updates a CRM record, posts to Slack and adds a sheet row. That’s 1 trigger + 4 actions = <b>5 Make credits per run</b> and <b>1 n8n execution</b>. I priced Make at the smallest slider tier that covers the credits.</p>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Runs / month</th><th scope="col">Make credits needed</th><th scope="col">Make Core</th><th scope="col">Make Pro</th><th scope="col">n8n Cloud</th><th scope="col">n8n self-hosted</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.runs}</th><td>{r.credits} ({r.tier} tier)</td><td><b class="usd">${r.core[0]}</b><br/><small>${r.core[1]} annual</small></td><td><b class="usd">${r.pro[0]}</b><br/><small>${r.pro[1]} annual</small></td><td><b class="usd">${r.n8nc[0]}</b> ({r.n8nPlan})<br/><small>${r.n8nc[1]} annual</small></td><td>~${SELF} server</td></tr>)}</tbody>
+</table></div>
+<figure class="chart" style="margin:18px 0 0">
+<svg viewBox="0 0 640 300" width="100%" role="img" aria-labelledby="mk-t">
+  <title id="mk-t">Monthly cost at 2,500, 10,000 and 50,000 runs of a 5-step workflow: Make Core, Make Pro, n8n Cloud, n8n self-hosted</title>
+  {heads.map(h => <text x="0" y={h.y} font-size="13" font-weight="600" fill="currentColor">{h.label}</text>)}
+  {flat.map(b => <g><text x="0" y={b.y + 10} font-size="11" fill="currentColor">{b.name}</text><rect x="110" y={b.y} width={b.w} height="12" fill={b.color} /><text x={116 + b.w} y={b.y + 10} font-size="11" fill="currentColor">${b.val}/mo</text></g>)}
+</svg>
+<figcaption class="note">Monthly billing. Self-hosted n8n shown as a $20/mo 4 GB Vultr server (<a href={S.vultr}>Vultr</a>, read Oct 21, 2026); backups and your time are extra.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>Same thing with a 10-step workflow</h2>
+<p class="muted">Double the steps and Make’s bill roughly doubles, while n8n’s doesn’t move: the n8n Cloud prices are the same as the table above.</p>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Runs / month</th><th scope="col">Make credits needed</th><th scope="col">Make Core (monthly)</th><th scope="col">Make Pro (monthly)</th></tr></thead>
+<tbody>{rows10.map(r => <tr><th scope="row">{r.runs}</th><td>{r.credits} ({r.tier} tier)</td><td>{r.core ? <b class="usd">${r.core}</b> : 'not offered at this tier'}</td><td><b class="usd">${r.pro}</b></td></tr>)}</tbody>
+</table></div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>Where Make still wins</h2>
+<p>I don’t want to oversell this. If most of your scenarios are a trigger and one or two actions, Make’s credits go a long way: 10,000 credits for $16/mo (or $12 annual) is 5,000 two-step runs, against $24/mo for n8n Starter’s 2,500 executions. Make’s Free plan also gives you 1,000 credits a month on its servers, and n8n has no free cloud plan. And Make is easier to pick up if nobody on your team wants to touch a server.</p>
+<p>The steps that catch people out on Make are loops. Make counts each item an iterator or aggregator processes, so a run that touches 50 rows can use 50+ credits. If your workflows loop over lists, count credits from a real test run before you trust any estimate, including mine.</p>
+
+<h2>Make’s price tiers</h2>
+<p class="muted">Every tier I could pick on the slider up to 500,000 credits, in US$ per month. Annual = monthly-equivalent price, billed yearly.</p>
+</div>
+<div class="wrap">
+<figure style="margin:0 0 14px"><img src="/img/make-pricing-10k-monthly-2026-10-22.png" alt="Screenshot of Make's pricing page at 10,000 credits a month with monthly billing: Free $0, Core $16, Pro $28, Teams $51, Enterprise custom" width="715" height="280" loading="lazy" style="max-width:100%;height:auto;border:1px solid #ccc"/><figcaption class="note">Make’s pricing page at 10,000 credits, monthly billing, as I saw it on {CHECKED}.</figcaption></figure>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Credits / month</th><th scope="col">Core</th><th scope="col">Pro</th><th scope="col">Teams</th></tr></thead>
+<tbody>{makeTiers.map(t => <tr><th scope="row">{t[0]}</th><td>{t[1] ? <>${t[1]} <small>/ ${t[2]} annual</small></> : 'not offered'}</td><td>${t[3]} <small>/ ${t[4]} annual</small></td><td>${t[5]} <small>/ ${t[6]} annual</small></td></tr>)}</tbody>
+</table></div>
+<p class="note">Source: <a href={S.make}>make.com/en/pricing</a>, read in a browser on {CHECKED}. The slider goes up to 8 million credits; Core isn’t offered from 500,000 up. Free is $0 with 1,000 credits and a 15-minute minimum interval. Per <a href={S.makeSubs}>Make’s help center</a>, Core gives you credits monthly even on annual billing, while Pro and Teams on annual get the year’s credits as one pool. Some third-party reviews from September and early October 2026 quote lower prices (Core $10.59/mo at 10,000 credits). What I saw today was higher, so check at checkout.</p>
+</div>
+
+<div class="wrap">
+<h2>n8n Cloud tiers</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Plan</th><th scope="col">Executions / month</th><th scope="col">Monthly billing</th><th scope="col">Annual billing</th></tr></thead>
+<tbody>{n8nCloud.map(p => <tr><th scope="row">{p.plan}</th><td>{p.ex}</td><td><b class="usd">${p.m}/mo</b></td><td>${p.a}/mo</td></tr>)}</tbody>
+</table></div>
+<p class="note">Source: <a href={S.n8n}>n8n.io/pricing</a>, read in a US browser on {CHECKED}; it showed dollars and a “Save 17%” badge for annual. (Fetched from outside the US, the same page lists euros: €20 Starter, €50 Pro.) Pro also has a custom tier. n8n doesn’t list an overage price for Starter or Pro. Its FAQ says workflows keep running past quota but “overage charges may apply”. Every plan includes unlimited users and workflows.</p>
+</div>
+
+<div class="wrap prose">
+<h2>Self-hosting n8n</h2>
+<p>This is the option Make simply doesn’t have. n8n’s Community edition is free under its Sustainable Use License for your own internal business use, and it has no execution quota. The limit is your server. A 2 vCPU / 4 GB box is $20/mo at Vultr or $24/mo at DigitalOcean (<a href={S.do}>DigitalOcean pricing</a>). You give up some features (shared credentials, environments, SSO, Git version control) and you take on updates and backups. I go through all of that in the <a href="/pricing/n8n/">n8n pricing guide</a>.</p>
+<p>My honest read: if you’re past about 10,000 runs a month of multi-step workflows and someone on the team is comfortable with Docker, self-hosted n8n is the cheapest option by a wide margin. If not, n8n Cloud beats Make on multi-step workflows, and Make beats both on short ones.</p>
+
+<h2>How to redo this for your own workflows</h2>
+<ol>
+  <li>For each workflow, count Make credits per run: the trigger plus each module action, and each item a loop processes. Routers and error handlers are free.</li>
+  <li>Multiply by runs per month and add the workflows up. Pick the Make tier that covers the total.</li>
+  <li>For n8n, the count is just total runs per month, whatever the step count.</li>
+</ol>
+
+<h2>FAQ</h2>
+{faq.map(f => <><h3>{f.q}</h3><p>{f.a}</p></>)}
+</div>
+</section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>n8n on SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${n8n.slug}/`}><img src={avatar(n8n, 56)} alt="" width="28" height="28" loading="lazy"/> n8n</a>: {n8n.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(n8n.lastPush)} (GitHub API, fetched {fmtDate(n8n.fetchedAt)}). See also <a href="/alternatives/zapier/">Zapier alternatives</a>.</p>
+</div></section>
+</Base>
