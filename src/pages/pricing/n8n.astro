@@ -16,9 +16,9 @@ const S = {
   vultr: 'https://www.vultr.com/pricing/',
 };
 const cloud = [
-  { plan: 'Starter', price: '€20/mo', usd: '≈ $22/mo', note: 'billed annually; 5 concurrent executions, 2.5k saved executions, 1 shared project, forum support' },
-  { plan: 'Pro', price: '€50/mo', usd: '≈ $56/mo', note: 'billed annually; up to 50 concurrent executions, 25k saved executions, 3 shared projects, admin roles' },
-  { plan: 'Business', price: '€667/mo', usd: '≈ $749/mo', note: 'billed annually; self-hosted only (license key); SSO/LDAP, environments, Git version control, queue mode' },
+  { plan: 'Starter', price: '€20/mo outside the US', usd: '$20/mo annual · $24/mo monthly', note: ' 5 concurrent executions, 2.5k saved executions, 1 shared project, forum support' },
+  { plan: 'Pro', price: '€50/mo outside the US', usd: '$50/mo annual · $60/mo monthly', note: 'entry Pro tier; up to 50 concurrent executions, 25k saved executions, 3 shared projects, admin roles' },
+  { plan: 'Business', price: '€667/mo', usd: '≈ $749/mo (converted)', note: 'billed annually; self-hosted only (license key); SSO/LDAP, environments, Git version control, queue mode' },
   { plan: 'Enterprise', price: 'Contact sales', note: 'cloud or self-hosted; SLA support, log streaming, external secrets' },
   { plan: 'Community edition', price: '€0 license', usd: '$0', note: 'self-hosted; you pay for the server and your time' },
 ];
@@ -33,7 +33,7 @@ const vps = [
   { host: 'Vultr', plan: 'Cloud Compute, High Performance', spec: '2 vCPU · 4 GB · 100 GB NVMe', price: '$24.00/mo', src: S.vultr, note: '' },
 ];
 const faq = [
-  { q: 'How much does n8n cost per month?', a: 'On n8n Cloud, Starter is about $22/mo (€20) and Pro about $56/mo (€50), both billed annually (n8n.io/pricing, checked Oct 21, 2026). Self-hosting the Community edition has no license fee; you pay for a server, which starts around $10–24/mo on DigitalOcean or Vultr for a 2–4 GB machine.' },
+  { q: 'How much does n8n cost per month?', a: 'On n8n Cloud, Starter is $20/mo and Pro starts at $50/mo billed annually, or $24 and $60 month to month (n8n.io/pricing in US dollars, read Oct 22, 2026; re-checked Oct 23). Self-hosting the Community edition has no license fee; you pay for a server, which starts around $10–24/mo on DigitalOcean or Vultr for a 2–4 GB machine.' },
   { q: 'Is self-hosted n8n free?', a: 'The Community edition is free to self-host under the Sustainable Use License, for your own internal business purposes or personal use. Features like SSO, environments, Git version control and workflow sharing need a paid Business or Enterprise license.' },
   { q: 'What server do I need for n8n?', a: 'n8n’s Hetzner guide says the CPX11 type (2 vCPU, 2 GB) is enough for most usage, and recommends at least 4 GB RAM and 2 vCPU if you add n8n Assistant. n8n’s docs list its own Cloud Starter tier at 320 MB RAM.' },
 ];
@@ -42,18 +42,18 @@ const schema = [
   { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
 ];
 ---
-<Base title="n8n pricing (Oct 2026): Cloud vs self-hosted, real monthly cost" description="n8n Cloud costs about $22–56/mo (€20–50) billed annually; self-hosting is free but needs a server from ~$10/mo. Verified prices from n8n, Hetzner, DigitalOcean and Vultr, checked Oct 2026." schema={schema} crumbs={[['Home', '/'], ['n8n pricing', '/pricing/n8n/']]}>
+<Base title="n8n pricing (Oct 2026): Cloud vs self-hosted, real monthly cost" description="n8n Cloud costs $20–50/mo billed annually ($24–60 monthly); self-hosting is free but needs a server from ~$10/mo. Verified prices from n8n, Hetzner, DigitalOcean and Vultr, checked Oct 2026." schema={schema} crumbs={[['Home', '/'], ['n8n pricing', '/pricing/n8n/']]}>
 <div class="wrap page-head prose">
-  <span class="eyebrow">Pricing guide · Checked on Oct 22, 2026 · prices read Oct 21, 2026</span>
+  <span class="eyebrow">Pricing guide · Checked on Oct 23, 2026 · n8n prices read Oct 22, 2026</span>
   <h1>n8n pricing: Cloud vs self-hosted, real monthly cost</h1>
   <p class="muted">I read every price below off the vendor’s own page on {CHECKED} and linked it, so you can check me. I went back over the page on Oct 22, 2026. Prices move, so look at the source before you pay for anything. Where something is my opinion rather than a published number, I say so.</p>
   <p class="note"><b>Disclosure:</b> we may later add affiliate links to some providers on this page. There are none yet; all links below are plain links. <a href="/disclosure/">How we make money</a>.</p>
 
   <h2>The short version</h2>
   <ul>
-    <li><b>n8n Cloud:</b> Starter <b>≈ $22/mo</b> (€20), Pro <b>≈ $56/mo</b> (€50), both billed annually (<a href={S.pricing}>n8n pricing</a>). n8n looks after the servers, upgrades and backups for you.</li>
+    <li><b>n8n Cloud:</b> Starter <b>$20/mo</b>, Pro from <b>$50/mo</b>, billed annually ($24 and $60 if you pay month to month) (<a href={S.pricing}>n8n pricing</a>). n8n looks after the servers, upgrades and backups for you.</li>
     <li><b>Self-hosted Community edition:</b> $0 license. You pay for a VPS, roughly <b>$10–24/mo</b> for a 2–4 GB server on Vultr or DigitalOcean, plus your own time on updates, backups and security.</li>
-    <li><b>Self-hosted Business:</b> <b>≈ $749/mo</b> (€667) billed annually, for SSO, environments, Git version control and queue mode on your own servers.</li>
+    <li><b>Self-hosted Business:</b> <b>€667/mo</b> (≈ $749, my conversion; n8n quotes this plan in euros) billed annually, for SSO, environments, Git version control and queue mode on your own servers.</li>
   </ul>
 </div>
 
@@ -63,8 +63,8 @@ const schema = [
 <thead><tr><th scope="col">Plan</th><th scope="col">Price</th><th scope="col">What you get (from n8n’s page)</th></tr></thead>
 <tbody>{cloud.map(c => <tr><th scope="row">{c.plan}</th><td><b class="usd">{c.usd}</b><br /><small class="eur">{c.price} (official)</small></td><td>{c.note}</td></tr>)}</tbody>
 </table></div>
-<p class="note">Source: <a href={S.pricing}>n8n.io/pricing</a>, checked {CHECKED}. n8n lists Cloud prices in euros, billed annually; it bills by workflow executions (one run of a whole workflow, however many steps). All plans include unlimited users, workflows and integrations. I didn’t verify the monthly-billing price, so I’ve left it out.</p>
-<p class="note">{FX_NOTE}</p>
+<p class="note">Source: <a href={S.pricing}>n8n.io/pricing</a>, read in a US browser on Oct 22, 2026, which showed US dollars; I re-checked the plan list on Oct 23. From outside the US the same page shows euros (€20 / €50), so the euro figures are kept in small print. n8n it bills by workflow executions (one run of a whole workflow, however many steps). All plans include unlimited users, workflows and integrations. Monthly billing costs about 17% more than annual (the page shows a “Save 17%” badge).</p>
+<p class="note">The Business plan is quoted in euros, so its dollar figure is my conversion: {FX_NOTE}</p>
 </div></section>
 
 <section style="padding-top:0"><div class="wrap">
@@ -91,7 +91,7 @@ const schema = [
 <section style="padding-top:0"><div class="wrap prose">
 <h2>Cloud vs self-hosted at a glance</h2>
 <ul>
-  <li><b>Cheapest Cloud plan:</b> ≈ $22/mo (€20) (Starter, annual).</li>
+  <li><b>Cheapest Cloud plan:</b> $20/mo (Starter, annual) or $24/mo monthly.</li>
   <li><b>A 4 GB self-hosted server:</b> $20/mo (Vultr Regular) or $24/mo (DigitalOcean Basic), before backups.</li>
   <li><b>A 2 GB self-hosted server:</b> $10/mo (Vultr Regular) or $12/mo (DigitalOcean Basic).</li>
 </ul>
