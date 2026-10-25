@@ -1,0 +1,149 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const sb = listings.find(l => l.slug === 'supabase--supabase')!;
+const CHECKED = 'Oct 25, 2026';
+const S = {
+  pricing: 'https://supabase.com/pricing',
+  docker: 'https://supabase.com/docs/guides/self-hosting/docker',
+  self: 'https://supabase.com/docs/guides/self-hosting',
+  compose: 'https://github.com/supabase/supabase/blob/master/docker/docker-compose.yml',
+  hub: 'https://hub.docker.com/u/supabase',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+const plans = [
+  { plan: 'Free', price: '$0', note: '2 active projects, 500 MB database, shared CPU with 500 MB RAM, 1 GB file storage, 5 GB egress, 50,000 monthly active users. Projects pause after a week with no activity.' },
+  { plan: 'Pro', price: 'from $25/mo', note: '$10 of compute credit (one Micro instance), 8 GB disk per project, 100 GB file storage, 250 GB egress, 100,000 MAU, daily backups kept 7 days, email support. Spend cap on by default.' },
+  { plan: 'Team', price: 'from $599/mo', note: 'SOC 2 and ISO 27001 reports, SSO for the dashboard, read-only and project-scoped roles, 14-day backups, support SLAs.' },
+  { plan: 'Enterprise', price: 'Not listed', note: 'uptime SLAs, AWS PrivateLink, 24/7 support, account manager.' },
+];
+const compute = [
+  ['Micro', 10, 'Shared', '1 GB'], ['Small', 15, 'Shared', '2 GB'], ['Medium', 60, 'Shared', '4 GB'],
+  ['Large', 110, '2 dedicated vCPU', '8 GB'], ['XL', 210, '4 dedicated vCPU', '16 GB'],
+] as const;
+// Monthly totals: Pro $25 + compute - $10 credit (supabase.com/pricing). Self-hosted: DigitalOcean Basic Droplets read Oct 25, 2026.
+const bars = [
+  { label: 'Cloud Pro + Micro (1 GB)', v: 25, kind: 'cloud' },
+  { label: 'Cloud Pro + Small (2 GB)', v: 30, kind: 'cloud' },
+  { label: 'Cloud Pro + Medium (4 GB)', v: 75, kind: 'cloud' },
+  { label: 'Cloud Pro + Large (8 GB)', v: 125, kind: 'cloud' },
+  { label: 'Self-hosted, 4 GiB server', v: 24, kind: 'self' },
+  { label: 'Self-hosted, 8 GiB server', v: 48, kind: 'self' },
+  { label: 'Self-hosted, 8 GiB + backups', v: 57.6, kind: 'self' },
+];
+const maxV = 125;
+const images = [
+  ['Studio (dashboard)', 353], ['Edge Runtime (functions)', 392], ['Postgres 17', 367], ['Supavisor (pooler)', 356],
+  ['Storage API', 250], ['Realtime', 125], ['postgres-meta', 114], ['imgproxy', 81], ['Envoy (API gateway)', 74], ['Auth (GoTrue)', 30], ['PostgREST', 6],
+] as const;
+const totalMB = images.reduce((a, [, m]) => a + m, 0);
+const faq = [
+  { q: 'How much does Supabase cost?', a: 'Supabase has a Free plan ($0, 2 projects, 500 MB database, pauses after a week idle), Pro from $25 a month, Team from $599 a month, and custom Enterprise pricing. Pro includes $10 of compute credit, which covers one Micro project; every extra project adds its own compute cost (supabase.com/pricing, checked Oct 25, 2026).' },
+  { q: 'Can you self-host Supabase for free?', a: 'Yes. The Docker setup is free and open source (Apache-2.0). You pay for a server: Supabase lists 4 GB RAM, 2 cores and 40 GB SSD as the minimum and 8 GB, 4 cores and 80 GB as recommended. That is about $24 or $48 a month on DigitalOcean.' },
+  { q: 'What do you lose when you self-host Supabase?', a: 'Per Supabase’s docs: multiple projects in one dashboard, branching, managed backups and point-in-time recovery, advanced metrics, analytics and vector buckets, ETL, and the Management API. Support is community-only, and you run updates, backups, HTTPS and SMTP yourself.' },
+  { q: 'When is self-hosting Supabase cheaper?', a: 'For one small app, it isn’t really: Pro with Micro compute is $25 and a 4 GB server is $24. Self-hosting pulls ahead when you would need Medium or larger compute ($75+ a month on the cloud), more than 250 GB of egress, or more than 100,000 monthly active users, because self-hosted Supabase has no usage fees.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Supabase pricing: cloud plans vs self-hosting, and what you give up', dateModified: '2026-10-25', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/pricing/supabase/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title="Supabase pricing (Oct 2026): cloud vs self-hosting, real monthly cost" description="Supabase Pro is $25/mo with one Micro project; Medium compute takes it to $75. Self-hosting needs a 4–8 GB server ($24–48/mo) and drops backups, branching and multi-project. Checked Oct 25, 2026." schema={schema} crumbs={[['Home', '/'], ['Supabase pricing', '/pricing/supabase/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Pricing guide · Checked on {CHECKED}</span>
+  <h1>Supabase pricing: cloud plans vs self-hosting, and what you give up</h1>
+  <p class="muted">I read the plan and compute prices off <a href={S.pricing}>Supabase’s pricing page</a> on {CHECKED}, the server sizes and the list of missing features off its <a href={S.docker}>Docker guide</a> and <a href={S.self}>self-hosting overview</a>, and server prices off <a href={S.do}>DigitalOcean</a> the same night. I also went through the official <a href={S.compose}>docker-compose.yml</a> and looked up each image on Docker Hub, so the download size below is measured, not guessed. I haven’t run a production Supabase on my own server, so the upkeep notes are from the docs plus my judgment.</p>
+  <p class="note"><b>Disclosure:</b> there are no affiliate links on this page. Supabase doesn’t pay us, and neither does DigitalOcean. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>Side project:</b> the Free plan costs $0, but it pauses after a week with no activity and caps the database at 500 MB.</li>
+    <li><b>One real app:</b> Pro is <b>$25/mo</b> with a 1 GB Micro instance. A 4 GiB server to self-host on is <b>$24/mo</b>, so there’s nothing to save here.</li>
+    <li><b>Bigger database or heavy traffic:</b> Pro with a 4 GB Medium instance is <b>$75/mo</b> and 8 GB Large is <b>$125/mo</b>. An 8 GiB self-hosted server is <b>$48/mo</b>, or about $58 with backups.</li>
+  </ul>
+  <p>My take: for one app with normal traffic, pay for Pro. Self-hosting starts to make sense when you’d outgrow Micro or Small compute, push lots of egress, or have a lot of monthly users, or when you need the data on your own hardware.</p>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Supabase Cloud plans</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Plan</th><th scope="col">Price</th><th scope="col">What’s included (from Supabase’s page)</th></tr></thead>
+<tbody>{plans.map(p => <tr><th scope="row">{p.plan}</th><td><b class="usd">{p.price}</b></td><td>{p.note}</td></tr>)}</tbody>
+</table></div>
+<p class="note">Source: <a href={S.pricing}>supabase.com/pricing</a>, checked {CHECKED}. Pro is charged monthly up front, and usage over the included amounts is billed at the end of the month. The plan price is per organization; compute is per project.</p>
+
+<h2>Compute is the part that grows</h2>
+<p>Every project runs on its own instance, billed hourly. Pro and Team include $10 a month of credit, which pays for one Micro. A second Micro project adds $10, so two small projects on Pro cost $35.</p>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Size</th><th scope="col">Compute price</th><th scope="col">CPU</th><th scope="col">RAM</th><th scope="col">One project on Pro, total</th></tr></thead>
+<tbody>{compute.map(([n, p, c, r]) => <tr><th scope="row">{n}</th><td>${p}/mo</td><td>{c}</td><td>{r}</td><td><b class="usd">${25 + p - 10}/mo</b></td></tr>)}</tbody>
+</table></div>
+<p class="note">Total = $25 Pro + compute − $10 credit. Bigger sizes go up to 16XL at $3,730/mo. Source: <a href={S.pricing}>supabase.com/pricing</a>, {CHECKED}.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>Cloud vs self-hosted, per month</h2>
+<p class="muted">One project. Cloud bars are Pro plus compute. Self-hosted bars are DigitalOcean Basic Droplets: 2 vCPU / 4 GiB at $24 (Supabase’s minimum) and 4 vCPU / 8 GiB at $48 (its recommended size), with weekly backups at +20%. Your time isn’t in any of these.</p>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 300" width="100%" role="img" aria-labelledby="sbchart-t">
+  <title id="sbchart-t">Monthly cost of Supabase Cloud Pro with Micro, Small, Medium and Large compute compared with self-hosting on 4 GiB and 8 GiB servers</title>
+  {bars.map((b, i) => {
+    const y = 8 + i * 40; const w = (b.v / maxV) * 330;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="210" y={y + 2} width={w} height="16" fill={b.kind === 'cloud' ? '#2f3a4a' : '#c2410c'} />
+      <text x={216 + w} y={y + 15} font-size="12" fill="currentColor">${b.v % 1 ? b.v.toFixed(2) : b.v}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">Dark: Supabase Cloud. Red: self-hosted. Prices from <a href={S.pricing}>Supabase</a> and <a href={S.do}>DigitalOcean</a>, both read {CHECKED}.</figcaption>
+</figure>
+<p>These bars aren’t apples to apples, and it cuts both ways. A cloud Micro gives Postgres 1 GB of RAM to itself, with Auth, Storage and the rest running on Supabase’s side. A self-hosted 4 GiB box has to fit all eleven containers. On the other hand, the $24 Droplet comes with 4,000 GiB of transfer, while Pro includes 250 GB of egress and then charges $0.09 per GB.</p>
+
+<h3>Where the cloud bill jumps</h3>
+<ul>
+  <li><b>Egress:</b> 1 TB a month on Pro is 750 GB over the allowance, which is $67.50 on top of the plan.</li>
+  <li><b>Monthly active users:</b> 200,000 MAU is 100,000 over, at $0.00325 each, so $325 extra. Self-hosted Auth has no per-user fee.</li>
+  <li><b>Point-in-time recovery:</b> $100/mo per 7 days of retention. Self-hosted doesn’t offer it at all; you’d set up WAL archiving yourself.</li>
+  <li><b>Phone MFA:</b> $75/mo for the first project. Custom domain: $10/mo per project.</li>
+</ul>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What self-hosting really takes</h2>
+<p>Supabase’s <a href={S.docker}>Docker guide</a> asks for <b>4 GB RAM, 2 cores and 40 GB SSD</b> at minimum and <b>8 GB, 4 cores and 80 GB</b> as recommended. It says setup takes under 15 minutes with the one-line install script. The current stable snapshot is <code>self-hosted/v0.8.3</code>, and Supabase says it ships one about once a month.</p>
+<p>I counted what the default stack actually runs. The <a href={S.compose}>compose file</a> starts 11 containers. Looking each pinned image up on Docker Hub (amd64, compressed), the first pull is about <b>{(totalMB / 1000).toFixed(1)} GB</b>:</p>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Container</th><th scope="col">Download size</th></tr></thead>
+<tbody>{images.map(([n, m]) => <tr><th scope="row">{n}</th><td>{m} MB</td></tr>)}</tbody>
+<tfoot><tr><th scope="row">Total</th><td><b>{totalMB.toLocaleString('en-US')} MB</b></td></tr></tfoot>
+</table></div>
+<p class="note">Image tags from the compose file on GitHub master and sizes from the Docker Hub API, both read {CHECKED}. Logs and analytics (Logflare and Vector) are off by default and add more on top.</p>
+
+<h2>What you give up</h2>
+<p>Straight from Supabase’s <a href={S.self}>self-hosting overview</a>:</p>
+<ul>
+  <li><b>One project per install.</b> Studio doesn’t do multiple projects or organizations. Staging and production means two stacks.</li>
+  <li><b>No branching, no managed backups or point-in-time recovery,</b> no advanced metrics, no analytics or vector buckets, no ETL, and no Management API.</li>
+  <li><b>Community support only.</b> Pro’s email support doesn’t apply.</li>
+  <li><b>Jobs that become yours:</b> HTTPS (the guide suggests Caddy or Nginx in front), a real SMTP server for auth emails (it suggests AWS SES), OS and image updates, Postgres maintenance, backups, and keeping Studio off the open internet.</li>
+</ul>
+<p>The upside the docs mention: self-hosted Supabase sends no telemetry, and the stack is Apache-2.0.</p>
+
+<h2>So which should you pick?</h2>
+<ul>
+  <li><b>Trying an idea:</b> Free. Just remember it pauses after a week idle, so it’s no good for anything people rely on.</li>
+  <li><b>One production app, normal traffic:</b> Pro at $25. Self-hosting saves about a dollar and costs you backups and support.</li>
+  <li><b>You’d need Medium compute or bigger, or you have lots of users or egress:</b> self-hosting on an 8 GiB server (~$48–58) starts to beat $75–125, if someone on the team is happy running Docker and testing restores.</li>
+  <li><b>Data has to stay on your hardware:</b> self-host. That’s the case Supabase itself says it’s built for.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(f => <><h3>{f.q}</h3><p>{f.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>Supabase on SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${sb.slug}/`}><img src={avatar(sb, 56)} alt="" width="28" height="28" loading="lazy"/> Supabase</a>: {sb.stars.toLocaleString('en-US')} GitHub stars, {sb.license} license, last push {fmtDate(sb.lastPush)} (GitHub API, fetched {fmtDate(sb.fetchedAt)}).</p>
+</div></section>
+</Base>

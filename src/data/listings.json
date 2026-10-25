@@ -7,13 +7,13 @@
   "homepage": "https://www.docuseal.com",
   "description": "Open source DocuSign alternative. Create, fill, and sign digital documents \u270d\ufe0f",
   "license": "AGPL-3.0",
-  "stars": 18776,
+  "stars": 18787,
   "lastPush": "2026-10-19T12:29:41Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/138379721?v=4",
   "language": "Ruby",
-  "forks": 1900,
-  "openIssues": 128,
+  "forks": 1903,
+  "openIssues": 129,
   "topics": [
    "document-signing",
    "documents",
@@ -27,7 +27,7 @@
   "category": "e-signature",
   "replaces": "DocuSign",
   "source": "https://api.github.com/repos/docusealco/docuseal",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "documenso--documenso",
@@ -37,13 +37,13 @@
   "homepage": "https://documenso.com",
   "description": "The Open Source DocuSign Alternative.",
   "license": "AGPL-3.0",
-  "stars": 15524,
-  "lastPush": "2026-10-23T09:41:10Z",
+  "stars": 15551,
+  "lastPush": "2026-10-23T12:50:03Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/127681099?v=4",
   "language": "TypeScript",
-  "forks": 3390,
-  "openIssues": 220,
+  "forks": 3403,
+  "openIssues": 236,
   "topics": [
    "digital-signature",
    "document-signing",
@@ -57,7 +57,7 @@
   "category": "e-signature",
   "replaces": "DocuSign",
   "source": "https://api.github.com/repos/documenso/documenso",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "opensignlabs--opensign",
@@ -67,12 +67,12 @@
   "homepage": "https://www.opensignlabs.com",
   "description": "\ud83d\udd25 The free & Open Source DocuSign alternative",
   "license": "NOASSERTION",
-  "stars": 7147,
+  "stars": 7169,
   "lastPush": "2026-10-23T10:44:22Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/146751146?v=4",
   "language": "JavaScript",
-  "forks": 846,
+  "forks": 848,
   "openIssues": 204,
   "topics": [
    "digital-signature",
@@ -87,7 +87,7 @@
   "category": "e-signature",
   "replaces": "DocuSign",
   "source": "https://api.github.com/repos/OpenSignLabs/OpenSign",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "calcom--cal.diy",
@@ -97,13 +97,13 @@
   "homepage": "https://cal.diy",
   "description": "Scheduling infrastructure for absolutely everyone.",
   "license": "MIT",
-  "stars": 49219,
+  "stars": 49322,
   "lastPush": "2026-10-19T18:46:00Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/79145102?v=4",
   "language": "TypeScript",
-  "forks": 15412,
-  "openIssues": 1518,
+  "forks": 15430,
+  "openIssues": 1534,
   "topics": [
    "next-auth",
    "nextjs",
@@ -117,7 +117,7 @@
   "category": "scheduling",
   "replaces": "Calendly",
   "source": "https://api.github.com/repos/calcom/cal.diy",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "alextselegidis--easyappointments",
@@ -127,13 +127,13 @@
   "homepage": "https://easyappointments.org",
   "description": ":date: Easy!Appointments - Self Hosted Appointment Scheduler",
   "license": "GPL-3.0",
-  "stars": 4454,
+  "stars": 4457,
   "lastPush": "2026-10-19T12:47:00Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/4527441?v=4",
   "language": "PHP",
-  "forks": 1581,
-  "openIssues": 181,
+  "forks": 1583,
+  "openIssues": 183,
   "topics": [
    "appointments",
    "codeigniter",
@@ -147,7 +147,7 @@
   "category": "scheduling",
   "replaces": "Calendly",
   "source": "https://api.github.com/repos/alextselegidis/easyappointments",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "invoiceninja--invoiceninja",
@@ -157,13 +157,13 @@
   "homepage": "https://invoiceninja.com",
   "description": "A source-available invoice, quote, project and time-tracking app built with Laravel",
   "license": "NOASSERTION",
-  "stars": 10312,
+  "stars": 10316,
   "lastPush": "2026-10-22T10:16:34Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/15712270?v=4",
   "language": "PHP",
-  "forks": 2762,
-  "openIssues": 237,
+  "forks": 2765,
+  "openIssues": 238,
   "topics": [
    "einvoicing",
    "expenses",
@@ -177,7 +177,7 @@
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/invoiceninja/invoiceninja",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "invoiceshelf--invoiceshelf",
@@ -187,18 +187,18 @@
   "homepage": "https://invoiceshelf.com",
   "description": "Open Source Invoicing Solution for Individuals & Businesses",
   "license": "AGPL-3.0",
-  "stars": 1866,
-  "lastPush": "2026-10-22T12:02:00Z",
+  "stars": 1868,
+  "lastPush": "2026-10-25T04:29:34Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/157853350?v=4",
   "language": "PHP",
-  "forks": 388,
-  "openIssues": 64,
+  "forks": 392,
+  "openIssues": 63,
   "topics": [],
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/InvoiceShelf/InvoiceShelf",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "crater-invoice-inc--crater",
@@ -208,12 +208,12 @@
   "homepage": "https://craterapp.com",
   "description": "Open Source Invoicing Solution for Individuals & Businesses",
   "license": "AGPL-3.0",
-  "stars": 8353,
+  "stars": 8355,
   "lastPush": "2024-08-10T09:32:07Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/79325907?v=4",
   "language": "PHP",
-  "forks": 1715,
+  "forks": 1714,
   "openIssues": 425,
   "topics": [
    "invoices",
@@ -227,7 +227,7 @@
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/crater-invoice-inc/crater",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "invoiceplane--invoiceplane",
@@ -237,12 +237,12 @@
   "homepage": "https://www.invoiceplane.com",
   "description": "A self-hosted open source application for managing your invoices, clients and payments.",
   "license": "NOASSERTION",
-  "stars": 3240,
-  "lastPush": "2026-10-23T07:22:27Z",
+  "stars": 3255,
+  "lastPush": "2026-10-25T04:37:04Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/7656602?v=4",
   "language": "PHP",
-  "forks": 886,
+  "forks": 889,
   "openIssues": 70,
   "topics": [
    "billing",
@@ -257,7 +257,7 @@
   "category": "invoicing",
   "replaces": "FreshBooks",
   "source": "https://api.github.com/repos/InvoicePlane/InvoicePlane",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "akaunting--akaunting",
@@ -267,13 +267,13 @@
   "homepage": "https://akaunting.com",
   "description": "Online Accounting Software",
   "license": "NOASSERTION",
-  "stars": 10203,
-  "lastPush": "2026-10-08T17:43:07Z",
+  "stars": 10210,
+  "lastPush": "2026-10-24T23:07:26Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/26357771?v=4",
   "language": "PHP",
-  "forks": 3006,
-  "openIssues": 8,
+  "forks": 3005,
+  "openIssues": 7,
   "topics": [
    "accounting",
    "akaunting",
@@ -287,7 +287,7 @@
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/akaunting/akaunting",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "frappe--erpnext",
@@ -297,13 +297,13 @@
   "homepage": "https://frappe.io/erpnext",
   "description": "Free and Open Source Enterprise Resource Planning (ERP)",
   "license": "GPL-3.0",
-  "stars": 40484,
-  "lastPush": "2026-10-23T11:26:11Z",
+  "stars": 40566,
+  "lastPush": "2026-10-25T02:30:55Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/836974?v=4",
   "language": "Python",
-  "forks": 13251,
-  "openIssues": 1425,
+  "forks": 13259,
+  "openIssues": 1404,
   "topics": [
    "accounting",
    "asset-management",
@@ -317,7 +317,7 @@
   "category": "accounting",
   "replaces": "NetSuite",
   "source": "https://api.github.com/repos/frappe/erpnext",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "odoo--odoo",
@@ -327,13 +327,13 @@
   "homepage": "https://www.odoo.com",
   "description": "Odoo. Open Source Apps To Grow Your Business.",
   "license": "NOASSERTION",
-  "stars": 55276,
-  "lastPush": "2026-10-23T11:17:59Z",
+  "stars": 55306,
+  "lastPush": "2026-10-25T03:27:02Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/6368483?v=4",
   "language": "Python",
-  "forks": 34089,
-  "openIssues": 11106,
+  "forks": 34099,
+  "openIssues": 11093,
   "topics": [
    "apps",
    "business",
@@ -346,7 +346,7 @@
   "category": "accounting",
   "replaces": "NetSuite",
   "source": "https://api.github.com/repos/odoo/odoo",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "dolibarr--dolibarr",
@@ -356,13 +356,13 @@
   "homepage": "https://www.dolibarr.org",
   "description": "Dolibarr ERP CRM is a modern software package to manage your company or foundation's activity (contacts, suppliers, invoices, orders, stocks, agenda, accounting, ...). it's an open source Web application (written in PHP) designed for businesses of any sizes, foundations and freelancers.",
   "license": "GPL-3.0",
-  "stars": 7764,
-  "lastPush": "2026-10-23T11:19:50Z",
+  "stars": 7775,
+  "lastPush": "2026-10-24T22:34:14Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/877491?v=4",
   "language": "PHP",
-  "forks": 3586,
-  "openIssues": 956,
+  "forks": 3588,
+  "openIssues": 939,
   "topics": [
    "accounting",
    "agenda",
@@ -376,7 +376,7 @@
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/Dolibarr/dolibarr",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "frappe--books",
@@ -386,7 +386,7 @@
   "homepage": "https://frappe.io/books",
   "description": "Free Accounting Software",
   "license": "AGPL-3.0",
-  "stars": 5001,
+  "stars": 5004,
   "lastPush": "2026-10-02T10:56:40Z",
   "archived": true,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/836974?v=4",
@@ -406,7 +406,7 @@
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/frappe/books",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "twentyhq--twenty",
@@ -416,13 +416,13 @@
   "homepage": "https://twenty.com",
   "description": "The open alternative to Salesforce, designed for AI.",
   "license": "NOASSERTION",
-  "stars": 59574,
-  "lastPush": "2026-10-23T11:27:09Z",
+  "stars": 59672,
+  "lastPush": "2026-10-25T06:03:09Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/119600397?v=4",
   "language": "TypeScript",
-  "forks": 9704,
-  "openIssues": 140,
+  "forks": 9730,
+  "openIssues": 119,
   "topics": [
    "crm",
    "crm-system",
@@ -436,7 +436,7 @@
   "category": "crm",
   "replaces": "Salesforce",
   "source": "https://api.github.com/repos/twentyhq/twenty",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "espocrm--espocrm",
@@ -446,13 +446,13 @@
   "homepage": "https://www.espocrm.com",
   "description": "EspoCRM \u2013 Open Source CRM Application",
   "license": "AGPL-3.0",
-  "stars": 3512,
-  "lastPush": "2026-10-23T10:30:49Z",
+  "stars": 3519,
+  "lastPush": "2026-10-24T07:23:32Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/6860351?v=4",
   "language": "PHP",
-  "forks": 1013,
-  "openIssues": 66,
+  "forks": 1014,
+  "openIssues": 67,
   "topics": [
    "calendar",
    "contacts",
@@ -466,7 +466,7 @@
   "category": "crm",
   "replaces": "HubSpot",
   "source": "https://api.github.com/repos/espocrm/espocrm",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "suitecrm--suitecrm",
@@ -481,7 +481,7 @@
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/45451151?v=4",
   "language": "PHP",
-  "forks": 2431,
+  "forks": 2430,
   "openIssues": 1364,
   "topics": [
    "accounts",
@@ -496,7 +496,7 @@
   "category": "crm",
   "replaces": "Salesforce",
   "source": "https://api.github.com/repos/SuiteCRM/SuiteCRM",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "krayin--laravel-crm",
@@ -506,12 +506,12 @@
   "homepage": "https://krayincrm.com",
   "description": "Krayin CRM is Free & Open Source CRM Built with Laravel for Customer, Lead, and Sales Management.",
   "license": "MIT",
-  "stars": 24047,
+  "stars": 24054,
   "lastPush": "2026-10-21T11:44:20Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/86250863?v=4",
   "language": "PHP",
-  "forks": 1674,
+  "forks": 1673,
   "openIssues": 107,
   "topics": [
    "cloud",
@@ -526,7 +526,7 @@
   "category": "crm",
   "replaces": "HubSpot",
   "source": "https://api.github.com/repos/krayin/laravel-crm",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "chatwoot--chatwoot",
@@ -536,13 +536,13 @@
   "homepage": "https://www.chatwoot.com/help-center",
   "description": "Open-source live-chat, email support, omni-channel desk. An alternative to Intercom, Zendesk, Salesforce Service Cloud etc. \ud83d\udd25\ud83d\udcac",
   "license": "NOASSERTION",
-  "stars": 38121,
-  "lastPush": "2026-10-23T11:07:06Z",
+  "stars": 38195,
+  "lastPush": "2026-10-25T03:55:32Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/23416667?v=4",
   "language": "Ruby",
-  "forks": 9307,
-  "openIssues": 1577,
+  "forks": 9325,
+  "openIssues": 1571,
   "topics": [
    "actioncable",
    "chat-widget",
@@ -556,7 +556,7 @@
   "category": "helpdesk",
   "replaces": "Zendesk",
   "source": "https://api.github.com/repos/chatwoot/chatwoot",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "zammad--zammad",
@@ -567,11 +567,11 @@
   "description": "Zammad is a web based open source helpdesk/customer support system.",
   "license": "AGPL-3.0",
   "stars": 6028,
-  "lastPush": "2026-10-23T09:54:36Z",
+  "lastPush": "2026-10-23T15:06:57Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/1380327?v=4",
   "language": "Ruby",
-  "forks": 1080,
+  "forks": 1079,
   "openIssues": 473,
   "topics": [
    "coffeescript",
@@ -586,7 +586,7 @@
   "category": "helpdesk",
   "replaces": "Zendesk",
   "source": "https://api.github.com/repos/zammad/zammad",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "freescout-help-desk--freescout",
@@ -596,13 +596,13 @@
   "homepage": "https://freescout.net",
   "description": "FreeScout \u2014 Free self-hosted omnichannel AI-powered helpdesk & shared mailbox",
   "license": "AGPL-3.0",
-  "stars": 4609,
-  "lastPush": "2026-10-23T08:30:09Z",
+  "stars": 4616,
+  "lastPush": "2026-10-24T07:25:32Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/152988407?v=4",
   "language": "PHP",
-  "forks": 736,
-  "openIssues": 25,
+  "forks": 734,
+  "openIssues": 27,
   "topics": [
    "customer-support",
    "help-desk",
@@ -616,7 +616,7 @@
   "category": "helpdesk",
   "replaces": "Help Scout",
   "source": "https://api.github.com/repos/freescout-help-desk/freescout",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "kimai--kimai",
@@ -626,13 +626,13 @@
   "homepage": "https://www.kimai.org",
   "description": "Kimai is the #1 open-source time-tracking application. From freelancers to companies and organisations - everyone can manage timesheets, generate reports, create invoices and so much more... Web-based multi-user application, available as On-Premise or SaaS version: https://www.kimai.org",
   "license": "AGPL-3.0",
-  "stars": 5093,
-  "lastPush": "2026-10-22T03:31:55Z",
+  "stars": 5096,
+  "lastPush": "2026-10-24T10:39:16Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/981996?v=4",
   "language": "PHP",
-  "forks": 866,
-  "openIssues": 355,
+  "forks": 868,
+  "openIssues": 360,
   "topics": [
    "doctrine",
    "invoice",
@@ -646,7 +646,7 @@
   "category": "time-tracking",
   "replaces": "Harvest",
   "source": "https://api.github.com/repos/kimai/kimai",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "solidtime-io--solidtime",
@@ -656,12 +656,12 @@
   "homepage": "https://www.solidtime.io",
   "description": "Modern open-source time-tracking app",
   "license": "AGPL-3.0",
-  "stars": 9027,
+  "stars": 9028,
   "lastPush": "2026-10-21T18:05:40Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/156823565?v=4",
   "language": "PHP",
-  "forks": 516,
+  "forks": 518,
   "openIssues": 35,
   "topics": [
    "laravel",
@@ -676,7 +676,7 @@
   "category": "time-tracking",
   "replaces": "Toggl",
   "source": "https://api.github.com/repos/solidtime-io/solidtime",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "frappe--hrms",
@@ -686,13 +686,13 @@
   "homepage": "https://frappe.io/hr",
   "description": "Open Source HR and Payroll Software",
   "license": "GPL-3.0",
-  "stars": 8950,
-  "lastPush": "2026-10-23T09:32:46Z",
+  "stars": 8960,
+  "lastPush": "2026-10-24T17:40:01Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/836974?v=4",
   "language": "Python",
-  "forks": 2821,
-  "openIssues": 470,
+  "forks": 2823,
+  "openIssues": 479,
   "topics": [
    "attendance",
    "employee",
@@ -706,7 +706,7 @@
   "category": "hr",
   "replaces": "BambooHR",
   "source": "https://api.github.com/repos/frappe/hrms",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "orangehrm--orangehrm",
@@ -716,13 +716,13 @@
   "homepage": null,
   "description": "OrangeHRM is a comprehensive Human Resource Management (HRM) System that captures  all the essential functionalities required for any enterprise. ",
   "license": "GPL-3.0",
-  "stars": 1155,
+  "stars": 1156,
   "lastPush": "2026-06-28T23:52:36Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/11557709?v=4",
   "language": "PHP",
   "forks": 760,
-  "openIssues": 111,
+  "openIssues": 113,
   "topics": [
    "enterprise",
    "hr",
@@ -736,7 +736,7 @@
   "category": "hr",
   "replaces": "BambooHR",
   "source": "https://api.github.com/repos/orangehrm/orangehrm",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "formbricks--formbricks",
@@ -746,13 +746,13 @@
   "homepage": "https://formbricks.com",
   "description": "Open Source Qualtrics Alternative",
   "license": "NOASSERTION",
-  "stars": 13138,
-  "lastPush": "2026-10-23T11:22:42Z",
+  "stars": 13145,
+  "lastPush": "2026-10-24T13:34:47Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/105877416?v=4",
   "language": "TypeScript",
-  "forks": 2588,
-  "openIssues": 164,
+  "forks": 2592,
+  "openIssues": 166,
   "topics": [
    "experience-management",
    "form",
@@ -766,7 +766,7 @@
   "category": "forms",
   "replaces": "Typeform",
   "source": "https://api.github.com/repos/formbricks/formbricks",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "baptistearno--typebot.io",
@@ -776,13 +776,13 @@
   "homepage": "https://typebot.io",
   "description": "\ud83d\udcac Typebot is a powerful chatbot builder that you can self-host.",
   "license": "NOASSERTION",
-  "stars": 10575,
-  "lastPush": "2026-10-23T09:11:39Z",
+  "stars": 10579,
+  "lastPush": "2026-10-23T17:01:15Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/16015833?v=4",
   "language": "TypeScript",
-  "forks": 3243,
-  "openIssues": 13,
+  "forks": 3244,
+  "openIssues": 14,
   "topics": [
    "chat-application",
    "chatbot",
@@ -794,7 +794,7 @@
   "category": "forms",
   "replaces": "Typeform",
   "source": "https://api.github.com/repos/baptisteArno/typebot.io",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "knadh--listmonk",
@@ -804,13 +804,13 @@
   "homepage": "https://listmonk.app",
   "description": "High performance, self-hosted, newsletter and mailing list manager with a modern dashboard. Single binary app.",
   "license": "AGPL-3.0",
-  "stars": 23937,
-  "lastPush": "2026-10-23T10:25:07Z",
+  "stars": 23955,
+  "lastPush": "2026-10-24T02:18:43Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/547147?v=4",
   "language": "Go",
-  "forks": 2713,
-  "openIssues": 60,
+  "forks": 2716,
+  "openIssues": 65,
   "topics": [
    "campaign",
    "campaign-management",
@@ -824,7 +824,7 @@
   "category": "email-marketing",
   "replaces": "Mailchimp",
   "source": "https://api.github.com/repos/knadh/listmonk",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "mautic--mautic",
@@ -834,13 +834,13 @@
   "homepage": "https://www.mautic.org",
   "description": "Mautic: Open Source Marketing Automation Software.",
   "license": "NOASSERTION",
-  "stars": 10828,
-  "lastPush": "2026-10-23T11:15:14Z",
+  "stars": 10845,
+  "lastPush": "2026-10-23T15:07:01Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/5257677?v=4",
   "language": "PHP",
-  "forks": 3506,
-  "openIssues": 316,
+  "forks": 3509,
+  "openIssues": 320,
   "topics": [
    "digital-experience-platform",
    "digitalexperienceplatform",
@@ -854,7 +854,7 @@
   "category": "email-marketing",
   "replaces": "Mailchimp",
   "source": "https://api.github.com/repos/mautic/mautic",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "paperless-ngx--paperless-ngx",
@@ -864,13 +864,13 @@
   "homepage": "http://docs.paperless-ngx.com/",
   "description": "A community-supported supercharged document management system: scan, index and archive all your documents",
   "license": "GPL-3.0",
-  "stars": 47021,
-  "lastPush": "2026-10-23T04:34:27Z",
+  "stars": 47070,
+  "lastPush": "2026-10-25T00:54:08Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/99562962?v=4",
   "language": "Python",
-  "forks": 3269,
-  "openIssues": 8,
+  "forks": 3276,
+  "openIssues": 4,
   "topics": [
    "ai",
    "angular",
@@ -884,7 +884,7 @@
   "category": "documents",
   "replaces": "Adobe Acrobat",
   "source": "https://api.github.com/repos/paperless-ngx/paperless-ngx",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "stirling-tools--stirling-pdf",
@@ -894,13 +894,13 @@
   "homepage": "https://stirling.com",
   "description": "#1 PDF Application on GitHub that lets you edit PDFs on any device anywhere",
   "license": "NOASSERTION",
-  "stars": 94788,
-  "lastPush": "2026-10-23T11:08:39Z",
+  "stars": 94928,
+  "lastPush": "2026-10-24T22:24:11Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/139791695?v=4",
   "language": "TypeScript",
-  "forks": 11401,
-  "openIssues": 547,
+  "forks": 11058,
+  "openIssues": 543,
   "topics": [
    "docker",
    "hacktoberfest",
@@ -914,7 +914,7 @@
   "category": "documents",
   "replaces": "Adobe Acrobat",
   "source": "https://api.github.com/repos/Stirling-Tools/Stirling-PDF",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "makeplane--plane",
@@ -924,13 +924,13 @@
   "homepage": "http://plane.so",
   "description": "\ud83d\udd25\ud83d\udd25\ud83d\udd25 Open-source Jira, Linear, Monday, and ClickUp alternative. Plane is a modern project management platform to manage tasks, sprints, docs, and triage.",
   "license": "AGPL-3.0",
-  "stars": 61330,
-  "lastPush": "2026-10-23T08:59:15Z",
+  "stars": 61396,
+  "lastPush": "2026-10-23T15:40:15Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/115727700?v=4",
   "language": "TypeScript",
-  "forks": 6157,
-  "openIssues": 1140,
+  "forks": 6171,
+  "openIssues": 1146,
   "topics": [
    "boards",
    "bug-tracker",
@@ -944,7 +944,7 @@
   "category": "project-management",
   "replaces": "Asana",
   "source": "https://api.github.com/repos/makeplane/plane",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "plausible--analytics",
@@ -954,13 +954,13 @@
   "homepage": "https://plausible.io",
   "description": "Open source, privacy-first web analytics. Lightweight, cookie-free Google Analytics alternative. Self-hosted or cloud.",
   "license": "AGPL-3.0",
-  "stars": 29614,
+  "stars": 29643,
   "lastPush": "2026-10-23T11:02:11Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/54802774?v=4",
   "language": "Elixir",
-  "forks": 1914,
-  "openIssues": 53,
+  "forks": 1918,
+  "openIssues": 56,
   "topics": [
    "analytics",
    "analytics-dashboard",
@@ -974,7 +974,7 @@
   "category": "analytics",
   "replaces": "Google Analytics",
   "source": "https://api.github.com/repos/plausible/analytics",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "umami-software--umami",
@@ -984,13 +984,13 @@
   "homepage": "https://umami.is",
   "description": "Umami is a privacy-first web and product analytics platform. Traffic, campaigns, behavior, conversions, and revenue in one place. No cookies, no surveillance, self-hosted or in the cloud.",
   "license": "MIT",
-  "stars": 39580,
-  "lastPush": "2026-10-23T08:26:44Z",
+  "stars": 39659,
+  "lastPush": "2026-10-23T21:58:32Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/105618662?v=4",
   "language": "TypeScript",
-  "forks": 8373,
-  "openIssues": 128,
+  "forks": 8408,
+  "openIssues": 137,
   "topics": [
    "analytics",
    "audience-segmentation",
@@ -1004,7 +1004,7 @@
   "category": "analytics",
   "replaces": "Google Analytics",
   "source": "https://api.github.com/repos/umami-software/umami",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "inventree--inventree",
@@ -1014,13 +1014,13 @@
   "homepage": "https://docs.inventree.org",
   "description": "Open Source Inventory Management System",
   "license": "MIT",
-  "stars": 7750,
-  "lastPush": "2026-10-23T00:37:17Z",
+  "stars": 7755,
+  "lastPush": "2026-10-25T01:43:54Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/26612639?v=4",
   "language": "Python",
-  "forks": 1591,
-  "openIssues": 149,
+  "forks": 1589,
+  "openIssues": 155,
   "topics": [
    "django",
    "hacktoberfest",
@@ -1029,7 +1029,7 @@
   "category": "inventory",
   "replaces": "Sortly",
   "source": "https://api.github.com/repos/inventree/InvenTree",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "opensourcepos--opensourcepos",
@@ -1039,13 +1039,13 @@
   "homepage": "http://www.opensourcepos.org",
   "description": "Open Source Point of Sale is a web based point of sale application written in PHP using CodeIgniter framework. It uses MySQL as the data back end and has a Bootstrap 3 based user interface. If you like this project, please give it a star! Doing so helps maintain Popular OSS status for the project.",
   "license": "NOASSERTION",
-  "stars": 4459,
-  "lastPush": "2026-10-23T10:56:27Z",
+  "stars": 4464,
+  "lastPush": "2026-10-25T01:35:18Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/31845758?v=4",
   "language": "PHP",
-  "forks": 2643,
-  "openIssues": 269,
+  "forks": 2642,
+  "openIssues": 270,
   "topics": [
    "bootstrap3",
    "codeigniter3",
@@ -1057,7 +1057,7 @@
   "category": "pos",
   "replaces": "Square POS",
   "source": "https://api.github.com/repos/opensourcepos/opensourcepos",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "bigcapitalhq--bigcapital",
@@ -1067,13 +1067,13 @@
   "homepage": "https://bigcapital.app",
   "description": "\ud83d\udcb5 Independent financial accounting with intelligent reporting, alternative to Quickbooks, Xero, Wave.",
   "license": "AGPL-3.0",
-  "stars": 3956,
+  "stars": 3958,
   "lastPush": "2026-10-23T08:25:30Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/63662386?v=4",
   "language": "TypeScript",
-  "forks": 550,
-  "openIssues": 282,
+  "forks": 549,
+  "openIssues": 285,
   "topics": [
    "accounting",
    "bills",
@@ -1087,7 +1087,7 @@
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/bigcapitalhq/bigcapital",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "leantime--leantime",
@@ -1097,12 +1097,12 @@
   "homepage": "https://leantime.io",
   "description": "Leantime is a goals focused project management system for non-project managers. Building with ADHD, Autism, and dyslexia in mind.",
   "license": "AGPL-3.0",
-  "stars": 11888,
+  "stars": 11897,
   "lastPush": "2026-10-21T19:14:49Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/11252321?v=4",
   "language": "PHP",
-  "forks": 1160,
+  "forks": 1162,
   "openIssues": 236,
   "topics": [
    "agile",
@@ -1117,7 +1117,7 @@
   "category": "project-management",
   "replaces": "Asana",
   "source": "https://api.github.com/repos/Leantime/leantime",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "nextcloud--server",
@@ -1127,13 +1127,13 @@
   "homepage": "https://nextcloud.com",
   "description": "\u2601\ufe0f Nextcloud server, a safe home for all your data",
   "license": "AGPL-3.0",
-  "stars": 37250,
-  "lastPush": "2026-10-23T09:53:39Z",
+  "stars": 37283,
+  "lastPush": "2026-10-25T02:51:08Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/19211038?v=4",
   "language": "PHP",
-  "forks": 5299,
-  "openIssues": 3852,
+  "forks": 5305,
+  "openIssues": 3863,
   "topics": [
    "cloud",
    "collaboration",
@@ -1147,7 +1147,7 @@
   "category": "documents",
   "replaces": "Dropbox",
   "source": "https://api.github.com/repos/nextcloud/server",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "lukevella--rallly",
@@ -1157,13 +1157,13 @@
   "homepage": "https://rallly.co",
   "description": "Rallly is an open-source scheduling and collaboration tool designed to make organizing events and meetings easier.",
   "license": "AGPL-3.0",
-  "stars": 5314,
-  "lastPush": "2026-10-23T09:06:25Z",
+  "stars": 5319,
+  "lastPush": "2026-10-25T05:27:42Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/676849?v=4",
   "language": "TypeScript",
   "forks": 576,
-  "openIssues": 5,
+  "openIssues": 6,
   "topics": [
    "i18next",
    "next-auth",
@@ -1177,7 +1177,7 @@
   "category": "scheduling",
   "replaces": "Doodle",
   "source": "https://api.github.com/repos/lukevella/rallly",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "nocodb--nocodb",
@@ -1187,13 +1187,13 @@
   "homepage": "https://nocodb.com",
   "description": "\ud83d\udd25 \ud83d\udd25 \ud83d\udd25 A Free & Self-hostable Airtable Alternative",
   "license": "NOASSERTION",
-  "stars": 65332,
-  "lastPush": "2026-10-23T04:36:16Z",
+  "stars": 65351,
+  "lastPush": "2026-10-25T02:51:06Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/50206778?v=4",
   "language": "TypeScript",
-  "forks": 5096,
-  "openIssues": 711,
+  "forks": 5097,
+  "openIssues": 677,
   "topics": [
    "airtable",
    "airtable-alternative",
@@ -1207,7 +1207,7 @@
   "category": "databases",
   "replaces": "Airtable",
   "source": "https://api.github.com/repos/nocodb/nocodb",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "mattermost--mattermost",
@@ -1217,13 +1217,13 @@
   "homepage": "https://mattermost.com",
   "description": "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle..",
   "license": "NOASSERTION",
-  "stars": 39413,
-  "lastPush": "2026-10-23T11:28:04Z",
+  "stars": 39427,
+  "lastPush": "2026-10-25T06:01:04Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/9828093?v=4",
   "language": "TypeScript",
-  "forks": 9068,
-  "openIssues": 1085,
+  "forks": 9067,
+  "openIssues": 1088,
   "topics": [
    "collaboration",
    "golang",
@@ -1236,7 +1236,7 @@
   "category": "team-chat",
   "replaces": "Slack",
   "source": "https://api.github.com/repos/mattermost/mattermost",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "rocketchat--rocket.chat",
@@ -1246,13 +1246,13 @@
   "homepage": "https://rocket.chat/",
   "description": "The Secure CommsOS\u2122 for mission-critical operations",
   "license": "NOASSERTION",
-  "stars": 46303,
-  "lastPush": "2026-10-23T11:28:02Z",
+  "stars": 46318,
+  "lastPush": "2026-10-25T03:43:40Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/12508788?v=4",
   "language": "TypeScript",
-  "forks": 14027,
-  "openIssues": 4213,
+  "forks": 14033,
+  "openIssues": 4239,
   "topics": [
    "chat",
    "collaboration",
@@ -1266,7 +1266,7 @@
   "category": "team-chat",
   "replaces": "Slack",
   "source": "https://api.github.com/repos/RocketChat/Rocket.Chat",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "outline--outline",
@@ -1276,13 +1276,13 @@
   "homepage": "https://www.getoutline.com",
   "description": "The fastest knowledge base for growing teams. Beautiful, realtime collaborative, feature packed, and markdown compatible.",
   "license": "NOASSERTION",
-  "stars": 41036,
-  "lastPush": "2026-10-23T05:08:34Z",
+  "stars": 41055,
+  "lastPush": "2026-10-25T04:16:51Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/1765001?v=4",
   "language": "TypeScript",
-  "forks": 3633,
-  "openIssues": 81,
+  "forks": 3637,
+  "openIssues": 78,
   "topics": [
    "docker",
    "javascript",
@@ -1295,7 +1295,7 @@
   "category": "knowledge-base",
   "replaces": "Confluence",
   "source": "https://api.github.com/repos/outline/outline",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "appflowy-io--appflowy",
@@ -1305,13 +1305,13 @@
   "homepage": "https://appflowy.com",
   "description": "Bring projects, wikis, and teams together with AI. AppFlowy is the AI collaborative workspace where you achieve more without losing control of your data. The leading open source Notion alternative.",
   "license": "AGPL-3.0",
-  "stars": 77671,
+  "stars": 77733,
   "lastPush": "2026-10-21T04:12:10Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/86002201?v=4",
   "language": "Dart",
-  "forks": 6083,
-  "openIssues": 1052,
+  "forks": 6085,
+  "openIssues": 1054,
   "topics": [
    "blog",
    "confluence-alternative",
@@ -1325,7 +1325,7 @@
   "category": "knowledge-base",
   "replaces": "Notion",
   "source": "https://api.github.com/repos/AppFlowy-IO/AppFlowy",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "opf--openproject",
@@ -1335,13 +1335,13 @@
   "homepage": "https://www.openproject.org",
   "description": "OpenProject is the leading open source project management software for product, project and portfolio management. A powerful Jira alternative with agile planning, issue tracking, roadmaps, Gantt charts, time tracking, collaboration features, and more. Available on premises or in the cloud. \u2b50 Star us on GitHub",
   "license": "GPL-3.0",
-  "stars": 16579,
-  "lastPush": "2026-10-23T11:23:23Z",
+  "stars": 16633,
+  "lastPush": "2026-10-25T03:47:16Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/1756674?v=4",
   "language": "Ruby",
-  "forks": 3603,
-  "openIssues": 313,
+  "forks": 3615,
+  "openIssues": 321,
   "topics": [
    "agile-development",
    "angular",
@@ -1355,7 +1355,7 @@
   "category": "project-management",
   "replaces": "Microsoft Project",
   "source": "https://api.github.com/repos/opf/openproject",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "go-vikunja--vikunja",
@@ -1365,13 +1365,13 @@
   "homepage": "https://vikunja.io",
   "description": "The task manager you actually own.",
   "license": "AGPL-3.0",
-  "stars": 5828,
-  "lastPush": "2026-10-23T08:00:25Z",
+  "stars": 5844,
+  "lastPush": "2026-10-25T00:12:12Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/41270016?v=4",
   "language": "Go",
-  "forks": 774,
-  "openIssues": 254,
+  "forks": 775,
+  "openIssues": 255,
   "topics": [
    "api",
    "golang",
@@ -1385,7 +1385,7 @@
   "category": "project-management",
   "replaces": "Todoist",
   "source": "https://api.github.com/repos/go-vikunja/vikunja",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "frappe--helpdesk",
@@ -1395,13 +1395,13 @@
   "homepage": "https://frappe.io/helpdesk",
   "description": "Modern, Streamlined, Free and Open Source Customer Service Software",
   "license": "AGPL-3.0",
-  "stars": 3442,
-  "lastPush": "2026-10-23T11:27:57Z",
+  "stars": 3445,
+  "lastPush": "2026-10-23T23:53:40Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/836974?v=4",
   "language": "Vue",
-  "forks": 981,
-  "openIssues": 209,
+  "forks": 980,
+  "openIssues": 205,
   "topics": [
    "customer-support",
    "foss",
@@ -1415,7 +1415,7 @@
   "category": "helpdesk",
   "replaces": "Zendesk",
   "source": "https://api.github.com/repos/frappe/helpdesk",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "heyform--heyform",
@@ -1425,13 +1425,13 @@
   "homepage": "https://heyform.net",
   "description": "Open-Source Form Builder",
   "license": "AGPL-3.0",
-  "stars": 9046,
-  "lastPush": "2026-10-23T08:39:15Z",
+  "stars": 9051,
+  "lastPush": "2026-10-25T01:17:07Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/70623513?v=4",
   "language": "TypeScript",
-  "forks": 722,
-  "openIssues": 8,
+  "forks": 724,
+  "openIssues": 6,
   "topics": [
    "form",
    "quiz",
@@ -1440,7 +1440,7 @@
   "category": "forms",
   "replaces": "Typeform",
   "source": "https://api.github.com/repos/heyform/heyform",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "matomo-org--matomo",
@@ -1450,13 +1450,13 @@
   "homepage": "https://matomo.org/",
   "description": "Empowering People Ethically \ud83d\ude80 \u2014 Matomo is hiring! Join us \u2192 https://matomo.org/jobs Matomo is the leading open-source alternative to Google Analytics, giving you complete control and built-in privacy. Easily collect, visualise, and analyse data from websites & apps. Star us on GitHub \u2b50\ufe0f  \u2013 Pull Requests welcome! ",
   "license": "GPL-3.0",
-  "stars": 21972,
-  "lastPush": "2026-10-23T11:27:52Z",
+  "stars": 21981,
+  "lastPush": "2026-10-25T04:53:35Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/698038?v=4",
   "language": "PHP",
-  "forks": 2919,
-  "openIssues": 2558,
+  "forks": 2921,
+  "openIssues": 2559,
   "topics": [
    "analytics",
    "growth",
@@ -1470,7 +1470,7 @@
   "category": "analytics",
   "replaces": "Google Analytics",
   "source": "https://api.github.com/repos/matomo-org/matomo",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "posthog--posthog",
@@ -1480,13 +1480,13 @@
   "homepage": "https://posthog.com",
   "description": ":hedgehog: PostHog is the leading platform for building self-driving products. Our developer tools \u2013 AI observability, analytics, session replay, flags, experiments, error tracking, logs, and more \u2013 capture all the context agents need to diagnose problems, uncover opportunities, and ship fixes. Steer it all from Slack, web, desktop, or the MCP.",
   "license": "NOASSERTION",
-  "stars": 40387,
-  "lastPush": "2026-10-23T11:27:46Z",
+  "stars": 40420,
+  "lastPush": "2026-10-25T04:07:14Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/60330232?v=4",
   "language": "Python",
-  "forks": 3541,
-  "openIssues": 5257,
+  "forks": 3552,
+  "openIssues": 5245,
   "topics": [
    "ab-testing",
    "ai-analytics",
@@ -1500,7 +1500,7 @@
   "category": "analytics",
   "replaces": "Mixpanel",
   "source": "https://api.github.com/repos/PostHog/posthog",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "getlago--lago",
@@ -1510,12 +1510,12 @@
   "homepage": "https://www.getlago.com",
   "description": "Open Source Metering and Usage Based Billing API \u2b50\ufe0f Consumption tracking, Subscription management, Pricing iterations, Payment orchestration & Revenue analytics",
   "license": "AGPL-3.0",
-  "stars": 10708,
-  "lastPush": "2026-10-22T16:04:57Z",
+  "stars": 10712,
+  "lastPush": "2026-10-23T14:34:55Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/75492405?v=4",
   "language": "Go",
-  "forks": 774,
+  "forks": 773,
   "openIssues": 35,
   "topics": [
    "analytics",
@@ -1530,7 +1530,7 @@
   "category": "invoicing",
   "replaces": "Chargebee",
   "source": "https://api.github.com/repos/getlago/lago",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "midday-ai--midday",
@@ -1540,12 +1540,12 @@
   "homepage": "https://midday.ai",
   "description": "Invoicing, Time tracking, File reconciliation, Storage, Financial Overview & your own Assistant made for Freelancers",
   "license": "AGPL-3.0",
-  "stars": 15091,
+  "stars": 15093,
   "lastPush": "2026-06-13T13:40:35Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/145366395?v=4",
   "language": "TypeScript",
-  "forks": 1892,
+  "forks": 1890,
   "openIssues": 14,
   "topics": [
    "finance",
@@ -1557,7 +1557,7 @@
   "category": "accounting",
   "replaces": "QuickBooks",
   "source": "https://api.github.com/repos/midday-ai/midday",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "grokability--snipe-it",
@@ -1567,13 +1567,13 @@
   "homepage": "https://snipeitapp.com",
   "description": "A free open source IT asset/license management system",
   "license": "AGPL-3.0",
-  "stars": 15069,
+  "stars": 15087,
   "lastPush": "2026-10-23T09:42:01Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/18605133?v=4",
   "language": "PHP",
-  "forks": 4035,
-  "openIssues": 913,
+  "forks": 4037,
+  "openIssues": 919,
   "topics": [
    "asset-management",
    "asset-manager",
@@ -1584,7 +1584,7 @@
   "category": "inventory",
   "replaces": "Asset Panda",
   "source": "https://api.github.com/repos/grokability/snipe-it",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "pentacent--keila",
@@ -1594,18 +1594,18 @@
   "homepage": "https://keila.io",
   "description": "Open Source Newsletter Tool.",
   "license": "AGPL-3.0",
-  "stars": 2246,
-  "lastPush": "2026-10-22T12:10:22Z",
+  "stars": 2247,
+  "lastPush": "2026-10-24T10:59:44Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/76011632?v=4",
   "language": "Elixir",
-  "forks": 174,
-  "openIssues": 78,
+  "forks": 175,
+  "openIssues": 77,
   "topics": [],
   "category": "email-marketing",
   "replaces": "Mailchimp",
   "source": "https://api.github.com/repos/pentacent/keila",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "bitwarden--server",
@@ -1615,13 +1615,13 @@
   "homepage": "https://bitwarden.com",
   "description": "Bitwarden infrastructure/backend (API, database, Docker, etc).",
   "license": "NOASSERTION",
-  "stars": 20461,
-  "lastPush": "2026-10-23T10:41:58Z",
+  "stars": 20474,
+  "lastPush": "2026-10-25T02:59:26Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/15990069?v=4",
   "language": "C#",
-  "forks": 1812,
-  "openIssues": 282,
+  "forks": 1814,
+  "openIssues": 283,
   "topics": [
    "api",
    "aspnet",
@@ -1635,7 +1635,7 @@
   "category": "passwords",
   "replaces": "1Password",
   "source": "https://api.github.com/repos/bitwarden/server",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "passbolt--passbolt_api",
@@ -1665,7 +1665,7 @@
   "category": "passwords",
   "replaces": "1Password",
   "source": "https://api.github.com/repos/passbolt/passbolt_api",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
  },
  {
   "slug": "n8n-io--n8n",
@@ -1675,13 +1675,13 @@
   "homepage": "https://n8n.io",
   "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
   "license": "NOASSERTION",
-  "stars": 208377,
-  "lastPush": "2026-10-23T11:27:41Z",
+  "stars": 208516,
+  "lastPush": "2026-10-24T23:11:27Z",
   "archived": false,
   "ownerAvatar": "https://avatars.githubusercontent.com/u/45487711?v=4",
   "language": "TypeScript",
-  "forks": 61217,
-  "openIssues": 1215,
+  "forks": 61226,
+  "openIssues": 1228,
   "topics": [
    "ai",
    "apis",
@@ -1695,6 +1695,36 @@
   "category": "automation",
   "replaces": "Zapier",
   "source": "https://api.github.com/repos/n8n-io/n8n",
-  "fetchedAt": "2026-10-23T11:28:07Z"
+  "fetchedAt": "2026-10-25T06:07:43Z"
+ },
+ {
+  "slug": "supabase--supabase",
+  "name": "Supabase",
+  "repo": "supabase/supabase",
+  "repoUrl": "https://github.com/supabase/supabase",
+  "homepage": "https://supabase.com",
+  "description": "The Postgres development platform. Supabase gives you a dedicated Postgres database to build your web, mobile, and AI applications.",
+  "license": "Apache-2.0",
+  "stars": 113898,
+  "lastPush": "2026-10-25T00:37:17Z",
+  "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/54469796?v=4",
+  "language": "TypeScript",
+  "forks": 16721,
+  "openIssues": 1172,
+  "topics": [
+   "ai",
+   "alternative",
+   "auth",
+   "database",
+   "deno",
+   "embeddings",
+   "example",
+   "firebase"
+  ],
+  "category": "backend",
+  "replaces": "Firebase",
+  "source": "https://api.github.com/repos/supabase/supabase",
+  "fetchedAt": "2026-10-25T06:07:43Z"
  }
 ]

@@ -56,3 +56,4 @@ pentacent/keila	email-marketing	Mailchimp	Keila
 bitwarden/server	passwords	1Password	Bitwarden
 passbolt/passbolt_api	passwords	1Password	Passbolt
 n8n-io/n8n	automation	Zapier	n8n
+supabase/supabase	backend	Firebase	Supabase

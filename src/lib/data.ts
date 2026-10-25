@@ -23,6 +23,7 @@ export const CATS: Record<string, { name: string; icon: string; blurb: string }>
   databases: { name: 'No-code databases', icon: 'form', blurb: 'Spreadsheet-style databases' },
   automation: { name: 'Workflow automation', icon: 'pulse', blurb: 'Zapier-style workflows and integrations' },
   passwords: { name: 'Password managers', icon: 'badge', blurb: 'Shared vaults and credentials' },
+  backend: { name: 'App backends', icon: 'box', blurb: 'Postgres, auth and file storage for apps' },
 };
 export const catName = (c: string) => CATS[c]?.name ?? c;
 export const cats = Object.keys(CATS).filter(c => listings.some(l => l.category === c));
@@ -45,4 +46,5 @@ export const GUIDES = [
   { href: '/pricing/cal-com/', title: 'Cal.com pricing: cloud plans vs self-hosting Cal.diy', tools: ['calcom--cal.diy'], checked: 'Oct 2026' },
   { href: '/compare/n8n-vs-make/', title: 'n8n vs Make: what 2,500, 10,000 and 50,000 runs a month really cost', tools: ['n8n-io--n8n'], checked: 'Oct 2026' },
   { href: '/pricing/chatwoot/', title: 'Chatwoot pricing: cloud plans vs self-hosting', tools: ['chatwoot--chatwoot'], checked: 'Oct 2026' },
+  { href: '/pricing/supabase/', title: 'Supabase pricing: cloud plans vs self-hosting, and what you give up', tools: ['supabase--supabase'], checked: 'Oct 2026' },
 ];
