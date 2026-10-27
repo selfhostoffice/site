@@ -46,5 +46,6 @@ export const GUIDES = [
   { href: '/pricing/cal-com/', title: 'Cal.com pricing: cloud plans vs self-hosting Cal.diy', tools: ['calcom--cal.diy'], checked: 'Oct 2026' },
   { href: '/compare/n8n-vs-make/', title: 'n8n vs Make: what 2,500, 10,000 and 50,000 runs a month really cost', tools: ['n8n-io--n8n'], checked: 'Oct 2026' },
   { href: '/pricing/chatwoot/', title: 'Chatwoot pricing: cloud plans vs self-hosting', tools: ['chatwoot--chatwoot'], checked: 'Oct 2026' },
+  { href: '/pricing/n8n-server-requirements/', title: 'n8n server requirements: measured RAM and the server to buy', tools: ['n8n-io--n8n'], checked: 'Oct 2026' },
   { href: '/pricing/supabase/', title: 'Supabase pricing: cloud plans vs self-hosting, and what you give up', tools: ['supabase--supabase'], checked: 'Oct 2026' },
 ];

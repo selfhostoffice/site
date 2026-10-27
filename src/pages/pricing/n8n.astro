@@ -75,7 +75,7 @@ const schema = [
   <li>n8n’s <a href={S.awsDoc}>Kubernetes guides</a> list the resources behind its own Cloud tiers: Starter 320 MB RAM, Pro (10k executions) 640 MB, Pro (50k executions) 1,280 MB.</li>
   <li>The default Docker setup uses SQLite. n8n’s docs say to use Postgres for production instances with more than a handful of users or round-the-clock workflows. That can run on the same server.</li>
 </ul>
-<p>My take: a 2 GB server is plenty for a small team’s workflows. I’d go to 4 GB if you want Assistant, plan to run Postgres on the same box, or lean on heavy code steps. That’s my judgment from n8n’s numbers above, not something I load-tested.</p>
+<p>My take: a 2 GB server is plenty for a small team’s workflows. I’d go to 4 GB if you want Assistant, plan to run Postgres on the same box, or lean on heavy code steps. That started as my judgment from n8n’s numbers; I’ve since measured it: <a href="/pricing/n8n-server-requirements/">n8n used about 524 MB idle and peaked at 735 MB</a> in my Oct 27 test.</p>
 </div>
 </div></section>
 

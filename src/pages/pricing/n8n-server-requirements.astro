@@ -1,0 +1,119 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const n8n = listings.find(l => l.slug === 'n8n-io--n8n')!;
+const CHECKED = 'Oct 27, 2026';
+const S = {
+  npm: 'https://docs.n8n.io/hosting/installation/npm/',
+  docker: 'https://docs.n8n.io/hosting/installation/docker/',
+  hetzner: 'https://docs.n8n.io/hosting/installation/server-setups/hetzner/',
+  memory: 'https://docs.n8n.io/hosting/scaling/memory-errors/',
+  db: 'https://docs.n8n.io/hosting/configuration/supported-databases-settings/',
+  prune: 'https://docs.n8n.io/hosting/scaling/execution-data/',
+  hub: 'https://hub.docker.com/r/n8nio/n8n/tags',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// Measured on Oct 27, 2026: n8n 2.44.7 from npm, Node 24.22.1, SQLite, internal JS task runner.
+// RSS from ps (KiB), main "n8n start" process + "n8n task-runner" process, divided by 1024.
+const mem = [
+  { label: 'Idle, fresh install', v: 524 },
+  { label: 'Idle, after test runs', v: 561 },
+  { label: 'Code step, 10,000 rows', v: 568 },
+  { label: 'Code step, 100,000 rows', v: 613 },
+  { label: 'Code step, 300,000 rows', v: 735 },
+];
+const maxV = 1024;
+const servers = [
+  { spec: '1 vCPU · 1 GiB · 25 GiB', price: 6, fit: 'Too tight for me. n8n alone sat at 524–561 MB idle, leaving little for the OS, Docker and any spike. I did not test it.' },
+  { spec: '1 vCPU · 2 GiB · 50 GiB', price: 12, fit: 'My pick for a small team on SQLite. Roomy enough for the 735 MB peak I saw.' },
+  { spec: '2 vCPU · 2 GiB · 60 GiB', price: 18, fit: 'Same memory, second core. Worth it if many workflows fire at once.' },
+  { spec: '2 vCPU · 4 GiB · 80 GiB', price: 24, fit: 'Postgres on the same box, n8n Assistant (n8n asks for 4 GB), or heavy Code steps.' },
+];
+const faq = [
+  { q: 'How much RAM does n8n need?', a: 'In my test on Oct 27, 2026, n8n 2.44.7 used about 524 MB idle right after install (the main process plus its JavaScript task runner) and peaked around 735 MB while a Code step built 300,000 rows. A 2 GB server covers that with room for the OS. n8n’s own Hetzner guide says a 2 vCPU / 2 GB CPX11 is enough for most usage, and to use at least 4 GB if you add n8n Assistant.' },
+  { q: 'Can n8n run on a 1 GB VPS?', a: 'I wouldn’t. n8n by itself sat between 524 and 561 MB idle in my test, before Docker, the operating system or a reverse proxy. It may start, but one big workflow can push it out of memory. I did not test a 1 GB server, so treat that as my judgment.' },
+  { q: 'What does it cost to self-host n8n?', a: 'The Community edition has no license fee. The server is the bill: on DigitalOcean (prices read Oct 27, 2026) a 2 GiB Droplet is $12 a month and a 4 GiB one is $24, plus 20% if you turn on weekly backups.' },
+  { q: 'Which Node.js version does n8n need?', a: 'n8n’s npm docs say Node 20.19 to 24.x, but the n8n 2.44.7 package I installed refused to start on Node 22 and asked for Node 24 or newer. If you use the official Docker image, Node is already inside it.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'n8n server requirements: what it used on my test install, and the server I’d buy', dateModified: '2026-10-27', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/pricing/n8n-server-requirements/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title="n8n server requirements (Oct 2026): measured RAM, and what a self-host server costs" description="I installed n8n 2.44.7 and measured it: about 524 MB idle, 735 MB peak on a 300,000-row Code step. A 2 GiB server ($12/mo on DigitalOcean) is enough for most small teams. Checked Oct 27, 2026." schema={schema} crumbs={[['Home', '/'], ['n8n pricing', '/pricing/n8n/'], ['Server requirements', '/pricing/n8n-server-requirements/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Self-hosting guide · Checked on {CHECKED}</span>
+  <h1>n8n server requirements: what it used on my test install, and the server I’d buy</h1>
+  <p class="muted">n8n’s docs give a plan name and not much else, so on {CHECKED} I installed n8n 2.44.7 on a Linux test machine and measured it. Memory numbers are what <code>ps</code> reported for the two n8n processes. Server prices are from <a href={S.do}>DigitalOcean’s Droplet page</a>, read the same night. For the plan prices of n8n Cloud, see my <a href="/pricing/n8n/">n8n pricing guide</a>.</p>
+  <p class="note"><b>Disclosure:</b> there are no affiliate links on this page. We’ve applied to n8n’s affiliate program, but it isn’t approved, and DigitalOcean doesn’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>Idle, n8n used about 524 MB</b> right after install, and about 561 MB once it had run some workflows. That’s the main process plus the JavaScript task runner that executes Code steps.</li>
+    <li><b>The heaviest step I threw at it peaked at about 735 MB:</b> a Code node building 300,000 rows of about 250 bytes each, which took 224 ms.</li>
+    <li><b>The server I’d buy:</b> 2 GiB of RAM. That’s <b>$12/mo</b> on DigitalOcean. Go to 4 GiB (<b>$24/mo</b>) if you’ll run Postgres on the same machine or want n8n Assistant.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Memory I measured</h2>
+<p class="muted">n8n 2.44.7, installed from npm, Node 24.22.1, default SQLite database, internal task runner. The test workflow was a Webhook trigger into one Code node that builds N rows, adds them up and returns a single summary item. I sampled memory every 0.2 seconds while each request ran.</p>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 220" width="100%" role="img" aria-labelledby="n8nmem-t">
+  <title id="n8nmem-t">Measured memory use of n8n 2.44.7: 524 MB idle on a fresh install, 561 MB idle after test runs, and 568, 613 and 735 MB peaks for Code steps of 10,000, 100,000 and 300,000 rows</title>
+  {mem.map((b, i) => {
+    const y = 8 + i * 40; const w = (b.v / maxV) * 330;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="190" y={y + 2} width={w} height="16" fill={i < 2 ? '#2f3a4a' : '#c2410c'} />
+      <text x={196 + w} y={y + 15} font-size="12" fill="currentColor">{b.v} MB</text>
+    </g>;
+  })}
+  <line x1={190 + 330} y1="4" x2={190 + 330} y2="206" stroke="currentColor" stroke-dasharray="3 3" opacity="0.5" />
+  <text x={190 + 326} y="216" font-size="11" fill="currentColor" text-anchor="end">1 GB</text>
+</svg>
+<figcaption class="note">Dark: idle. Red: peak while one request ran. Main process plus task runner, from <code>ps</code> RSS, 1 MB = 1,024 KB. Measured {CHECKED}. The dashed line is a whole 1 GB server.</figcaption>
+</figure>
+<p>Two things stood out. First, the floor is high: before a single workflow runs, n8n already takes more than half a gigabyte. The main process was about 412 MB of that and the task runner about 112 MB. Second, it grows slowly with plain JSON. Going from 10,000 to 300,000 rows inside one Code step added only about 170 MB.</p>
+<p>What this test doesn’t cover: binary files (PDFs, images), workflows that pass hundreds of thousands of items from node to node, and manual runs in the editor, which n8n’s <a href={S.memory}>memory docs</a> say use more because a copy of the data goes to your browser. Those are the cases that run servers out of memory, so leave headroom.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>Which server to buy</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">DigitalOcean Basic Droplet</th><th scope="col">Price</th><th scope="col">For n8n</th></tr></thead>
+<tbody>{servers.map(s => <tr><th scope="row">{s.spec}</th><td><b class="usd">${s.price}/mo</b></td><td>{s.fit}</td></tr>)}</tbody>
+</table></div>
+<p class="note">Prices from <a href={S.do}>digitalocean.com/pricing/droplets</a>, read {CHECKED}, US dollars. Weekly backups add 20% of the Droplet price. A domain name is extra. n8n’s <a href={S.hetzner}>Hetzner guide</a> names the 2 vCPU / 2 GB CPX11 as enough for most usage and asks for at least 4 GB / 2 vCPU with n8n Assistant, because Assistant adds a sandbox.</p>
+<p>My take: 2 GiB is the sweet spot. You get the 735 MB peak I measured with over a gigabyte to spare, and $12 is a little over half of n8n Cloud Starter ($20/mo billed annually). If your workflows are small and Starter’s limits fit, though, the $8 difference won’t pay for the hours you’ll spend on updates.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>Disk, install and first start</h2>
+<ul>
+  <li><b>Docker image:</b> <code>n8nio/n8n:2.44.7</code> is 280 MB compressed for amd64 and 279 MB for arm64 (<a href={S.hub}>Docker Hub</a>, read {CHECKED}). This is the install n8n recommends.</li>
+  <li><b>npm install:</b> 2,344 packages, 3.1 GB in <code>node_modules</code>, and 155 seconds on my machine. It also needed a C++ compiler and Python’s setuptools to build one native module (<code>isolated-vm</code>), which a bare VPS won’t have.</li>
+  <li><b>First start:</b> about 4 minutes, spent running 301 database migrations on a new SQLite file. Later restarts were ready in about 6 seconds.</li>
+  <li><b>Database size:</b> 2.5 MB after the migrations and my few test runs. It grows with saved executions. n8n prunes them by default after 14 days or 10,000 executions, whichever comes first (<a href={S.prune}>execution data docs</a>).</li>
+</ul>
+<p>Two snags I hit that the docs don’t warn about. The <a href={S.npm}>npm docs</a> say n8n needs Node 20.19 to 24.x, but 2.44.7 refused to start on Node 22 and asked for 24 or newer. And on start it printed that running n8n outside a container is deprecated and that future versions will require the official Docker image. The npm page also says npm installs are deprecated from n8n 3.0. So use <a href={S.docker}>Docker</a>, even though I tested the npm build here.</p>
+
+<h2>SQLite or Postgres?</h2>
+<p>Self-hosted n8n uses SQLite by default, and so do n8n Cloud’s Starter and Pro plans, per its <a href={S.db}>database docs</a>; Postgres is only on the Enterprise scaling plans. For one small team, SQLite is fine and costs no extra memory. If you want Postgres anyway (n8n supports 16, 17 and 18), I’d move to the 4 GiB server rather than squeeze it into 2 GiB. I didn’t measure Postgres alongside n8n, so that’s caution, not a number.</p>
+
+<h2>Honest limits of this test</h2>
+<ul>
+  <li>My test machine has 8 cores, so the run times above are faster than you’ll see on a 1 vCPU Droplet. Memory doesn’t depend on core count in the same way, but I didn’t verify on a small VPS.</li>
+  <li>I measured the npm build, not the Docker image. The app inside is the same version, but the container adds its own small overhead.</li>
+  <li>One synthetic workflow is not your workflows. If yours move files or big API responses, test with your own data and watch memory for a week before you size down.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(f => <><h3>{f.q}</h3><p>{f.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>n8n on SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${n8n.slug}/`}><img src={avatar(n8n, 56)} alt="" width="28" height="28" loading="lazy"/> n8n</a>: {n8n.stars.toLocaleString('en-US')} GitHub stars, {n8n.license} license, last push {fmtDate(n8n.lastPush)} (GitHub API, fetched {fmtDate(n8n.fetchedAt)}). Prices: <a href="/pricing/n8n/">n8n Cloud vs self-hosted</a> and <a href="/compare/n8n-vs-make/">n8n vs Make</a>.</p>
+</div></section>
+</Base>
