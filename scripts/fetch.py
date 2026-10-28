@@ -11,7 +11,7 @@ out=[]; now=time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime())
 for row in csv.reader(open(os.path.join(os.path.dirname(__file__),"repos.tsv")),delimiter="\t"):
     repo,cat,rep=row[:3]; disp=(row[3] if len(row)>3 else "").strip()
     try:
-        d=json.load(urllib.request.urlopen(urllib.request.Request(f"https://api.github.com/repos/{repo}",headers=H)))
+        d=json.load(urllib.request.urlopen(urllib.request.Request(f"https://api.github.com/repos/{repo}",headers=H),timeout=20))
     except Exception as e:
         print("SKIP",repo,e,file=sys.stderr)
         if repo.lower() in old:

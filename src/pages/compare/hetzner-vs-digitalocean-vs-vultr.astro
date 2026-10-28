@@ -1,0 +1,132 @@
+---
+import Base from '../../layouts/Base.astro';
+const CHECKED = 'Oct 28, 2026';
+const FX = 1.115; // ECB euro reference rate, Oct 27, 2026 (1 EUR = 1.1150 USD)
+const FX_NOTE = 'Hetzner bills in euros. USD shown at the ECB reference rate of 1.1150 on Oct 27, 2026, so your card charge may differ a little. Hetzner prices are before VAT and include an IPv4 address.';
+const S = {
+  hzReg: 'https://www.hetzner.com/cloud/regular-performance',
+  hzCost: 'https://www.hetzner.com/cloud/cost-optimized',
+  hzHome: 'https://www.hetzner.com/cloud',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  doBw: 'https://docs.digitalocean.com/platform/billing/bandwidth/',
+  vultr: 'https://www.vultr.com/pricing/',
+  ecb: 'https://data.ecb.europa.eu/data/datasets/EXR/EXR.D.USD.EUR.SP00.A',
+};
+const usd = (eur: number) => Math.round(eur * FX * 100) / 100;
+const f = (n: number) => '$' + n.toFixed(2).replace(/\.00$/, '');
+type Row = { who: string; plan: string; spec: string; tb: string; price: number; eur?: number };
+const tiers: { ram: string; rows: Row[] }[] = [
+  { ram: '2 GB of RAM', rows: [
+    { who: 'DigitalOcean', plan: 'Basic Droplet', spec: '1 vCPU · 2 GiB · 50 GiB SSD', tb: '2,000 GiB', price: 12 },
+    { who: 'Vultr', plan: 'Cloud Compute, Regular Performance', spec: '1 vCPU · 2 GB · 55 GB SSD', tb: '2 TB', price: 10 },
+    { who: 'Vultr', plan: 'Cloud Compute, High Performance', spec: '1 vCPU · 2 GB · 50 GB NVMe', tb: '3 TB', price: 12 },
+    { who: 'Hetzner (US: Ashburn, Hillsboro)', plan: 'CPX11', spec: '2 vCPU · 2 GB · 40 GB NVMe', tb: '1 TB', price: usd(17.99), eur: 17.99 },
+    { who: 'Hetzner (Germany, Finland)', plan: 'CPX12', spec: '1 vCPU · 2 GB · 40 GB NVMe', tb: '20 TB', price: usd(11.99), eur: 11.99 },
+  ]},
+  { ram: '4 GB of RAM', rows: [
+    { who: 'DigitalOcean', plan: 'Basic Droplet', spec: '2 vCPU · 4 GiB · 80 GiB SSD', tb: '4,000 GiB', price: 24 },
+    { who: 'Vultr', plan: 'Cloud Compute, Regular Performance', spec: '2 vCPU · 4 GB · 80 GB SSD', tb: '3 TB', price: 20 },
+    { who: 'Vultr', plan: 'Cloud Compute, High Performance', spec: '2 vCPU · 4 GB · 100 GB NVMe', tb: '5 TB', price: 24 },
+    { who: 'Hetzner (US: Ashburn, Hillsboro)', plan: 'CPX21', spec: '3 vCPU · 4 GB · 80 GB NVMe', tb: '2 TB', price: usd(32.49), eur: 32.49 },
+    { who: 'Hetzner (Germany, Finland)', plan: 'CX23 (Cost-Optimized)', spec: '2 vCPU · 4 GB · 40 GB NVMe', tb: '20 TB', price: usd(5.99), eur: 5.99 },
+  ]},
+  { ram: '8 GB of RAM', rows: [
+    { who: 'DigitalOcean', plan: 'Basic Droplet', spec: '4 vCPU · 8 GiB · 160 GiB SSD', tb: '5,000 GiB', price: 48 },
+    { who: 'Vultr', plan: 'Cloud Compute, Regular Performance', spec: '4 vCPU · 8 GB · 160 GB SSD', tb: '4 TB', price: 40 },
+    { who: 'Vultr', plan: 'Cloud Compute, High Performance', spec: '4 vCPU · 8 GB · 180 GB NVMe', tb: '6 TB', price: 48 },
+    { who: 'Hetzner (US: Ashburn, Hillsboro)', plan: 'CPX31', spec: '4 vCPU · 8 GB · 160 GB NVMe', tb: '3 TB', price: usd(62.99), eur: 62.99 },
+    { who: 'Hetzner (Germany, Finland)', plan: 'CX33 (Cost-Optimized)', spec: '4 vCPU · 8 GB · 80 GB NVMe', tb: '20 TB', price: usd(8.99), eur: 8.99 },
+  ]},
+];
+const chart = tiers[1].rows.map(r => ({ label: r.who.startsWith('Hetzner (US') ? 'Hetzner US CPX21' : r.who.startsWith('Hetzner') ? 'Hetzner EU CX23' : r.who === 'Vultr' ? (r.plan.includes('Regular') ? 'Vultr Regular' : 'Vultr High Perf.') : 'DigitalOcean Basic', v: r.price }));
+const maxV = 40;
+const faq = [
+  { q: 'Is Hetzner cheaper than DigitalOcean?', a: `In Europe, by a lot: on ${CHECKED} Hetzner listed a 2 vCPU / 4 GB CX23 at €5.99 a month (about ${f(usd(5.99))}) against $24 for DigitalOcean’s 4 GiB Droplet. In its US locations (Ashburn and Hillsboro) it was the other way round: the 4 GB CPX21 was €32.49 (about ${f(usd(32.49))}), more than DigitalOcean or Vultr at the same RAM.` },
+  { q: 'Which is cheapest for a US business?', a: 'Vultr’s Regular Performance plans, when I checked: $10 for 2 GB, $20 for 4 GB and $40 for 8 GB. They run on older Intel CPUs and plain SSDs. Vultr High Performance and DigitalOcean Basic were tied at $12, $24 and $48.' },
+  { q: 'Do they charge for bandwidth?', a: 'All three include a monthly allowance and bill extra past it. DigitalOcean charges $0.01 per GiB over and pools the allowance across your Droplets. Vultr lists $0.01 per GB over. Hetzner lists €1.00 per extra TB in the EU and US, and €7.40 per TB in Singapore.' },
+  { q: 'How much do backups cost?', a: 'Each adds about a fifth to the server bill. DigitalOcean: 20% of the Droplet price for weekly backups or 30% for daily. Vultr: automatic backups add 20%. Hetzner: daily backups with seven slots, listed from €1.198 a month, which is 20% of its €5.99 plan.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Hetzner vs DigitalOcean vs Vultr for self-hosting: what 2, 4 and 8 GB cost', dateModified: '2026-10-28', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/hetzner-vs-digitalocean-vs-vultr/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Hetzner vs DigitalOcean vs Vultr (Oct 2026): what a self-hosting server costs" description="Prices read Oct 28, 2026: 4 GB costs $24 at DigitalOcean, $20–24 at Vultr, about $6.68 at Hetzner in Europe but about $36 at Hetzner’s US locations. Bandwidth, backups and the server I’d pick." schema={schema} crumbs={[['Home', '/'], ['Hetzner vs DigitalOcean vs Vultr', '/compare/hetzner-vs-digitalocean-vs-vultr/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Hetzner vs DigitalOcean vs Vultr for self-hosting: what 2, 4 and 8 GB actually cost</h1>
+  <p class="muted">Most of the tools on this site run happily on one small Linux server, so the server is usually the whole bill. I read the price pages of the three hosts people ask about most on {CHECKED} and lined up their plans by memory, since RAM is what self-hosted apps run out of first. US dollars throughout; {FX_NOTE}</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. None of these three hosts pays us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>If your team is in Europe, Hetzner wins on price by a mile.</b> 4 GB of RAM was €5.99 a month (about {f(usd(5.99))}) with 20 TB of traffic included.</li>
+    <li><b>If you want a US data center, Hetzner is now the priciest of the three.</b> Its US plans were roughly 1.5 times DigitalOcean’s price for the same RAM, with far less traffic included than its European plans.</li>
+    <li><b>For a US small business I’d pick DigitalOcean or Vultr High Performance.</b> They cost exactly the same ($12 / $24 / $48 for 2 / 4 / 8 GB). Vultr includes more transfer; DigitalOcean has more US regions. Vultr Regular Performance saves $2 to $8 a month if you don’t mind older hardware.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>4 GB of RAM, side by side</h2>
+<p class="muted">4 GB is the size I’d start most self-hosted stacks on: enough for an app, its database and a reverse proxy on one box.</p>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 210" width="100%" role="img" aria-labelledby="vps4-t">
+  <title id="vps4-t">Monthly price of a 4 GB server on {CHECKED}: DigitalOcean Basic $24, Vultr Regular $20, Vultr High Performance $24, Hetzner US CPX21 about ${usd(32.49)}, Hetzner EU CX23 about ${usd(5.99)}</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 40; const w = (b.v / maxV) * 360;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="150" y={y + 2} width={w} height="16" fill={b.label.startsWith('Hetzner US') ? '#c2410c' : '#2f3a4a'} />
+      <text x={156 + w} y={y + 15} font-size="12" fill="currentColor">{f(b.v)}/mo</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}. Hetzner converted from euros at 1.1150 and shown before VAT. Red: Hetzner’s US locations.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>Every size I compared</h2>
+{tiers.map(t => <>
+<h3>{t.ram}</h3>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Host</th><th scope="col">Plan</th><th scope="col">Specs</th><th scope="col">Traffic included</th><th scope="col">Price</th></tr></thead>
+<tbody>{t.rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.plan}</td><td>{r.spec}</td><td>{r.tb}</td><td><b class="usd">{r.eur ? '≈ ' : ''}{f(r.price)}/mo</b>{r.eur ? <><br/><small>€{r.eur.toFixed(2)} excl. VAT</small></> : null}</td></tr>)}</tbody>
+</table></div>
+</>)}
+<p class="note">Sources, all read {CHECKED}: <a href={S.do}>DigitalOcean Droplet pricing</a>, <a href={S.vultr}>Vultr pricing</a>, Hetzner <a href={S.hzReg}>Regular Performance</a> and <a href={S.hzCost}>Cost-Optimized</a> pages. Hetzner’s US locations only offer the older CPX11–CPX51 line; its newer CPX12–CPX62 and CX plans were listed for Germany and Finland. Exchange rate: <a href={S.ecb}>ECB</a>.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What the price tables don’t show</h2>
+<h3>Traffic</h3>
+<p>For most office tools (a CRM, a help desk, n8n), traffic is tiny and you’ll never get near any of these allowances. It matters if you host files or video. DigitalOcean charges $0.01 per GiB over the allowance and, usefully, pools allowances across all your Droplets (<a href={S.doBw}>its billing docs</a>). Vultr lists the same $0.01 per GB. Hetzner lists €1.00 per extra TB in the EU and US, which is about a tenth of the others, but its US plans include only 1 to 5 TB to start with.</p>
+<h3>Backups</h3>
+<p>Budget about 20% on top wherever you go. DigitalOcean is 20% of the Droplet price for weekly backups or 30% for daily. Vultr’s automatic backups add 20%. Hetzner keeps seven daily backups and lists them from €1.198 a month, which works out to 20% of its €5.99 plan. I’d still keep a copy of the database somewhere off the host; a backup that lives with the server goes away when the account does.</p>
+<h3>Where the servers are</h3>
+<p>Hetzner has two US sites, Ashburn, Virginia and Hillsboro, Oregon, plus Germany, Finland and Singapore (per <a href={S.hzHome}>its cloud page</a>). DigitalOcean lists New York, San Francisco, Toronto, Atlanta, Richmond and Kansas City in North America, among others. If your staff are in Texas or the Midwest, any of them is fine for a back-office app; a few extra milliseconds won’t show up in a CRM.</p>
+<h3>Availability</h3>
+<p>When I read Hetzner’s pages, every shared plan carried a “currently unavailable, please check back later” note, and the cloud overview said shared resources were “currently not available.” I couldn’t tell from outside whether that’s a real stock shortage or a page quirk, so check in the Hetzner console before you plan a migration around it. DigitalOcean’s and Vultr’s pages showed no such notes.</p>
+
+<h2>How much server do you need?</h2>
+<p>From my own test installs: <a href="/pricing/n8n-server-requirements/">n8n used about 524 MB idle and peaked at 735 MB</a>, so a 2 GB server is plenty. <a href="/pricing/supabase/">Self-hosted Supabase</a> starts 11 containers and its docs ask for at least 4 GB, with 8 GB recommended. Most single apps on this site land between those two, which is why I’d start at 4 GB unless I’d measured otherwise.</p>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>Team in Europe, or you don’t care where the data sits:</b> Hetzner CX23, 4 GB for about {f(usd(5.99))}. Nothing else here comes close on price, as long as you can actually get one.</li>
+  <li><b>US team, one or two apps:</b> DigitalOcean’s $24 Basic Droplet with 4 GiB. Vultr High Performance is the same price with more transfer and NVMe disks, so it’s a coin toss; I lean DigitalOcean for its docs and the pooled bandwidth.</li>
+  <li><b>US team on a tight budget:</b> Vultr Regular Performance at $20 for 4 GB. Older CPUs, but back-office apps rarely push the CPU.</li>
+  <li><b>I wouldn’t pick Hetzner’s US locations</b> at these prices. At {f(usd(32.49))} for 4 GB with 2 TB of traffic, you pay more and get less transfer than at the other two.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>This is a price comparison, not a benchmark. I didn’t buy and test servers at each host, so I can’t tell you whose 2 vCPUs are faster.</li>
+  <li>List prices only. New-account credits, taxes and Vultr’s note that some locations are priced differently can change your bill.</li>
+  <li>Prices move. Hetzner’s US prices in particular are far above what older guides quote, so trust the date on this page over a 2024 blog post, and check again before you buy.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+</Base>

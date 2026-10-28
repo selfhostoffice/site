@@ -48,4 +48,5 @@ export const GUIDES = [
   { href: '/pricing/chatwoot/', title: 'Chatwoot pricing: cloud plans vs self-hosting', tools: ['chatwoot--chatwoot'], checked: 'Oct 2026' },
   { href: '/pricing/n8n-server-requirements/', title: 'n8n server requirements: measured RAM and the server to buy', tools: ['n8n-io--n8n'], checked: 'Oct 2026' },
   { href: '/pricing/supabase/', title: 'Supabase pricing: cloud plans vs self-hosting, and what you give up', tools: ['supabase--supabase'], checked: 'Oct 2026' },
+  { href: '/compare/hetzner-vs-digitalocean-vs-vultr/', title: 'Hetzner vs DigitalOcean vs Vultr: what a 2, 4 or 8 GB server costs', tools: [], checked: 'Oct 2026' },
 ];

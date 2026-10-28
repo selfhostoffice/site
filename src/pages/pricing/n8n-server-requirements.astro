@@ -101,6 +101,8 @@ const schema = [
 <h2>SQLite or Postgres?</h2>
 <p>Self-hosted n8n uses SQLite by default, and so do n8n Cloud’s Starter and Pro plans, per its <a href={S.db}>database docs</a>; Postgres is only on the Enterprise scaling plans. For one small team, SQLite is fine and costs no extra memory. If you want Postgres anyway (n8n supports 16, 17 and 18), I’d move to the 4 GiB server rather than squeeze it into 2 GiB. I didn’t measure Postgres alongside n8n, so that’s caution, not a number.</p>
 
+<p>Not sure which host to put it on? I compared <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner, DigitalOcean and Vultr at 2, 4 and 8 GB</a>.</p>
+
 <h2>Honest limits of this test</h2>
 <ul>
   <li>My test machine has 8 cores, so the run times above are faster than you’ll see on a 1 vCPU Droplet. Memory doesn’t depend on core count in the same way, but I didn’t verify on a small VPS.</li>
