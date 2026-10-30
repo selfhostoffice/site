@@ -1,0 +1,163 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const lm = listings.find(l => l.slug === 'knadh--listmonk')!;
+const CHECKED = 'Oct 30, 2026';
+const S = {
+  ghost: 'https://ghost.org/pricing/',
+  ghostHosting: 'https://ghost.org/docs/hosting/',
+  ghostMailgun: 'https://docs.ghost.org/faq/mailgun-newsletters',
+  beehiiv: 'https://www.beehiiv.com/pricing',
+  mailgun: 'https://www.mailgun.com/pricing/',
+  ses: 'https://aws.amazon.com/ses/pricing/',
+  sesSandbox: 'https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// Monthly cost of a weekly newsletter (4 issues a month), US$ list prices read Oct 30, 2026.
+// Ghost(Pro) and beehiiv: per-month price with yearly billing (monthly billing in brackets).
+// Ghost self-hosted: DigitalOcean 2 GiB Droplet $12 + Mailgun (Basic $15 incl. 10,000 emails, $1.80 per extra 1,000; Foundation $35 incl. 50,000).
+// listmonk: DigitalOcean 1 GiB Droplet $6 + Amazon SES at $0.10 per 1,000 (a la carte) to $0.16 (Essentials plan, the default for new accounts).
+const rows = [
+  { who: 'beehiiv', how: 'Hosted', c: ['$0 (Free plan)', '$95 Lite ($109 monthly)', '$119 Lite ($139 monthly)'] },
+  { who: 'Ghost(Pro)', how: 'Hosted by Ghost', c: ['$15 Starter or $29 Publisher ($18 / $35 monthly)', '$63 Publisher ($75 monthly)', '$88 Publisher ($105 monthly)'] },
+  { who: 'Ghost, self-hosted', how: 'Your server + Mailgun', c: ['$27 ($12 server + $15 Mailgun Basic)', '$45 ($12 + $33 Mailgun Basic with 10,000 extra emails)', '$47 ($12 + $35 Mailgun Foundation)'] },
+  { who: 'listmonk, self-hosted', how: 'Your server + Amazon SES', c: ['about $6.40–6.64', 'about $8–9.20', 'about $10–12.40'] },
+];
+const chart = [
+  { label: 'beehiiv Lite', v: 119 },
+  { label: 'Ghost(Pro) Publisher', v: 88 },
+  { label: 'Ghost self-hosted', v: 47 },
+  { label: 'listmonk + SES', v: 12.4 },
+];
+const maxC = 130;
+// Measured Oct 30, 2026 on my Linux test box. RSS from /proc, MB = 1,024 KB.
+const mem = [
+  { label: 'listmonk 6.2.0', idle: 43, peak: 51 },
+  { label: 'its Postgres 17', idle: 98, peak: 108 },
+  { label: 'Ghost 6.73.0', idle: 281, peak: 385 },
+  { label: 'its MySQL 8.4', idle: 512, peak: 521 },
+];
+const maxM = 600;
+const faq = [
+  { q: 'Is Ghost cheaper than beehiiv?', a: `At every list size I priced on ${CHECKED}, yes, once you need a paid plan. With yearly billing Ghost(Pro) Publisher was $29 a month for 1,000 members, $63 for 5,000 and $88 for 10,000. beehiiv Lite was $49, $95 and $119 for the same sizes. beehiiv’s free plan goes up to 2,500 subscribers, though, and Ghost has no free hosted plan.` },
+  { q: 'What does self-hosting Ghost really cost?', a: 'The software is free. You pay for a server and for Mailgun, because Ghost only sends newsletters through Mailgun. For a weekly issue to 10,000 people I get about $47 a month: a $12 DigitalOcean server with 2 GiB of RAM plus Mailgun Foundation at $35. Add 20% of the server price if you turn on backups.' },
+  { q: 'How much RAM does Ghost need?', a: 'Ghost’s docs ask for at least 1 GB. On my test install, Ghost 6.73.0 used 281 MB right after starting and 385 MB at its peak, and MySQL 8.4 with stock settings used about 520 MB. That’s about 900 MB before the operating system and NGINX, so I’d buy 2 GB.' },
+  { q: 'Can listmonk replace beehiiv or Mailchimp?', a: 'For sending a newsletter to a list you already have, yes, and it’s very cheap to run: listmonk and its Postgres database used about 160 MB of RAM together in my test. It has no hosted website, paid subscriptions, ad network or referral program. You also handle deliverability yourself through an email service such as Amazon SES.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Ghost vs beehiiv vs listmonk: what a newsletter costs at 1,000, 5,000 and 10,000 subscribers', dateModified: '2026-10-30', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/ghost-vs-beehiiv-vs-listmonk/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Ghost vs beehiiv vs listmonk (Oct 2026): newsletter cost at 1K, 5K and 10K subscribers" description="Prices read Oct 30, 2026 and two test installs: at 10,000 subscribers beehiiv Lite is $119/mo, Ghost(Pro) $88, self-hosted Ghost about $47 and listmonk with Amazon SES about $10–12. Measured RAM included." schema={schema} crumbs={[['Home', '/'], ['Ghost vs beehiiv vs listmonk', '/compare/ghost-vs-beehiiv-vs-listmonk/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Ghost vs beehiiv vs listmonk: what a newsletter costs at 1,000, 5,000 and 10,000 subscribers</h1>
+  <p class="muted">Four ways to run an email newsletter, from fully hosted to fully yours: beehiiv, Ghost(Pro), Ghost on your own server, and listmonk on your own server. I read each official pricing page on {CHECKED}, priced a weekly issue at three list sizes, and installed Ghost and listmonk on a test machine to see how much memory they really use. Everything is in US dollars; all four price pages list USD, so no currency conversion was needed.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. Ghost, beehiiv, Mailgun, AWS and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>Under 2,500 subscribers and no budget:</b> beehiiv’s Free plan costs nothing. Nothing else here beats free.</li>
+    <li><b>You want a website, a newsletter and paid memberships, and no server work:</b> Ghost(Pro). It was cheaper than beehiiv’s paid plan at every size I priced ($88 vs $119 a month at 10,000 with yearly billing), and both take 0% of your subscription revenue on paid plans.</li>
+    <li><b>You’re fine running a server and want Ghost:</b> self-hosting cut the bill to about $47 at 10,000, but Mailgun is mandatory and you lose the extras Ghost(Pro) bundles (CDN, backups, its hosted analytics).</li>
+    <li><b>You only need to send email to a list, say a company update or a customer newsletter:</b> listmonk with Amazon SES came to about $10–12 a month at 10,000 subscribers, and it barely uses any memory.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost at 10,000 subscribers</h2>
+<p class="muted">A weekly issue, so about 40,000 emails a month. Hosted plans use the yearly-billing price per month.</p>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 175" width="100%" role="img" aria-labelledby="nl-t">
+  <title id="nl-t">Monthly cost of a weekly newsletter to 10,000 subscribers, prices read {CHECKED}: beehiiv Lite $119, Ghost(Pro) Publisher $88, self-hosted Ghost about $47, listmonk with Amazon SES about $12 at most</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 40; const w = (b.v / maxC) * 360;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="160" y={y + 2} width={w} height="16" fill={b.label.startsWith('listmonk') ? '#c2410c' : '#2f3a4a'} />
+      <text x={166 + w} y={y + 15} font-size="12" fill="currentColor">{b.label.startsWith('listmonk') ? 'up to $12.40/mo' : (b.label.startsWith('Ghost self') ? 'about $47/mo' : `$${b.v}/mo`)}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}. Self-hosted rows include a DigitalOcean server ($12 for Ghost, $6 for listmonk) and the email service; backups and a domain name are extra.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>All three list sizes</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">Who runs it</th><th scope="col">1,000 subscribers</th><th scope="col">5,000</th><th scope="col">10,000</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.how}</td>{r.c.map(c => <td>{c}</td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Per month, weekly issue (4 sends a month). Hosted plans: yearly billing, monthly billing in brackets. Sources, all read {CHECKED}: <a href={S.ghost}>Ghost(Pro) pricing</a>, <a href={S.beehiiv}>beehiiv pricing</a>, <a href={S.mailgun}>Mailgun pricing</a>, <a href={S.ses}>Amazon SES pricing</a>, <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+
+<figure style="margin:18px 0 14px"><img src="/img/ghost-pro-pricing-1000-members-2026-10-30.png" alt="Screenshot of Ghost(Pro) pricing at 1,000 members with yearly billing: Starter $15, Publisher $29, Business $199 per month, Custom on request" width="1230" height="625" loading="lazy" style="max-width:100%;height:auto;border:1px solid #ccc"/><figcaption class="note">Ghost(Pro) at 1,000 members, yearly billing, as I saw it on {CHECKED}.</figcaption></figure>
+<figure style="margin:0 0 14px"><img src="/img/beehiiv-pricing-1000-subscribers-2026-10-30.png" alt="Screenshot of beehiiv pricing at 1,000 subscribers with yearly billing: Free $0, Lite $49, Pro $95 per month, Enterprise custom" width="1057" height="434" loading="lazy" style="max-width:100%;height:auto;border:1px solid #ccc"/><figcaption class="note">beehiiv at 1,000 subscribers, yearly billing, same night.</figcaption></figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What each price gets you</h2>
+<h3>beehiiv</h3>
+<p>The Free plan covers up to 2,500 subscribers with unlimited sends, but keeps beehiiv’s branding and leaves out paid subscriptions and the ad network. Lite ($49 a month yearly at 1,000 subscribers, $59 monthly) adds paid subscriptions with a 0% take rate, automations and the ad network. Pro ($95 yearly at 1,000) is the plan that removes beehiiv branding. Price climbs with the list: Lite was $95 at 5,000 and $119 at 10,000. One thing I couldn’t square: the plan summary lists “Custom Domains” under Free, while the feature table shows custom domains starting on Lite. Check before you rely on it.</p>
+<h3>Ghost(Pro)</h3>
+<p>Starter is $15 a month yearly ($18 monthly), stops at 1,000 members, and has no paid subscriptions and no custom sending domain. Publisher is where most people land: $29 at 1,000 members, $63 at 5,000, $88 at 10,000 (yearly), with paid memberships at 0% Ghost fee and your own sending domain. Business is $199 a month yearly up to 10,000 members, mainly for 15 staff users and priority support. Email sends are unlimited on every plan. Stripe’s card fees still apply to paid memberships on both Ghost and beehiiv.</p>
+<h3>Ghost on your own server</h3>
+<p>Ghost is open source, so the software is free and every feature is there. Two costs are not optional. First, a server: Ghost’s <a href={S.ghostHosting}>hosting docs</a> ask for Ubuntu, Node 22, MySQL 8 and at least 1 GB of memory. Second, Mailgun: Ghost’s own FAQ says <a href={S.ghostMailgun}>Mailgun is the only bulk-mail API it supports</a> for newsletters, and plain SMTP is not allowed. Mailgun’s free plan caps you at 100 emails a day, which can’t send even one issue to 1,000 people, so budget at least Basic at $15 a month (10,000 emails, then $1.80 per extra 1,000) or Foundation at $35 (50,000 emails). Ghost’s newer web analytics and fully self-hosted social web features need its Docker Compose setup, which Ghost itself calls a preview.</p>
+<h3>listmonk on your own server</h3>
+<p>listmonk is a single program plus a Postgres database. It manages lists and sends campaigns; it is not a blog or a membership site. It sends through any SMTP service. I priced Amazon SES because it’s the cheapest I know of that’s built for bulk mail: $0.10 per 1,000 emails on pay-as-you-go pricing. Since July 21, 2026, AWS says new SES accounts start on an “Essentials” plan at $0.16 per 1,000, and you can switch to pay-as-you-go, which is why I show a range. New SES accounts also start in a <a href={S.sesSandbox}>sandbox</a> that only allows 200 messages a day to verified addresses until AWS approves production access; AWS says it responds within 96 hours.</p>
+
+<h2>What I measured</h2>
+<p>On {CHECKED} I installed both on my Linux test machine. listmonk 6.2.0 (the latest stable release; 7.0 is in beta) ran against Postgres 17 with default settings. Ghost 6.73.0 went in with the official Ghost-CLI against MySQL 8.4.11, also with stock settings (128 MB InnoDB buffer pool). Memory is the resident size each process reported.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 175" width="100%" role="img" aria-labelledby="mem-t">
+  <title id="mem-t">Memory measured {CHECKED}. listmonk 43 MB idle, 51 MB peak; its Postgres 98 to 108 MB; Ghost 281 MB idle, 385 MB peak; its MySQL 512 to 521 MB</title>
+  {mem.map((b, i) => {
+    const y = 8 + i * 40; const wi = (b.idle / maxM) * 360; const wp = (b.peak / maxM) * 360;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="150" y={y + 2} width={wp} height="16" fill="#c2410c" />
+      <rect x="150" y={y + 2} width={wi} height="16" fill="#2f3a4a" />
+      <text x={156 + wp} y={y + 15} font-size="12" fill="currentColor">{b.idle}–{b.peak} MB</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">Dark: just after start. Red: highest reading during the load below. RSS, 1 MB = 1,024 KB, measured {CHECKED}. Postgres is the sum of its processes, which counts shared memory more than once, so the real figure is lower.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<ul>
+  <li><b>listmonk:</b> I loaded 10,000 subscribers and sent one campaign to all of them through a local test mail server that accepts and discards messages. At listmonk’s default settings (10 workers, 10 messages a second each) the 10,000 emails took 101 seconds. listmonk peaked at 51 MB and Postgres at about 108 MB, so the pair fits in a fraction of DigitalOcean’s smallest 1 GiB server. On disk: a 20 MB program and a 14 MB database after the send.</li>
+  <li><b>Ghost:</b> after the install I created the owner account and made 2,000 page requests to the home page, a post, the RSS feed and the sitemap, 10 at a time. All returned 200, in 11.2 seconds. Ghost went from 281 MB to 385 MB and settled back to 231 MB within a minute. MySQL sat at about 520 MB the whole time. The Ghost install took 532 MB of disk and MySQL’s fresh data folder 218 MB. My setup also ran a 78 MB Ghost-CLI helper process; I didn’t check whether a standard systemd install has the same one.</li>
+</ul>
+<p>So Ghost and MySQL need about 900 MB between them before the operating system and NGINX. Ghost’s 1 GB minimum is technically true and I wouldn’t run it there; I’d pay the $12 for 2 GiB. listmonk is happy on the $6, 1 GiB server.</p>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>Starting from zero:</b> beehiiv Free until you pass 2,500 subscribers or want paid subscriptions. It costs nothing to find out if anyone reads you.</li>
+  <li><b>A real publication with paying members:</b> Ghost(Pro) Publisher. It’s $31 a month cheaper than beehiiv Lite at 10,000 with yearly billing, you can export members any time, and if you ever want to leave the hosted plan, the same software runs on your own server.</li>
+  <li><b>A small business sending customer updates:</b> listmonk plus Amazon SES. About $10 a month at 10,000 subscribers is hard to argue with, as long as someone on your team can set up a server, DNS records and bounce handling.</li>
+  <li><b>I wouldn’t self-host Ghost just to save money below about 5,000 subscribers.</b> At 1,000 members it’s $27 against $29 for Publisher (or $15 for Starter if you don’t need paid memberships), and you take on updates, backups and Mailgun. The gap only gets meaningful as the list grows: about $41 a month at 10,000.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>My memory tests ran on my own test machine, not on a 1 or 2 GB VPS, and with tiny amounts of content. A Ghost site with years of posts and images will use more.</li>
+  <li>No real email left the box. I didn’t test deliverability, Mailgun or SES, or Ghost’s newsletter sending, because I don’t hold accounts for them for this test.</li>
+  <li>The cost table assumes a weekly issue. Send daily and the Mailgun and SES lines grow; the hosted plans don’t charge per email.</li>
+  <li>All four companies change prices. The date at the top is when I read them; check again before you commit.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>listmonk on SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${lm.slug}/`}><img src={avatar(lm, 56)} alt="" width="28" height="28" loading="lazy"/> listmonk</a>: {lm.stars.toLocaleString('en-US')} GitHub stars, {lm.license} license, last push {fmtDate(lm.lastPush)} (GitHub API, fetched {fmtDate(lm.fetchedAt)}). More options: <a href="/alternatives/mailchimp/">open-source Mailchimp alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</div></section>
+</Base>

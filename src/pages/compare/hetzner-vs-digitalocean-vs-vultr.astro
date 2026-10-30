@@ -109,7 +109,7 @@ const schema = [
 <p>When I read Hetzner’s pages, every shared plan carried a “currently unavailable, please check back later” note, and the cloud overview said shared resources were “currently not available.” I couldn’t tell from outside whether that’s a real stock shortage or a page quirk, so check in the Hetzner console before you plan a migration around it. DigitalOcean’s and Vultr’s pages showed no such notes.</p>
 
 <h2>How much server do you need?</h2>
-<p>From my own test installs: <a href="/pricing/n8n-server-requirements/">n8n used about 524 MB idle and peaked at 735 MB</a>, so a 2 GB server is plenty. <a href="/pricing/supabase/">Self-hosted Supabase</a> starts 11 containers and its docs ask for at least 4 GB, with 8 GB recommended. Most single apps on this site land between those two, which is why I’d start at 4 GB unless I’d measured otherwise.</p>
+<p>From my own test installs: <a href="/pricing/n8n-server-requirements/">n8n used about 524 MB idle and peaked at 735 MB</a>, so a 2 GB server is plenty. <a href="/pricing/supabase/">Self-hosted Supabase</a> starts 11 containers and its docs ask for at least 4 GB, with 8 GB recommended. Newsletter software varies just as much: in my <a href="/compare/ghost-vs-beehiiv-vs-listmonk/">Ghost vs listmonk test</a>, listmonk and Postgres used about 160 MB together, while Ghost and MySQL needed about 900 MB. Most single apps on this site land between those two, which is why I’d start at 4 GB unless I’d measured otherwise.</p>
 
 <h2>Which I’d pick</h2>
 <ul>

@@ -49,4 +49,5 @@ export const GUIDES = [
   { href: '/pricing/n8n-server-requirements/', title: 'n8n server requirements: measured RAM and the server to buy', tools: ['n8n-io--n8n'], checked: 'Oct 2026' },
   { href: '/pricing/supabase/', title: 'Supabase pricing: cloud plans vs self-hosting, and what you give up', tools: ['supabase--supabase'], checked: 'Oct 2026' },
   { href: '/compare/hetzner-vs-digitalocean-vs-vultr/', title: 'Hetzner vs DigitalOcean vs Vultr: what a 2, 4 or 8 GB server costs', tools: [], checked: 'Oct 2026' },
+  { href: '/compare/ghost-vs-beehiiv-vs-listmonk/', title: 'Ghost vs beehiiv vs listmonk: what a newsletter costs at 1,000, 5,000 and 10,000 subscribers', tools: ['knadh--listmonk'], checked: 'Oct 2026' },
 ];
