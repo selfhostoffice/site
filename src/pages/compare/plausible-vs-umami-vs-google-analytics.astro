@@ -1,0 +1,160 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const um = listings.find(l => l.slug === 'umami-software--umami')!;
+const pl = listings.find(l => l.slug === 'plausible--analytics')!;
+const CHECKED = 'Nov 1, 2026';
+const S = {
+  pl: 'https://plausible.io/#pricing',
+  plSelf: 'https://plausible.io/self-hosted-web-analytics',
+  plCE: 'https://github.com/plausible/community-edition',
+  um: 'https://umami.is/pricing',
+  umGh: 'https://github.com/umami-software/umami',
+  ga: 'https://support.google.com/analytics/answer/7667196?hl=en',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// US$ per month, list prices read Nov 1, 2026. Plausible = Starter plan, monthly billing (yearly = 10x monthly).
+// Umami Cloud: Hobby $0 to 100K events; Pro $20 incl. 1M events + $0.00003/event.
+// Self-hosted: DigitalOcean 2 GiB Droplet $12 + weekly backups 20% ($2.40).
+const rows = [
+  { who: 'Google Analytics 4', c: ['$0', '$0', '$0', '$0'] },
+  { who: 'Plausible Cloud (Starter)', c: ['$9', '$19', '$69', '$129'] },
+  { who: 'Plausible Cloud (Business)', c: ['$19', '$39', '$139', '$259'] },
+  { who: 'Umami Cloud', c: ['$0 Hobby', '$0 Hobby (at the limit)', '$20 Pro', '$140 Pro ($20 + 4M extra events)'] },
+  { who: 'Umami on your server', c: ['$14.40', '$14.40', '$14.40', '$14.40'] },
+];
+const chart = [
+  { label: 'Plausible Business', v: 139, t: '$139/mo' },
+  { label: 'Plausible Starter', v: 69, t: '$69/mo' },
+  { label: 'Umami Cloud Pro', v: 20, t: '$20/mo' },
+  { label: 'Umami self-hosted', v: 14.4, t: '$14.40/mo + your time' },
+  { label: 'Google Analytics 4', v: 0, t: '$0' },
+];
+const maxC = 150;
+// Measured Nov 1, 2026 on my Linux test box: Umami 3.4.1 built from source, Node 22.23.4, PostgreSQL 18.6.
+// Resident memory of the next-server process from /proc, 1 MB = 1,024 KB.
+const mem = [
+  { label: 'Just started', v: 223 },
+  { label: '5 pageviews/s for 2 min (peak)', v: 406 },
+  { label: '10 clients, ~420 pageviews/s (peak)', v: 876 },
+  { label: '60 s after the burst', v: 347 },
+];
+const maxM = 900;
+const faq = [
+  { q: 'Is Umami cheaper than Plausible?', a: `On the hosted plans I priced on ${CHECKED}, yes, at every traffic level. At 1 million pageviews a month Umami Cloud Pro was $20 and Plausible Starter $69 (monthly billing). Under 100,000 pageviews on one site Umami Cloud’s Hobby plan is free; Plausible has no free plan, only a 30-day trial.` },
+  { q: 'How much RAM does Umami need?', a: 'In my test Umami 3.4.1 used 223 MB right after starting and peaked at 406 MB while taking 5 pageviews a second. PostgreSQL added about 158 MB. A burst of roughly 420 pageviews a second pushed Umami to 876 MB. I’d run it on a 2 GB server, not 1 GB.' },
+  { q: 'How much does it cost to self-host Plausible?', a: `The software (Plausible Community Edition) is free. Plausible recommends at least 2 GB of RAM, so on DigitalOcean that’s the $12 Droplet, or $14.40 with backups. It needs Docker and a CPU with SSE 4.2 for ClickHouse, and Plausible says funnels, ecommerce revenue goals, SSO and the sites API are left out of it.` },
+  { q: 'Is Google Analytics 4 really free?', a: 'The standard version is. You pay in other ways: the tracking script I loaded was about 157 KB compressed against 1 to 2 KB for Plausible and Umami, event-level data is kept for 14 months at most, and in many places you need a cookie consent banner. The paid Analytics 360 has no published price.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Plausible vs Umami vs Google Analytics: what web analytics costs at 10K to 5M pageviews', dateModified: '2026-11-01', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/plausible-vs-umami-vs-google-analytics/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Plausible vs Umami vs Google Analytics (Nov 2026): real cost at 10K to 5M pageviews" description="Prices read Nov 1, 2026 and an Umami test install: at 1M pageviews/mo Plausible Starter is $69, Umami Cloud $20, self-hosted Umami about $14.40, GA4 $0. Measured Umami RAM: 223 MB idle." schema={schema} crumbs={[['Home', '/'], ['Plausible vs Umami vs Google Analytics', '/compare/plausible-vs-umami-vs-google-analytics/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Plausible vs Umami vs Google Analytics: what web analytics costs at 10K to 5M pageviews</h1>
+  <p class="muted">Google Analytics is free, so the real question is what the privacy-friendly options cost and whether self-hosting one is worth it. I read the Plausible and Umami pricing pages on {CHECKED}, priced four traffic levels, and installed Umami on a test machine to see how much memory and disk it actually uses. Both vendors list prices in US dollars.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. Plausible, Umami, Google and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>A small site, one domain, under 100,000 pageviews a month:</b> Umami Cloud’s free Hobby plan. No server, no cookie banner, six months of data.</li>
+    <li><b>A business site that wants someone else to run it:</b> Umami Cloud Pro at $20 a month covers 1 million pageviews. Plausible costs more ($69 at that level) but has the more polished reports and email/Slack reports on every plan.</li>
+    <li><b>You already run a server:</b> self-host Umami. About $14.40 a month on a 2 GB DigitalOcean Droplet with backups, at any traffic level I’d expect a small business to see.</li>
+    <li><b>You live in Google Ads:</b> keep GA4. Nothing here ties into Ads conversions the way it does, and it costs nothing.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost at 1 million pageviews</h2>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 175" width="100%" role="img" aria-labelledby="an-t">
+  <title id="an-t">Monthly cost at 1 million pageviews, prices read {CHECKED}: Plausible Business $139, Plausible Starter $69, Umami Cloud Pro $20, Umami self-hosted on a DigitalOcean 2 GiB Droplet with backups $14.40, Google Analytics 4 $0</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 32; const w = Math.max((b.v / maxC) * 330, 2);
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="150" y={y + 2} width={w} height="16" fill={b.label.startsWith('Umami self') ? '#c2410c' : '#2f3a4a'} />
+      <text x={156 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, monthly billing, list prices read {CHECKED}. Plausible is 2 months cheaper if you pay yearly ($690 a year for Starter at 1M). The self-hosted line is a DigitalOcean 2 GiB Droplet ($12) plus weekly backups (20%, $2.40).</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>All four traffic levels</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">10K pageviews/mo</th><th scope="col">100K</th><th scope="col">1M</th><th scope="col">5M</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th>{r.c.map(c => <td>{c}</td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Per month, monthly billing. Umami counts each pageview as one event, plus custom events and each saved event property, so a site that tracks a lot of events pays for more than its pageviews. Sources, all read {CHECKED}: <a href={S.pl}>Plausible pricing</a>, <a href={S.um}>Umami pricing</a>, <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What each price gets you</h2>
+<h3>Plausible Cloud</h3>
+<p>Three plans, each priced by monthly pageviews: Starter (one site), Growth (3 sites, 3 team members, shared links and embedded dashboards) and Business (10 sites, custom properties, the Stats API, funnels and ecommerce revenue). At 10,000 pageviews they’re $9, $14 and $19 a month; at 1 million, $69, $104 and $139. Paying yearly is ten times the monthly price, so two months free. There’s no free plan, just a 30-day trial without a card. Data is kept with no retention limit and Plausible says it’s hosted in the EU.</p>
+<h3>Umami Cloud</h3>
+<p>Hobby is free for one website and 100,000 events a month, with six months of data. Pro is $20 a month for up to 20 websites, 10 team members, 1 million events and two years of data; past that it’s $0.00003 an event, which is $30 per extra million. Business is $200 a month with 10 million events, five years of data, session replays and heatmaps. Umami’s FAQ says going over doesn’t stop data collection; you just pay for the extra.</p>
+<h3>Google Analytics 4</h3>
+<p>The standard version costs nothing. The catches: event-level data, which the Explorations reports use, is kept for <a href={S.ga}>2 or 14 months at most</a> (26 to 50 months are 360-only), the script is heavy, and because it uses cookies you’ll often need a consent banner, which means visitors who decline aren’t counted. Google doesn’t publish a price for Analytics 360; I couldn’t find one on its site.</p>
+<h3>Self-hosting</h3>
+<p><a href={S.umGh}>Umami</a> is MIT-licensed and needs Node.js and PostgreSQL. Umami’s own pricing page says email reports and the streaming API are cloud-only. <a href={S.plCE}>Plausible Community Edition</a> is AGPL and runs with Docker Compose alongside ClickHouse and PostgreSQL. Its README asks for a CPU with SSE 4.2 and at least 2 GB of RAM, and Plausible’s <a href={S.plSelf}>self-hosting page</a> says CE gets a release about twice a year and leaves out funnels, user journeys, ecommerce revenue goals, SSO and the sites API. I didn’t install Plausible CE because my test machine has no Docker.</p>
+
+<h2>What I measured</h2>
+<p>On {CHECKED} I installed Umami 3.4.1 (released Oct 23, 2026) the way its README describes for a non-Docker install: clone, <code>pnpm install</code>, <code>pnpm run build</code>, <code>pnpm run start</code>, on Node 22.23.4 with PostgreSQL 18.6 on the same machine. The install pulled 1,023 packages (1.3 GB of node_modules) in 5 seconds on a fast connection, and the build, which also creates the database tables and the default admin login, took 47 seconds on 8 cores. The whole folder came to 2.0 GB. After that it answered requests about 0.7 seconds after starting.</p>
+<p>Then I sent it 100,000 pageviews through the same <code>/api/send</code> endpoint the tracking script uses, from 10 clients at once, each with a random IP address so every pageview became a new visitor. It took them all without a single error at roughly 405 to 425 a second. I restarted it and sent another 600 at a steady 5 a second to see what normal traffic looks like.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 175" width="100%" role="img" aria-labelledby="mem-t">
+  <title id="mem-t">Umami 3.4.1 memory measured {CHECKED}: 223 MB after start, 406 MB peak at 5 pageviews a second, 876 MB peak at about 420 pageviews a second from 10 clients, 347 MB 60 seconds later</title>
+  {mem.map((b, i) => {
+    const y = 8 + i * 40; const w = (b.v / maxM) * 330;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="230" y={y + 2} width={w} height="16" fill={b.v > 500 ? '#c2410c' : '#2f3a4a'} />
+      <text x={236 + w} y={y + 15} font-size="12" fill="currentColor">{b.v} MB</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">Resident memory of the Umami server process (next-server), 1 MB = 1,024 KB, measured {CHECKED}. PostgreSQL is not included; it used about 158 MB (proportional share) after the test. The red bar is a stress test far beyond normal traffic: 420 pageviews a second is about a billion a month.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<p>At a realistic trickle Umami sat between 223 and 406 MB, and PostgreSQL added about 158 MB. Starting it with <code>pnpm run start</code> as the README says adds another 49 MB for the pnpm process itself. That’s roughly 600 MB before the operating system, so the $6, 1 GiB Droplet is too tight; the $12, 2 GiB one is what I’d buy. Rebuilding Umami for an upgrade is heavier than running it, and I didn’t measure that peak.</p>
+<p>After 100,000 pageviews the database was 155 MB: 84 MB of events and 62 MB of sessions. Since every test pageview was a new visitor, a real site with several pages per visit should grow slower. Even at this worst-case rate, a site with 1 million pageviews a month adds about 1.5 GB a month, and the $12 Droplet has 50 GB of disk. The dashboard stayed quick at 100,000 rows: the overview numbers and the hourly chart came back in 0.14 to 0.18 seconds and the top pages, referrers and browsers lists in 0.11 to 0.15.</p>
+<p>I also downloaded each tracking script. Umami’s was 4.8 KB (2.3 KB compressed) and Plausible’s standard <code>script.js</code> 2.8 KB (1.3 KB compressed). Google’s <code>gtag.js</code>, loaded with a placeholder measurement ID, was 446 KB, or 157 KB compressed. A real GA4 property can load a different amount.</p>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>For a personal site or a single small-business site:</b> Umami Cloud Hobby. Free, no server to look after, and six months of history is enough to see what’s working.</li>
+  <li><b>For several client or company sites with a few hundred thousand visits:</b> Umami Cloud Pro at $20 covers 20 sites and a million events. I’d only pay Plausible’s higher price if someone on the team prefers its dashboard after the trial, or wants its email and Slack reports.</li>
+  <li><b>If I already ran a server for other tools:</b> self-hosted Umami on the same box, as long as it has 2 GB free. It was simple to install and handled far more traffic than I’ll ever send it.</li>
+  <li><b>I wouldn’t drop GA4</b> if paid search is a big part of the budget. The free privacy tools count visitors well; they don’t replace the Ads integration.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I tested Umami on my own test machine with PostgreSQL alongside it, not on a 2 GB VPS, and without a reverse proxy or HTTPS in front.</li>
+  <li>The test traffic was synthetic: every pageview had a random IP, so every one was a new one-page visit. Real traffic has fewer, longer visits, which changes the database size.</li>
+  <li>I didn’t install Plausible CE (it needs Docker, which my test machine doesn’t have), so its numbers here are Plausible’s published requirements, not my measurements.</li>
+  <li>I didn’t compare how accurately the three count visitors, and I’m not giving legal advice about cookie banners; both Plausible and Umami say you don’t need one with their tools.</li>
+  <li>Prices change. The date at the top is when I read them; check again before you commit.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>On SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${um.slug}/`}><img src={avatar(um, 56)} alt="" width="28" height="28" loading="lazy"/> Umami</a>: {um.stars.toLocaleString('en-US')} GitHub stars, {um.license} license, last push {fmtDate(um.lastPush)}. <a class="tool" href={`/tool/${pl.slug}/`}><img src={avatar(pl, 56)} alt="" width="28" height="28" loading="lazy"/> Plausible</a>: {pl.stars.toLocaleString('en-US')} stars, {pl.license} license, last push {fmtDate(pl.lastPush)}. Both from the GitHub API, fetched {fmtDate(um.fetchedAt)}. More options: <a href="/alternatives/google-analytics/">open-source Google Analytics alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</div></section>
+</Base>

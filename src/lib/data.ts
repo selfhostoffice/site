@@ -51,4 +51,6 @@ export const GUIDES = [
   { href: '/compare/hetzner-vs-digitalocean-vs-vultr/', title: 'Hetzner vs DigitalOcean vs Vultr: what a 2, 4 or 8 GB server costs', tools: [], checked: 'Oct 2026' },
   { href: '/compare/ghost-vs-beehiiv-vs-listmonk/', title: 'Ghost vs beehiiv vs listmonk: what a newsletter costs at 1,000, 5,000 and 10,000 subscribers', tools: ['knadh--listmonk'], checked: 'Oct 2026' },
   { href: '/compare/bitwarden-vs-vaultwarden-vs-1password/', title: 'Bitwarden vs Vaultwarden vs 1Password: what a password manager costs for 1, 6, 10 and 25 people', tools: ['dani-garcia--vaultwarden', 'bitwarden--server'], checked: 'Oct 2026' },
+  { href: '/compare/plausible-vs-umami-vs-google-analytics/', title: 'Plausible vs Umami vs Google Analytics: what web analytics costs at 10K to 5M pageviews', tools: ['umami-software--umami', 'plausible--analytics'], checked: 'Nov 2026' },
+  { href: '/compare/pocketbase-vs-supabase-vs-appwrite/', title: 'PocketBase vs Supabase vs Appwrite: what an app backend costs, cloud and self-hosted', tools: ['pocketbase--pocketbase', 'supabase--supabase', 'appwrite--appwrite'], checked: 'Nov 2026' },
 ];

@@ -1,0 +1,160 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const pb = listings.find(l => l.slug === 'pocketbase--pocketbase')!;
+const sb = listings.find(l => l.slug === 'supabase--supabase')!;
+const aw = listings.find(l => l.slug === 'appwrite--appwrite')!;
+const CHECKED = 'Nov 1, 2026';
+const S = {
+  sb: 'https://supabase.com/pricing',
+  aw: 'https://appwrite.io/pricing',
+  awSelf: 'https://appwrite.io/docs/advanced/self-hosting/installation',
+  pbProd: 'https://pocketbase.io/docs/going-to-production/',
+  pbFaq: 'https://pocketbase.io/faq/',
+  pbGh: 'https://github.com/pocketbase/pocketbase',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// US$ per month, list prices read Nov 1, 2026.
+// Example app: database under 8 GB, egress under 250 GB, ~100 reads and ~10 writes per user per month (only Appwrite bills these).
+// Self-hosted lines: DigitalOcean Droplet + weekly backups at 20%.
+const rows = [
+  { who: 'Supabase Cloud', c: ['$0 Free (pauses after a week with no activity)', '$25 Pro', '$187.50 Pro ($25 + 50K extra users at $0.00325)'] },
+  { who: 'Appwrite Cloud', c: ['$0 Free (pauses after a week with no activity)', '$25.15 Pro ($25 + reads over quota)', '$33.70 Pro ($25 + $8.70 reads and writes)'] },
+  { who: 'PocketBase on your server', c: ['$7.20 (1 GiB)', '$7.20 (1 GiB)', '$14.40 (2 GiB, my pick at this size)'] },
+  { who: 'Appwrite on your server', c: ['$28.80 (4 GiB minimum)', '$28.80', '$28.80 or more'] },
+  { who: 'Supabase on your server', c: ['$28.80 (4 GiB minimum)', '$28.80 to $57.60', '$57.60 (8 GiB recommended)'] },
+];
+const chart = [
+  { label: 'Supabase Cloud Pro', v: 187.5, t: '$187.50/mo' },
+  { label: 'Supabase self-hosted', v: 57.6, t: '$57.60/mo' },
+  { label: 'Appwrite Cloud Pro', v: 33.7, t: '$33.70/mo' },
+  { label: 'Appwrite self-hosted', v: 28.8, t: '$28.80/mo' },
+  { label: 'PocketBase self-hosted', v: 14.4, t: '$14.40/mo + your time' },
+];
+const maxC = 200;
+// Measured Nov 1, 2026 on my Linux test box: PocketBase 0.40.6 official linux_amd64 binary. RSS from /proc, 1 MB = 1,024 KB.
+const mem = [
+  { label: 'Empty, just started', v: 39 },
+  { label: '100,000 records, restarted', v: 92 },
+  { label: '100,000 writes, 10 clients (peak)', v: 175 },
+  { label: 'Reads, 1 client (peak)', v: 231 },
+  { label: 'Reads, 10 clients (peak)', v: 734 },
+  { label: '30 s after the reads', v: 544 },
+];
+const maxM = 760;
+const faq = [
+  { q: 'Is PocketBase cheaper than Supabase?', a: `Usually, because there’s no hosted PocketBase to pay for: you run one file on a server. On ${CHECKED} the $6 DigitalOcean server I’d start on came to $7.20 a month with backups, against $25 for Supabase Pro. Supabase’s Free plan costs nothing, but it pauses projects after a week with no activity and caps the database at 500 MB.` },
+  { q: 'How much RAM does PocketBase need?', a: 'Very little at rest: 39 MB empty and 92 MB with 100,000 records in my test of PocketBase 0.40.6. It grows with the number of clients reading at the same time. With 10 clients hammering it, it peaked at 734 MB and held about 544 MB afterwards. A 1 GB server is fine for a small app; I’d use 2 GB for a busy one.' },
+  { q: 'Is Appwrite Cloud cheaper than Supabase?', a: `For apps with lots of users it can be. Both Pro plans were $25 a month on ${CHECKED}, but Appwrite Pro includes 200,000 monthly active users and Supabase Pro 100,000, with $0.00325 for each extra Supabase user. Appwrite instead charges for database reads and writes over its quota (1.75 million reads and 750,000 writes a month on Pro), so a read-heavy app pays more there.` },
+  { q: 'Can PocketBase scale?', a: 'Only on one server. Its FAQ says it scales vertically, not across machines, and that it’s aimed at small and midsize apps. It also says that until version 1.0 full backward compatibility isn’t guaranteed, so upgrades can need code changes.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'PocketBase vs Supabase vs Appwrite: what an app backend costs, cloud and self-hosted', dateModified: '2026-11-01', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/pocketbase-vs-supabase-vs-appwrite/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="PocketBase vs Supabase vs Appwrite (Nov 2026): real cost, cloud and self-hosted" description="Prices read Nov 1, 2026 and a PocketBase test: at 150K users Supabase Pro is about $187.50/mo, Appwrite Pro about $33.70, PocketBase on a 2 GB server $14.40. Measured PocketBase RAM: 39 MB empty." schema={schema} crumbs={[['Home', '/'], ['PocketBase vs Supabase vs Appwrite', '/compare/pocketbase-vs-supabase-vs-appwrite/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>PocketBase vs Supabase vs Appwrite: what an app backend costs, cloud and self-hosted</h1>
+  <p class="muted">All three give you a database, user logins and file storage behind an API, so you don’t have to write that part of your app. Supabase and Appwrite sell hosted plans and can be self-hosted; PocketBase is a single program you run yourself. I read the Supabase and Appwrite pricing pages on {CHECKED}, priced three sizes of app, and ran PocketBase on a test machine with 100,000 records to see what it really needs. All prices are in US dollars as listed.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. Supabase, Appwrite, PocketBase and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>A side project or prototype:</b> the free plan of Supabase or Appwrite. Both pause a project after a week with no activity, so don’t launch on them.</li>
+    <li><b>A small production app:</b> it’s close. Supabase Pro and Appwrite Pro both start at $25 a month with daily backups. PocketBase on a $6 server is $7.20 with weekly backups, if you’re happy running a server.</li>
+    <li><b>An app with 150,000 monthly users:</b> Supabase gets expensive (about $187.50 in my example) because it bills every user over 100,000. Appwrite Pro includes 200,000 users. PocketBase stays at a server’s price.</li>
+    <li><b>You need Postgres, SQL and a big ecosystem:</b> Supabase. PocketBase uses SQLite and scales on one machine only.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost for an app with 150,000 monthly active users</h2>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 175" width="100%" role="img" aria-labelledby="be-t">
+  <title id="be-t">Monthly cost at 150,000 monthly active users, prices read {CHECKED}: Supabase Cloud Pro $187.50, Supabase self-hosted on an 8 GiB server $57.60, Appwrite Cloud Pro $33.70, Appwrite self-hosted on a 4 GiB server $28.80, PocketBase self-hosted on a 2 GiB server $14.40</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 32; const w = (b.v / maxC) * 330;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="160" y={y + 2} width={w} height="16" fill={b.label.startsWith('PocketBase') ? '#c2410c' : '#2f3a4a'} />
+      <text x={166 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}. Assumes a database under 8 GB, under 250 GB of egress, and about 100 reads and 10 writes per user a month (only Appwrite Cloud bills those). Self-hosted lines are DigitalOcean Droplets plus weekly backups (20%) at each project’s stated requirement.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>Three sizes of app</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">Side project (1K users)</th><th scope="col">Small app (20K users)</th><th scope="col">150K users</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th>{r.c.map(c => <td>{c}</td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Per month. Users = monthly active users. For the 20K and 150K columns I priced the paid plans, since the free ones pause and have no backups. Self-hosted: DigitalOcean $6 (1 GiB), $12 (2 GiB), $24 (4 GiB) and $48 (8 GiB) Droplets plus 20% for weekly backups. Sources, all read {CHECKED}: <a href={S.sb}>Supabase pricing</a>, <a href={S.aw}>Appwrite pricing</a>, <a href={S.awSelf}>Appwrite self-hosting requirements</a>, <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What each price gets you</h2>
+<h3>Supabase</h3>
+<p>Free is $0 for two active projects, each with a 500 MB database, 1 GB of file storage, 5 GB of egress and 50,000 monthly active users; projects pause after a week with no activity. Pro starts at $25 a month and includes $10 of compute credit, enough for one Micro instance (1 GB of memory, shared CPU). It covers 100,000 monthly active users and then charges $0.00325 each, an 8 GB disk, 250 GB of egress, 100 GB of files, and daily backups kept 7 days. Bigger instances cost more: Small $15, Medium $60, Large $110, minus the $10 credit. API requests aren’t billed. I went through Supabase in more detail, including self-hosting it, in <a href="/pricing/supabase/">Supabase pricing: cloud vs self-hosting</a>.</p>
+<h3>Appwrite</h3>
+<p>Free is $0 for two projects with 75,000 monthly active users, 500,000 database reads and 250,000 writes a month, 2 GB of storage and 5 GB of bandwidth; Appwrite pauses free projects after a week with no activity. Pro is $25 a month for one project (more are $15 each) with 200,000 monthly active users, 1.75 million reads and 750,000 writes, 150 GB of storage, 2 TB of bandwidth, daily backups kept 7 days and $10 of database compute credit. Over the quota it’s $3 per 1,000 users, $0.06 per 100,000 reads and $0.10 per 100,000 writes. Self-hosting is free, but Appwrite’s <a href={S.awSelf}>installation guide</a> asks for 2 CPU cores, 4 GB of RAM, 2 GB of swap and Docker, which is a $24 Droplet.</p>
+<h3>PocketBase</h3>
+<p><a href={S.pbGh}>PocketBase</a> is MIT-licensed and ships as one program with an SQLite database, auth, file storage, realtime updates and an admin dashboard built in. There’s no official hosted version, so the cost is the server. Two things to know: its <a href={S.pbFaq}>FAQ</a> says it only scales on a single server, and its README says full backward compatibility isn’t guaranteed before version 1.0. It has no cloud functions; you extend it in Go or JavaScript instead.</p>
+
+<h2>What I measured</h2>
+<p>On {CHECKED} I downloaded the official PocketBase 0.40.6 build for Linux (released Oct 23, 2026). The download was 12.8 MB and the program 33.5 MB unzipped, with nothing else to install. On an empty data folder it was answering requests 43 milliseconds after I started it and used 39 MB of memory.</p>
+<p>I made a collection with a title, a 500-character body and an indexed number, then created 100,000 records through its normal REST API from 10 clients at once. That took 20 seconds, about 5,000 writes a second with half of them done in 1.5 ms, and none failed. Then I ran 20,000 filtered, sorted list queries from 10 clients: about 4,600 to 5,000 a second, half under 2 ms. With one client a query took 0.5 ms.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 255" width="100%" role="img" aria-labelledby="mem-t">
+  <title id="mem-t">PocketBase 0.40.6 memory measured {CHECKED}: 39 MB empty, 92 MB with 100,000 records after a restart, 175 MB peak during 100,000 writes from 10 clients, 231 MB peak with one client reading, 734 MB peak with 10 clients reading, 544 MB 30 seconds later</title>
+  {mem.map((b, i) => {
+    const y = 8 + i * 40; const w = (b.v / maxM) * 330;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="230" y={y + 2} width={w} height="16" fill={b.v > 500 ? '#c2410c' : '#2f3a4a'} />
+      <text x={236 + w} y={y + 15} font-size="12" fill="currentColor">{b.v} MB</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">Resident memory of the PocketBase process, 1 MB = 1,024 KB, measured {CHECKED}. Red bars are the 10-client read test, about 5,000 queries a second, far more than a small app sends.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<p>The surprise was reads. Memory climbed with the number of clients reading at once and didn’t come back down: 231 MB with one reader, 734 MB at the peak with ten, and still 544 MB half a minute later. PocketBase’s production guide suggests setting <code>GOMEMLIMIT</code> on small servers, so I tried <code>GOMEMLIMIT=256MiB</code>: it made no difference, peaking at 548 MB. Looking inside the binary, PocketBase opens SQLite with a 32 MB page cache per database connection, and with a 60 MB database each busy connection can hold a good chunk of it. That’s my reading, not something I confirmed, but it matches what I saw.</p>
+<p>So a $6, 1 GiB server is fine for a small app, which won’t have ten clients reading flat out. If yours is busy, or the database is bigger than a few hundred MB, I’d go to the $12, 2 GiB one.</p>
+<p>On disk the 100,000 records took 60 MB. PocketBase also logs every API request in a second SQLite file, and after about 170,000 requests that file was 80 MB, bigger than the data. You can shorten log retention in the dashboard settings; worth doing on a small disk.</p>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>For a weekend project:</b> PocketBase on my own laptop first, then a $6 server if it sticks. Nothing to sign up for and it moves with a folder copy.</li>
+  <li><b>For a client app where I don’t want to be on call:</b> Supabase Pro or Appwrite Pro. Daily backups and someone else’s uptime are worth the $25.</li>
+  <li><b>For an app with lots of users and light database use:</b> Appwrite Cloud. Its user allowance is twice Supabase’s, and reads are cheap.</li>
+  <li><b>I wouldn’t pick PocketBase</b> for something that has to run on several servers, or where I couldn’t afford to rework code on an upgrade before 1.0.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I tested PocketBase on my own test machine, not on a 1 GiB VPS, and without a reverse proxy, HTTPS or realtime subscriptions.</li>
+  <li>The test data was synthetic: random text, one collection, no file uploads, no auth rules on the collection.</li>
+  <li>I didn’t install Supabase or Appwrite; they need Docker, which my test machine doesn’t have. Their self-hosting numbers here are each project’s published requirements.</li>
+  <li>The 150K-user column assumes about 100 reads and 10 writes per user a month. Your app’s pattern can move Appwrite’s bill a lot either way. Egress, file storage and compute upgrades can add to any cloud bill.</li>
+  <li>Prices change. The date at the top is when I read them; check again before you commit.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>On SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${pb.slug}/`}><img src={avatar(pb, 56)} alt="" width="28" height="28" loading="lazy"/> PocketBase</a>: {pb.stars.toLocaleString('en-US')} GitHub stars, {pb.license} license, last push {fmtDate(pb.lastPush)}. <a class="tool" href={`/tool/${sb.slug}/`}><img src={avatar(sb, 56)} alt="" width="28" height="28" loading="lazy"/> Supabase</a>: {sb.stars.toLocaleString('en-US')} stars, {sb.license} license. <a class="tool" href={`/tool/${aw.slug}/`}><img src={avatar(aw, 56)} alt="" width="28" height="28" loading="lazy"/> Appwrite</a>: {aw.stars.toLocaleString('en-US')} stars, {aw.license} license. All from the GitHub API, fetched {fmtDate(pb.fetchedAt)}. More options: <a href="/alternatives/firebase/">open-source Firebase alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</div></section>
+</Base>
