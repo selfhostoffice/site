@@ -1,0 +1,139 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const n8n = listings.find(l => l.slug === 'n8n-io--n8n')!;
+const um = listings.find(l => l.slug === 'umami-software--umami')!;
+const vw = listings.find(l => l.slug === 'dani-garcia--vaultwarden')!;
+const pb = listings.find(l => l.slug === 'pocketbase--pocketbase')!;
+const CHECKED = 'Nov 2, 2026';
+const S = {
+  rw: 'https://railway.com/pricing',
+  rwDocs: 'https://docs.railway.com/reference/pricing/plans',
+  rd: 'https://render.com/pricing',
+  rdFree: 'https://render.com/docs/free',
+  fly: 'https://fly.io/docs/about/pricing/',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// Measured Nov 2, 2026 on my Linux test box: each app left running for 10 minutes with one health-check request a minute.
+// RSS from /proc summed over the app's processes (1 MB = 1,024 KB); CPU = user + system time / wall time.
+const idle = [
+  { app: 'Vaultwarden 1.37.4 (SQLite, 1,000 items)', mb: 32, cpu: '0.03 s', vcpu: 0.00005 },
+  { app: 'PocketBase 0.40.6 (SQLite, 100,000 records)', mb: 93, cpu: '0.08 s', vcpu: 0.00013 },
+  { app: 'Umami 3.4.1 server (Next.js)', mb: 253, cpu: '0.21 s', vcpu: 0.00035 },
+  { app: 'PostgreSQL 18.6 for Umami', mb: 80, cpu: '0.05 s', vcpu: 0.00008 },
+  { app: 'n8n 2.44.7 (main + task runner, SQLite)', mb: 543, cpu: '1.94 s', vcpu: 0.00323 },
+];
+// US$ per month, always on, prices read Nov 2, 2026. Each app gets a 1 GB volume or disk.
+const rows = [
+  { app: 'Vaultwarden', rw: '$5.00 (uses $0.46)', fly: '$2.34 (256 MB)', rd: '$7.25 (512 MB)', note: 'Fly’s 256 MB size covers normal use' },
+  { app: 'PocketBase', rw: '$5.00 (uses $1.06)', fly: '$3.84 (512 MB)', rd: '$7.25 (512 MB)', note: '' },
+  { app: 'Umami + Postgres', rw: '$5.00 (uses $3.41)', fly: '$6.03 (512 MB + 256 MB DB)', rd: '$13.00 (512 MB + $6 Postgres)', note: 'Fly line runs Postgres yourself; Fly Managed Postgres is $38 more' },
+  { app: 'n8n', rw: '$5.51', fly: '$6.85 (1 GB)', rd: '$25.25 (2 GB)', note: 'Render has no size between 512 MB and 2 GB' },
+  { app: 'All four together', rw: '$10.44', fly: '$19.06', rd: '$52.75', note: 'A $12 DigitalOcean server holds all four for $14.40 with backups' },
+];
+const chart = [
+  { label: 'Render', v: 52.75, t: '$52.75/mo' },
+  { label: 'Fly.io', v: 19.06, t: '$19.06/mo' },
+  { label: 'DigitalOcean VPS', v: 14.4, t: '$14.40/mo + your time' },
+  { label: 'Railway Hobby', v: 10.44, t: '$10.44/mo' },
+];
+const maxC = 60;
+const faq = [
+  { q: 'Is Railway cheaper than Render?', a: `For small, always-on apps, yes, by a lot. Railway bills the memory and CPU an app actually uses ($10 per GB of RAM and $20 per vCPU a month, read ${CHECKED}), and the $5 Hobby plan includes $5 of that. Render sells fixed sizes: $7 for 512 MB and then $25 for 2 GB. n8n, which used 543 MB idle in my test, costs about $5.51 on Railway and $25.25 on Render.` },
+  { q: 'Does Fly.io have a free tier?', a: `Not for new accounts. Fly’s pricing page, read ${CHECKED}, says new organizations get a trial of up to 2 hours of machine time or 7 days, then pay as they go. The smallest always-on machine (shared CPU, 256 MB) is $2.19 per 30 days in its cheapest US regions.` },
+  { q: 'Can I run n8n on Render’s free plan?', a: 'Not usefully. Render’s free web services have 512 MB of RAM (n8n used 543 MB idle in my test), spin down after 15 minutes without traffic, so schedules and webhooks stop firing, and can’t attach a disk, so n8n’s SQLite database is lost on every restart.' },
+  { q: 'How much RAM does a self-hosted app use when idle?', a: `In my ${CHECKED} test: Vaultwarden 32 MB, PocketBase 93 MB with 100,000 records, Umami 253 MB plus 80 MB for Postgres, and n8n 543 MB. All of them used almost no CPU while idle; n8n was the busiest at 1.94 CPU-seconds in 10 minutes.` },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Railway vs Render vs Fly.io: what it costs to host n8n, Umami, Vaultwarden and PocketBase', dateModified: '2026-11-02', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/railway-vs-render-vs-fly/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Railway vs Render vs Fly.io (Nov 2026): real cost for n8n, Umami, Vaultwarden" description="Prices read Nov 2, 2026 plus measured idle RAM and CPU of four self-hosted apps: running all four costs about $10.44/mo on Railway, $19.06 on Fly.io and $52.75 on Render. n8n alone: $5.51 vs $6.85 vs $25.25." schema={schema} crumbs={[['Home', '/'], ['Railway vs Render vs Fly.io', '/compare/railway-vs-render-vs-fly/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Railway vs Render vs Fly.io: what it costs to host n8n, Umami, Vaultwarden and PocketBase</h1>
+  <p class="muted">If you want to self-host an app but don’t want to look after a server, these three are the usual answer: you push code or a Docker image and they run it. They charge in very different ways, though. Railway bills what your app actually uses, Fly.io bills the machine size you pick by the second, and Render sells fixed instance sizes. So instead of comparing price lists, I ran four apps people often self-host, measured how much memory and CPU each one uses when sitting idle, and priced those numbers on each platform. All prices are in US dollars as listed.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. Railway, Render, Fly.io and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>Cheapest for small, mostly idle apps:</b> Railway. Its $5 Hobby plan includes $5 of usage, and three of my four apps used less than that on their own. All four together came to $10.44.</li>
+    <li><b>Cheapest for one tiny app:</b> Fly.io. Vaultwarden fits its $2.19 machine. There’s no free tier, but there’s also no monthly plan fee.</li>
+    <li><b>Most expensive here:</b> Render, because its sizes jump from 512 MB ($7) to 2 GB ($25). Anything that needs a bit more than 512 MB, like n8n, lands on the $25 size.</li>
+    <li><b>If you don’t mind running a server:</b> a $12 DigitalOcean server held all four apps’ idle memory with room to spare, $14.40 with weekly backups. Cheaper than Fly or Render, but you do the updates.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost to run all four apps</h2>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 140" width="100%" role="img" aria-labelledby="all-t">
+  <title id="all-t">Monthly cost to run n8n, Umami with Postgres, Vaultwarden and PocketBase always on, prices read {CHECKED}: Render $52.75, Fly.io $19.06, a DigitalOcean server $14.40, Railway Hobby $10.44</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 32; const w = (b.v / maxC) * 340;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="140" y={y + 2} width={w} height="16" fill={b.label.startsWith('Railway') ? '#c2410c' : '#2f3a4a'} />
+      <text x={146 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, always on, list prices read {CHECKED}. Railway priced from the idle memory and CPU I measured; Fly and Render at the smallest size that fits each app; each app gets a 1 GB volume or disk. Traffic costs left out (a few cents at small-site volumes). DigitalOcean is one $12, 2 GiB server plus 20% for weekly backups.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>App by app</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">App</th><th scope="col">Railway Hobby</th><th scope="col">Fly.io</th><th scope="col">Render</th><th scope="col">Note</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.app}</th><td>{r.rw}</td><td>{r.fly}</td><td>{r.rd}</td><td>{r.note}</td></tr>)}</tbody>
+</table></div>
+<p class="note">Per month, always on. Railway: you pay the larger of $5 or your usage; “uses” is what my measured memory, CPU and a 1 GB volume come to. Fly.io: Ashburn (iad) prices, 30 days, plus $0.15 for a 1 GB volume. Render: Hobby workspace ($0) plus the instance and a 1 GB disk at $0.25. Sources, all read {CHECKED}: <a href={S.rw}>Railway pricing</a>, <a href={S.rwDocs}>Railway plan docs</a>, <a href={S.fly}>Fly.io pricing</a>, <a href={S.rd}>Render pricing</a>, <a href={S.rdFree}>Render free tier docs</a>, <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What I measured</h2>
+<p>On {CHECKED} I started each app on my test machine, left it alone for 10 minutes with one health-check request a minute, and recorded its memory every 10 seconds and its total CPU time at the end. These are the same builds I tested for earlier pages, with the data from those tests still in them: Vaultwarden with 1,000 vault items, PocketBase with 100,000 records, Umami with its Postgres database, and a fresh n8n with no workflows.</p>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">App</th><th scope="col">Memory, idle</th><th scope="col">CPU time in 10 min</th><th scope="col">Average vCPU</th></tr></thead>
+<tbody>{idle.map(r => <tr><th scope="row">{r.app}</th><td>{r.mb} MB</td><td>{r.cpu}</td><td>{r.vcpu}</td></tr>)}</tbody>
+</table></div>
+<p>Memory barely moved during the 10 minutes, never by more than 6 MB. CPU was close to nothing for all of them. On Railway, where CPU is $20 per vCPU a month, n8n’s idle CPU works out to about 6 cents a month and the others to less than one cent. So for idle apps the bill is almost all memory, at $10 per GB a month.</p>
+<p>That’s why the pricing models matter so much. Vaultwarden at 32 MB costs Railway about 31 cents of memory a month, but you still pay the $5 Hobby minimum. n8n at 543 MB is just over half a GB: $5.30 of memory on Railway, a $6.70 1 GB machine on Fly, and on Render it misses the 512 MB size by 31 MB and has to go up to the $25 one.</p>
+
+<h2>How each one charges</h2>
+<h3>Railway</h3>
+<p>The Hobby plan is $5 a month and includes $5 of usage; past that you pay the difference. Usage is RAM at $10 per GB a month, CPU at $20 per vCPU a month, volumes at $0.15 per GB a month and egress at $0.05 per GB, billed by the minute on what the app uses rather than a size you pick. Builds are free. Hobby allows 5 GB of volume storage. There’s also a Free plan: a 30-day trial with $5 of credit, then $1 of usage a month, with 0.5 GB of RAM per service and a 0.5 GB volume. By my numbers Vaultwarden fits in that $1 with room to spare; n8n doesn’t fit at all, since it needs more than 0.5 GB. Pro is $20 a month with $20 of usage included.</p>
+<h3>Fly.io</h3>
+<p>No plan fee and, for new accounts, no free allowance: just a short trial. You pick a machine size and pay for it by the second while it runs: $2.19 for 256 MB, $3.69 for 512 MB, $6.70 for 1 GB and $13.39 for 2 GB per 30 days in Ashburn and Secaucus, its cheapest regions. Volumes are $0.15 per GB a month and the first 10 GB of snapshots are free. Outbound traffic in North America and Europe is $0.02 per GB. A shared IPv4 address is free; a dedicated one is $2. Managed Postgres starts at $38 a month, so for Umami I priced Postgres on its own 256 MB machine instead, which Fly offers but doesn’t support.</p>
+<h3>Render</h3>
+<p>The Hobby workspace is $0 for one person and Pro is $25 a month, both plus compute. Paid web services are $7 for 512 MB and 0.5 CPU, then $25 for 2 GB and 1 CPU, then $85 for 4 GB. Disks are $0.25 per GB a month. Postgres starts at $6 for 256 MB with 1 GB of storage. Hobby includes 5 GB of bandwidth, then $0.15 per GB. The free web service has 512 MB, but it spins down after 15 minutes without traffic, takes about a minute to wake, can’t attach a disk, and free Postgres databases expire after 30 days. Fine for a demo, not for an app you rely on.</p>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>For a few small apps I want running all the time:</b> Railway Hobby. Usage billing suits apps that sit idle most of the day, and several apps share the same $5 of included usage.</li>
+  <li><b>For one small app with a database file:</b> Fly.io, for Vaultwarden or PocketBase. $2.34 to $3.84 a month and a real volume.</li>
+  <li><b>For n8n:</b> Railway ($5.51) or Fly ($6.85). Not Render, where the jump to 2 GB makes it $25. A $6 DigitalOcean server is also an option; I went through n8n’s real memory use in <a href="/pricing/n8n-server-requirements/">n8n server requirements</a>.</li>
+  <li><b>I’d pick Render</b> when a team already uses it, or when I want its managed Postgres with point-in-time recovery, not to save money on small apps.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I didn’t deploy anything to Railway, Render or Fly. The costs are their published prices applied to what the apps used on my own test machine. Inside their containers, memory use can be higher, for example from the base image or logging.</li>
+  <li>Idle means idle. Busy apps use more: in my earlier tests Umami peaked at 406 MB at 5 pageviews a second and n8n at 735 MB running a large Code step. On Railway that raises the bill; on Fly and Render it can mean the next size up.</li>
+  <li>Vaultwarden on a 256 MB Fly machine covers normal use (a single sync peaked at 54 MB in my earlier test) but not a burst of thousands of syncs, which reached 493 MB.</li>
+  <li>The Postgres I measured for Umami is a stock PostgreSQL 18.6 with a small database. Railway’s and Render’s Postgres images may use more.</li>
+  <li>Railway’s $0 Free plan, Fly’s regional prices outside Ashburn, Render’s Pro workspace fee and every platform’s traffic charges can change the totals.</li>
+  <li>Prices change. The date at the top is when I read them; check again before you commit.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>On SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${n8n.slug}/`}><img src={avatar(n8n, 56)} alt="" width="28" height="28" loading="lazy"/> n8n</a>: {n8n.stars.toLocaleString('en-US')} GitHub stars, Sustainable Use License (fair-code, not OSI open source). <a class="tool" href={`/tool/${um.slug}/`}><img src={avatar(um, 56)} alt="" width="28" height="28" loading="lazy"/> Umami</a>: {um.stars.toLocaleString('en-US')} stars, {um.license} license. <a class="tool" href={`/tool/${vw.slug}/`}><img src={avatar(vw, 56)} alt="" width="28" height="28" loading="lazy"/> Vaultwarden</a>: {vw.stars.toLocaleString('en-US')} stars, {vw.license} license. <a class="tool" href={`/tool/${pb.slug}/`}><img src={avatar(pb, 56)} alt="" width="28" height="28" loading="lazy"/> PocketBase</a>: {pb.stars.toLocaleString('en-US')} stars, {pb.license} license. All from the GitHub API, fetched {fmtDate(pb.fetchedAt)}. Want your own server instead: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>. Earlier tests: <a href="/compare/plausible-vs-umami-vs-google-analytics/">Plausible vs Umami</a>, <a href="/compare/bitwarden-vs-vaultwarden-vs-1password/">Bitwarden vs Vaultwarden</a>, <a href="/compare/pocketbase-vs-supabase-vs-appwrite/">PocketBase vs Supabase</a>.</p>
+</div></section>
+</Base>

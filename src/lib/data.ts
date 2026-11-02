@@ -53,4 +53,5 @@ export const GUIDES = [
   { href: '/compare/bitwarden-vs-vaultwarden-vs-1password/', title: 'Bitwarden vs Vaultwarden vs 1Password: what a password manager costs for 1, 6, 10 and 25 people', tools: ['dani-garcia--vaultwarden', 'bitwarden--server'], checked: 'Oct 2026' },
   { href: '/compare/plausible-vs-umami-vs-google-analytics/', title: 'Plausible vs Umami vs Google Analytics: what web analytics costs at 10K to 5M pageviews', tools: ['umami-software--umami', 'plausible--analytics'], checked: 'Nov 2026' },
   { href: '/compare/pocketbase-vs-supabase-vs-appwrite/', title: 'PocketBase vs Supabase vs Appwrite: what an app backend costs, cloud and self-hosted', tools: ['pocketbase--pocketbase', 'supabase--supabase', 'appwrite--appwrite'], checked: 'Nov 2026' },
+  { href: '/compare/railway-vs-render-vs-fly/', title: 'Railway vs Render vs Fly.io: what it costs to host n8n, Umami, Vaultwarden and PocketBase', tools: ['n8n-io--n8n', 'umami-software--umami', 'dani-garcia--vaultwarden', 'pocketbase--pocketbase'], checked: 'Nov 2026' },
 ];
