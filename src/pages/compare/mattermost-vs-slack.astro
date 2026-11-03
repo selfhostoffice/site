@@ -1,0 +1,158 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const mm = listings.find(l => l.slug === 'mattermost--mattermost')!;
+const rc = listings.find(l => l.slug === 'rocketchat--rocket.chat')!;
+const CHECKED = 'Nov 3, 2026';
+const S = {
+  slack: 'https://slack.com/pricing',
+  mmPricing: 'https://mattermost.com/pricing/',
+  mmEditions: 'https://docs.mattermost.com/product-overview/editions-and-offerings',
+  mmSub: 'https://docs.mattermost.com/product-overview/subscription',
+  mmHw: 'https://docs.mattermost.com/deployment-guide/software-hardware-requirements.html',
+  mmOldPrice: 'https://pricingsaas.com/companies/mattermost/diffs/2025Q4',
+  rcPricing: 'https://www.rocket.chat/pricing',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// Slack list prices read Nov 3, 2026 (USD per user per month): Pro $7.25 annual / $8.75 monthly; Business+ $15 annual / $18 monthly.
+// Self-hosted Mattermost: DigitalOcean 2 GiB Droplet $12 + 20% for weekly backups = $14.40, the same at every team size here.
+const sizes = [10, 25, 50];
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const rows = [
+  { who: 'Slack Free', how: '90 days of history, 10 apps, 1:1 huddles only', c: sizes.map(() => '$0') },
+  { who: 'Slack Pro', how: 'billed yearly ($7.25 a user)', c: sizes.map(n => money(n * 7.25)) },
+  { who: 'Slack Pro', how: 'billed monthly ($8.75 a user)', c: sizes.map(n => money(n * 8.75)) },
+  { who: 'Slack Business+', how: 'billed yearly ($15 a user)', c: sizes.map(n => money(n * 15)) },
+  { who: 'Mattermost Team Edition, self-hosted', how: 'free, MIT license, 2 GiB server + backups', c: sizes.map(() => '$14.40') },
+  { who: 'Mattermost Entry, self-hosted', how: 'free, 10,000-message history cap, same server', c: sizes.map(() => '$14.40') },
+  { who: 'Mattermost Professional, self-hosted', how: 'no public price now; last listed $10 a user, yearly', c: sizes.map(n => `about ${money(n * 10 + 14.4)}`) },
+];
+const chart = [
+  { label: 'Slack Business+', v: 375, t: '$375/mo' },
+  { label: 'Slack Pro', v: 181.25, t: '$181.25/mo' },
+  { label: 'Mattermost, own server', v: 14.4, t: '$14.40/mo + your time' },
+];
+const maxC = 400;
+const mem = [
+  { label: 'Mattermost Entry 12.0.1', avg: 368, max: 420 },
+  { label: 'Mattermost Team 12.0.1', avg: 316, max: 343 },
+  { label: 'Its PostgreSQL 18.6', avg: 85, max: 85 },
+];
+const maxM = 500;
+const faq = [
+  { q: 'Is Mattermost free?', a: 'Two versions are. Team Edition is MIT-licensed and free; my test server reported a 200-user limit with a hard stop at 250 and no cap on message history. Entry is the free mode of the Enterprise download: more features, but Mattermost’s docs cap visible history at 10,000 messages across the whole server. The paid plans (Professional, Enterprise) no longer show a price; Mattermost sells them by quote, as yearly prepaid seats.' },
+  { q: 'How much does Slack cost for 25 people?', a: `With every list price read ${CHECKED}: Pro is $181.25 a month billed yearly ($7.25 a user) or $218.75 billed monthly ($8.75). Business+ is $375 a month billed yearly ($15 a user) or $450 billed monthly. Slack only bills members who were active in the last 28 days, and it was showing 50% off the first 3 months of monthly Pro.` },
+  { q: 'What server do I need for Mattermost?', a: 'Mattermost’s docs say 1 vCPU and 2 GB of RAM for 1 to 1,000 users. In my test, the server and its database used about 400 to 500 MB idle with 21 users and 11,021 messages, so 2 GB leaves room for the system, a reverse proxy and file uploads. That’s a $12 DigitalOcean Droplet, $14.40 with weekly backups.' },
+  { q: 'Can I move from Slack to Mattermost?', a: 'I didn’t test moving a Slack workspace into Mattermost for this page, so I can’t tell you how complete an import is. Plan on rebuilding integrations and workflows either way, since those are Slack-specific.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Mattermost vs Slack: what team chat costs for 10, 25 and 50 people', dateModified: '2026-11-03', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/mattermost-vs-slack/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Mattermost vs Slack (Nov 2026): team chat cost for 10, 25 and 50 people" description="Prices read Nov 3, 2026 plus a test install of Mattermost 12.0.1: for 25 people Slack Pro is $181.25/mo and Business+ $375; self-hosted Mattermost runs on a $12 server. Measured RAM and the free editions' real limits." schema={schema} crumbs={[['Home', '/'], ['Mattermost vs Slack', '/compare/mattermost-vs-slack/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Mattermost vs Slack: what team chat costs for 10, 25 and 50 people</h1>
+  <p class="muted">Slack charges per person, every month. Mattermost is the best-known chat app you can run on your own server, where the cost is the server, not the head count. I read Slack’s and Mattermost’s pricing pages on {CHECKED}, priced three team sizes, and installed Mattermost 12.0.1 (released Oct 22) on my test machine to see what it really needs and what the free versions really limit. All prices are in US dollars as listed.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. Slack, Mattermost, Rocket.Chat and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>Slack for 25 people:</b> $181.25 a month on Pro billed yearly, $375 on Business+. It goes up with every person you add.</li>
+    <li><b>Mattermost on your own server:</b> about $14.40 a month for a 2 GiB DigitalOcean server with backups, whether you have 10 people or 50. Add your time for updates and backups.</li>
+    <li><b>Which free Mattermost:</b> for a small business I’d run Team Edition. It has no limit on message history; my server reported a cap of 200 users. The other free version, Entry, has more features but its docs cap history at 10,000 messages.</li>
+    <li><b>Paid Mattermost</b> no longer has a public price. If you need SSO or compliance exports, you’re getting a quote.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost for a 25-person team</h2>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 108" width="100%" role="img" aria-labelledby="c-t">
+  <title id="c-t">Monthly cost of team chat for 25 people, prices read {CHECKED}: Slack Business+ $375, Slack Pro $181.25, Mattermost on your own server $14.40</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 32; const w = Math.max(3, (b.v / maxC) * 330);
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="170" y={y + 2} width={w} height="16" fill={b.label.startsWith('Mattermost') ? '#c2410c' : '#2f3a4a'} />
+      <text x={176 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}. Slack billed yearly. Mattermost is the free Team Edition on a $12, 2 GiB DigitalOcean Droplet plus 20% for weekly backups; a domain name and email for notifications are extra.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>By team size</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">How it’s priced</th><th scope="col">10 people</th><th scope="col">25 people</th><th scope="col">50 people</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.how}</td>{r.c.map(x => <td>{x}</td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Per month. Slack Business+ billed monthly is $18 a user: $180, $450 and $900 at these sizes. The Mattermost Professional row is the old $10 list price plus the same server; Mattermost took that price off its page around the end of 2025 (<a href={S.mmOldPrice}>PricingSaaS capture</a>) and today’s quote may differ. Sources, read {CHECKED}: <a href={S.slack}>Slack pricing</a>, <a href={S.mmPricing}>Mattermost pricing</a>, <a href={S.mmEditions}>Mattermost editions</a>, <a href={S.mmSub}>Mattermost subscriptions</a>, <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What I measured</h2>
+<p>On {CHECKED} I downloaded Mattermost 12.0.1 and ran it against a stock PostgreSQL 18.6 on my Linux test box. I created a team with 21 users and posted 11,000 messages through Mattermost’s API (the first 2,000 took 9 seconds). Then I left it idle with one health check a minute and recorded memory every 10 seconds. I did this twice: first with the main download, which runs as the free Entry edition, for 10 minutes, then with the Team Edition download on the same database for 5 minutes.</p>
+<figure class="chart" style="margin:0 0 12px">
+<svg viewBox="0 0 640 108" width="100%" role="img" aria-labelledby="m-t">
+  <title id="m-t">Idle memory measured {CHECKED}: Mattermost Entry 368 MB average, 420 MB peak; Mattermost Team Edition 316 MB average, 343 MB peak; PostgreSQL 85 MB</title>
+  {mem.map((b, i) => {
+    const y = 8 + i * 32; const w = (b.avg / maxM) * 330; const w2 = (b.max / maxM) * 330;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="190" y={y + 2} width={w2} height="16" fill="#2f3a4a" opacity="0.35" />
+      <rect x="190" y={y + 2} width={w} height="16" fill="#2f3a4a" />
+      <text x={196 + w2} y={y + 15} font-size="12" fill="currentColor">{b.max === b.avg ? `${b.avg} MB` : `${b.avg} MB avg, ${b.max} MB peak`}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">Resident memory of the Mattermost server plus the plugins it starts (three bundled plugins on Entry, two on Team Edition). Postgres is proportional memory (shared buffers counted once) taken right after each run: 85 MB with Entry, 77 MB with Team Edition.</figcaption>
+</figure>
+<ul>
+  <li><b>CPU:</b> next to nothing while idle. Entry used 1.74 CPU-seconds in 10 minutes, Team Edition 0.68 in 5 minutes.</li>
+  <li><b>Disk:</b> the database was 99 MB after 11,021 posts. The downloads are big: 833 MB for the main one (1.4 GB unpacked) and 495 MB for Team Edition. Uploaded files are stored on top of that.</li>
+  <li><b>Server size:</b> about 400 to 500 MB for Mattermost and Postgres together, idle. Mattermost’s own guidance is 1 vCPU and 2 GB for up to 1,000 users (<a href={S.mmHw}>hardware requirements</a>), and I agree with it: a 1 GiB server would be tight once the OS, a reverse proxy and a few people uploading files are added. I’d buy the $12, 2 GiB Droplet.</li>
+</ul>
+
+<h2>The two free Mattermosts, and what I saw</h2>
+<p>This is the part most comparisons get wrong now, because it changed in 2025. There are two free ways to run Mattermost:</p>
+<ul>
+  <li><b>Team Edition</b> is the MIT-licensed build. Mattermost says it’s meant for under 250 users and has no single sign-on. When I ran it, the server’s limits endpoint reported <code>maxUsersLimit: 200</code> and <code>maxUsersHardLimit: 250</code>, and no limit on message history. All 11,021 of my posts were readable.</li>
+  <li><b>Entry</b> is what you get when you run the main (Enterprise) download without a license. It includes the paid features, but the <a href={S.mmEditions}>editions page</a> limits it to 10,000 messages of visible history across the whole server, with older messages kept in the database but hidden from view and search. Other limits (1,000 board cards, 5 playbook runs and 250 AI agent queries a month, 40-minute calls, 10,000 push notifications a month) are marked as coming in a future release. My server reported <code>postHistoryLimit: 10000</code>, but after 11,021 posts, a restart and about 15 minutes, all of them were still readable through the API. I didn’t wait to see when the cutoff starts.</li>
+</ul>
+<p>For a sense of scale: a team that posts 200 messages a workday (an example number, not a measurement) would reach 10,000 in about 50 workdays. That’s why I’d pick Team Edition for a small business unless you need a specific Entry feature.</p>
+
+<h2>How Slack charges</h2>
+<p>Read {CHECKED}: Free is $0 with 90 days of message history, 10 app integrations, and huddles and Slack Connect for 1:1 only; Slack’s page also says free workspaces delete data after a year. Pro is $8.75 a user a month billed monthly or $7.25 billed yearly, and the page showed 50% off the first 3 months on monthly Pro. Business+ is $18 monthly or $15 yearly and adds SAML single sign-on and posting controls in any channel. Enterprise+ is a quote. Slack bills only members who were active in the last 28 days and credits you back when someone goes inactive, which helps teams with part-time users.</p>
+
+<h2>Rocket.Chat</h2>
+<p>The other common self-hosted option. Its <a href={S.rcPricing}>pricing page</a>, read {CHECKED}, offers a free self-managed workspace (its Starter plan) and enterprise plans by quote, with no prices listed. I didn’t test it for this page; it needs MongoDB, which isn’t on my test machine.</p>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>Under 10 people, no one to run a server:</b> Slack Free if 90 days of history is enough, Pro if it isn’t. $72.50 a month for 10 people billed yearly is not much to avoid running a server.</li>
+  <li><b>10 to 200 people with someone who can look after a Linux server:</b> Mattermost Team Edition on a 2 GiB server. At 25 people it saves about $167 a month against Slack Pro and $360 against Business+. The catch is that updates, backups and the email setup for notifications are your job.</li>
+  <li><b>You need SSO, compliance exports or a support contract:</b> compare a Slack Business+ bill with a Mattermost quote. Without a public Mattermost price, I can’t say which is cheaper.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I ran Mattermost with 21 users who weren’t actually logged in and chatting. Real use, especially file uploads and many open connections, will use more memory than my idle numbers.</li>
+  <li>I didn’t test the Mattermost mobile apps or push notifications, calls, or a Slack import.</li>
+  <li>The Entry history cap wasn’t applied during my short test. I’m reporting what the docs say and what the server reported, not a cutoff I saw.</li>
+  <li>The server cost leaves out a domain name, an email service for notifications, and your time.</li>
+  <li>Prices change. The date at the top is when I read them; check again before you commit.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>On SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${mm.slug}/`}><img src={avatar(mm, 56)} alt="" width="28" height="28" loading="lazy"/> Mattermost</a>: {mm.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(mm.lastPush)}. <a class="tool" href={`/tool/${rc.slug}/`}><img src={avatar(rc, 56)} alt="" width="28" height="28" loading="lazy"/> Rocket.Chat</a>: {rc.stars.toLocaleString('en-US')} stars, last push {fmtDate(rc.lastPush)}. Both from the GitHub API, fetched {fmtDate(mm.fetchedAt)}. More options: <a href="/alternatives/slack/">open-source Slack alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>, or skip the server with <a href="/compare/railway-vs-render-vs-fly/">Railway, Render or Fly.io</a>.</p>
+</div></section>
+</Base>
