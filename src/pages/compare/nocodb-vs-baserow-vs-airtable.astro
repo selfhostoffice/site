@@ -1,0 +1,164 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const nc = listings.find(l => l.slug === 'nocodb--nocodb')!;
+const br = listings.find(l => l.slug === 'baserow--baserow')!;
+const CHECKED = 'Nov 4, 2026';
+const S = {
+  at: 'https://airtable.com/pricing',
+  atPlans: 'https://support.airtable.com/articles/2277136852-airtable-plans-overview',
+  atLimits: 'https://support.airtable.com/articles/9157745778-airtable-workspace-settings-overview',
+  nc: 'https://nocodb.com/pricing',
+  ncDocker: 'https://nocodb.com/docs/self-hosting/installation/quickstart',
+  ncLicense: 'https://github.com/nocodb/nocodb/blob/develop/LICENSE.md',
+  br: 'https://baserow.io/pricing',
+  brPlans: 'https://baserow.io/user-docs/pricing-plans',
+  brLicense: 'https://baserow.io/user-docs/get-a-licence-key',
+  brDocker: 'https://baserow.io/docs/installation/install-with-docker',
+  brCode: 'https://github.com/baserow/baserow/blob/develop/LICENSE',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// Read Nov 4, 2026, USD per editor per month, billed yearly.
+// Airtable Team $20, Business $45. NocoDB Cloud Plus $12 (capped at $108 = 9 seats), Business $24 (capped at $216).
+// Baserow Cloud Premium $10, Advanced $18. DigitalOcean 2 GiB Droplet $12, 4 GiB $24, +20% weekly backups.
+const sizes = [5, 10, 25];
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const capped = (n: number, per: number) => money(Math.min(n, 9) * per);
+const rows = [
+  { who: 'Airtable Team', how: '$20 an editor; 50,000 records per base', c: sizes.map(n => money(n * 20)) },
+  { who: 'Airtable Business', how: '$45 an editor; 125,000 records per base', c: sizes.map(n => money(n * 45)) },
+  { who: 'NocoDB Cloud Plus', how: '$12 a seat, you pay for 9 at most', c: sizes.map(n => capped(n, 12)) },
+  { who: 'NocoDB Cloud Business', how: '$24 a seat, you pay for 9 at most', c: sizes.map(n => capped(n, 24)) },
+  { who: 'Baserow Cloud Premium', how: '$10 a user; 50,000 rows per workspace', c: sizes.map(n => money(n * 10)) },
+  { who: 'Baserow Cloud Advanced', how: '$18 a user; 250,000 rows per workspace', c: sizes.map(n => money(n * 18)) },
+  { who: 'NocoDB self-hosted (free)', how: 'one container on a 2 GiB server + backups', c: sizes.map(() => '$14.40') },
+  { who: 'Baserow self-hosted (free)', how: 'server only, size not tested by me', c: sizes.map(() => '$14.40 to $28.80') },
+];
+const chart = [
+  { label: 'Airtable Business', v: 450, t: '$450/mo' },
+  { label: 'Airtable Team', v: 200, t: '$200/mo' },
+  { label: 'NocoDB Cloud Plus', v: 108, t: '$108/mo' },
+  { label: 'Baserow Cloud Premium', v: 100, t: '$100/mo' },
+  { label: 'NocoDB, own server', v: 14.4, t: '$14.40/mo + your time' },
+];
+const maxC = 480;
+const mem = [
+  { label: 'Right after loading 10,000 rows', avg: 721, max: 923 },
+  { label: 'After a restart', avg: 747, max: 887 },
+];
+const maxM = 1000;
+const faq = [
+  { q: 'Is NocoDB free?', a: 'Self-hosted, yes: the Community edition costs nothing and has no record or user limit. It is under NocoDB’s own “Sustainable Use License” (fair-code), not an OSI open-source license, so read it if you plan to resell or host it for others. NocoDB Cloud also has a free plan, but it stops at 3 editors and 1,000 records.' },
+  { q: 'How much does Airtable cost for 10 people?', a: `With list prices read ${CHECKED}: Team is $200 a month billed yearly ($20 an editor) or $240 billed monthly ($24). Business is $450 a month billed yearly ($45). Airtable bills anyone who can edit (and on Team, comment on) a base; read-only people, form submissions and share links are free.` },
+  { q: 'What server do I need for NocoDB?', a: 'In my test, one NocoDB 2026.10.1 container with its built-in SQLite database used about 720 to 750 MB of memory idle, with peaks near 900 MB. A 1 GiB server is too small. A 2 GiB server ($12 at DigitalOcean, $14.40 with backups) worked for that setup. NocoDB’s recommended install adds a second NocoDB process for background jobs plus Postgres and Redis, and for that I’d buy 4 GiB ($24, or $28.80 with backups). I didn’t measure that stack.' },
+  { q: 'Is Baserow cheaper than Airtable?', a: 'On list price, yes. Baserow Cloud Premium is $10 a user a month billed yearly against Airtable Team at $20, with the same 50,000-row ceiling (per workspace at Baserow, per base at Airtable). Self-hosted Baserow has no row limit and the core is MIT-licensed; its paid features cost the same per user as the cloud plans.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'NocoDB vs Baserow vs Airtable: what a team database costs for 5, 10 and 25 editors', dateModified: '2026-11-04', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/nocodb-vs-baserow-vs-airtable/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="NocoDB vs Baserow vs Airtable (Nov 2026): cost for 5, 10 and 25 editors" description="Prices read Nov 4, 2026 plus a test install of NocoDB 2026.10.1 with 10,000 rows: Airtable Team is $200/mo for 10 editors, NocoDB Cloud caps at $108, self-hosted NocoDB ran in about 750 MB of RAM." schema={schema} crumbs={[['Home', '/'], ['NocoDB vs Baserow vs Airtable', '/compare/nocodb-vs-baserow-vs-airtable/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>NocoDB vs Baserow vs Airtable: what a team database costs for 5, 10 and 25 editors</h1>
+  <p class="muted">Airtable charges for everyone who can edit. NocoDB and Baserow are the two best-known open-source alternatives, and both sell a cloud version and let you run the software yourself. I read all three pricing pages on {CHECKED}, priced three team sizes, and ran NocoDB 2026.10.1 (released Oct 29) on my test machine with 10,000 rows to see how much server it needs. All prices are in US dollars as listed, per month, billed yearly unless I say otherwise.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. Airtable, NocoDB, Baserow and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>Airtable for 10 editors:</b> $200 a month on Team, $450 on Business. It grows with every editor.</li>
+    <li><b>NocoDB Cloud</b> is the odd one out: on Plus and Business you pay for at most 9 seats, so 10 or 25 editors cost the same $108 (Plus) or $216 (Business). For bigger teams it’s the cheapest hosted option here.</li>
+    <li><b>Baserow Cloud</b> is half of Airtable’s per-user price ($10 against $20) with the same 50,000-row ceiling on its first paid plan.</li>
+    <li><b>Self-hosted NocoDB</b> ran fine on a 2 GiB server in my test: about $14.40 a month with backups, at any team size. Add your time for updates and backups.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost for 10 editors</h2>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 172" width="100%" role="img" aria-labelledby="c-t">
+  <title id="c-t">Monthly cost for 10 editors, prices read {CHECKED}, billed yearly: Airtable Business $450, Airtable Team $200, NocoDB Cloud Plus $108, Baserow Cloud Premium $100, NocoDB on your own server $14.40</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 32; const w = Math.max(3, (b.v / maxC) * 310);
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="170" y={y + 2} width={w} height="16" fill={b.label.includes('own server') ? '#c2410c' : '#2f3a4a'} />
+      <text x={176 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}, billed yearly. NocoDB on your own server is the free Community edition on a $12, 2 GiB DigitalOcean Droplet plus 20% for weekly backups; a domain name is extra.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>By team size</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">How it’s priced</th><th scope="col">5 editors</th><th scope="col">10 editors</th><th scope="col">25 editors</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.how}</td>{r.c.map(x => <td>{x}</td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Per month, billed yearly. Billed monthly: Airtable Team is $24 an editor and Business $54; NocoDB Plus $15 a seat; Baserow Premium $12 and Advanced $22. NocoDB’s pricing page isn’t consistent: the plan cards say Plus $12 and Business $24 a seat billed yearly, while the comparison table lower on the same page says $15 and $30. I used the plan cards. The Baserow self-hosted row is a range because I didn’t run it; its all-in-one image bundles Postgres, Redis and a web server, so I’d start at 2 GiB and expect to need 4 GiB. Sources, read {CHECKED}: <a href={S.at}>Airtable pricing</a>, <a href={S.atPlans}>Airtable plans</a>, <a href={S.atLimits}>Airtable limits</a>, <a href={S.nc}>NocoDB pricing</a>, <a href={S.br}>Baserow pricing</a>, <a href={S.brPlans}>Baserow plans</a>, <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What I measured</h2>
+<p>On {CHECKED} I pulled the official <code>nocodb/nocodb:2026.10.1</code> image and ran it on my Linux test box as a single container with its built-in SQLite database, which is the simplest way to run it. I made one table shaped like a small job tracker (title, customer, status, amount, due date, notes) and added 10,000 rows through NocoDB’s API in batches of 100. Then I left it idle with one health check a minute and recorded memory every 10 seconds: 10 minutes right after the load, then 5 minutes after a restart.</p>
+<figure class="chart" style="margin:0 0 12px">
+<svg viewBox="0 0 640 76" width="100%" role="img" aria-labelledby="m-t">
+  <title id="m-t">NocoDB 2026.10.1 idle memory measured {CHECKED}: 721 MB average and 923 MB peak right after loading 10,000 rows; 747 MB average and 887 MB peak after a restart</title>
+  {mem.map((b, i) => {
+    const y = 8 + i * 32; const w = (b.avg / maxM) * 300; const w2 = (b.max / maxM) * 300;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="210" y={y + 2} width={w2} height="16" fill="#2f3a4a" opacity="0.35" />
+      <rect x="210" y={y + 2} width={w} height="16" fill="#2f3a4a" />
+      <text x={216 + w2} y={y + 15} font-size="12" fill="currentColor">{`${b.avg} MB avg, ${b.max} MB peak`}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">Resident memory of the NocoDB process (it includes the SQLite database, which runs inside it). Dark bar is the average, light bar the peak.</figcaption>
+</figure>
+<ul>
+  <li><b>Speed:</b> the first 1,000 rows went in in 1.9 seconds and all 10,000 in 17.8 seconds. A filtered and sorted query (open jobs, highest amount first, 2,503 matches) came back in 85 ms. It was ready to serve requests 10 seconds after a restart.</li>
+  <li><b>CPU:</b> low while idle. 2.07 CPU-seconds in 10 minutes after the load, 1.69 in 5 minutes after the restart.</li>
+  <li><b>Disk:</b> the database file was 21 MB with 10,000 rows. The image is about 1 GB unpacked.</li>
+  <li><b>Server size:</b> NocoDB alone sat around 700 to 750 MB and touched 900 MB. That rules out a 1 GiB server. For the single-container setup I tested, I’d buy 2 GiB. NocoDB’s own <a href={S.ncDocker}>install guide</a> now sets up four containers (NocoDB, a second NocoDB as a background worker, Postgres and Redis). I didn’t run that, but two NocoDB processes like mine would already use about 1.5 GB, so I’d buy 4 GiB for it.</li>
+</ul>
+
+<h2>How each one charges</h2>
+<p><b>Airtable</b> (read {CHECKED}): Free has 1,000 records per base, 1,000 API calls a month, 100 automation runs and up to 5 editors. Team is $20 an editor billed yearly or $24 monthly, with 50,000 records per base, 100,000 API calls and 25,000 automation runs a month. Business is $45 or $54 with 125,000 records per base. Enterprise Scale is a quote. On Team, commenters count as paid seats too; read-only people don’t.</p>
+<p><b>NocoDB Cloud</b>: Free covers 3 editors, 10 commenters, 1,000 records and 1,000 API calls a month. Plus is $12 a seat billed yearly ($15 monthly) and Business $24, and on both you pay for at most 9 seats: “Unlimited seats at just $108” on Plus, $216 on Business. Scale is $45 a seat with no cap, and Enterprise is a quote. Self-hosted, the Community edition is free with no limits on users or records; NocoDB says some extras (advanced forms, AI features, extensions) are only in the cloud and paid self-hosted versions.</p>
+<p><b>Baserow</b>: Cloud Free has 3,000 rows and 2 GB per workspace. Premium is $10 a user billed yearly ($12 monthly) for 50,000 rows, and Advanced $18 ($22) for 250,000 rows and role-based permissions. Self-hosted Baserow has no row, storage or API limits on any plan; the paid features are a license bought per seat. Baserow’s <a href={S.brLicense}>license docs</a> say every Premium user is billable, while Advanced lets you mix paid and free users.</p>
+
+<h2>Licenses, briefly</h2>
+<ul>
+  <li><b>NocoDB</b> uses its own “Sustainable Use License” (<a href={S.ncLicense}>license file</a>). Fine for running it for your own business; read it before you sell hosting of it to others.</li>
+  <li><b>Baserow</b>’s core is MIT-licensed, with the premium and enterprise folders under separate licenses (<a href={S.brCode}>license file</a>).</li>
+</ul>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>Under 1,000 records and a few people:</b> Airtable Free. It’s the most polished, and Free is enough for a small tracker.</li>
+  <li><b>A hosted plan for 10 or more editors:</b> NocoDB Cloud Plus. At 25 editors it’s $108 a month against $500 for Airtable Team and $250 for Baserow Premium. Check that its record limit fits before you move; I couldn’t read a clear per-plan number from its page.</li>
+  <li><b>A hosted plan for 5 or fewer:</b> Baserow Premium at $10 a user is the cheapest, with a known 50,000-row ceiling.</li>
+  <li><b>Someone on your team can look after a Linux server:</b> self-host NocoDB or Baserow. No per-person bill and no row limit, for $15 to $30 a month in server costs. I measured NocoDB, so it’s the one I can size with confidence.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I tested one NocoDB container with SQLite and no one logged in. NocoDB’s recommended setup (Postgres, Redis, a worker) and real people editing at once will use more memory than my numbers.</li>
+  <li>I didn’t run Baserow, try an Airtable import into either tool, or test automations, forms or attachments.</li>
+  <li>The server cost leaves out a domain name, an email service for invites, and your time.</li>
+  <li>Prices change, and NocoDB’s page disagreed with itself on the day I read it. The date at the top is when I read them; check again before you commit.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>On SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${nc.slug}/`}><img src={avatar(nc, 56)} alt="" width="28" height="28" loading="lazy"/> NocoDB</a>: {nc.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(nc.lastPush)}. <a class="tool" href={`/tool/${br.slug}/`}><img src={avatar(br, 56)} alt="" width="28" height="28" loading="lazy"/> Baserow</a>: {br.stars.toLocaleString('en-US')} stars on its GitHub mirror, last push {fmtDate(br.lastPush)}. Both from the GitHub API, fetched {fmtDate(nc.fetchedAt)}. More options: <a href="/alternatives/airtable/">open-source Airtable alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>, or skip the server with <a href="/compare/railway-vs-render-vs-fly/">Railway, Render or Fly.io</a>.</p>
+</div></section>
+</Base>

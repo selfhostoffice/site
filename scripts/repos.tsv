@@ -60,3 +60,4 @@ supabase/supabase	backend	Firebase	Supabase
 dani-garcia/vaultwarden	passwords	1Password	Vaultwarden
 pocketbase/pocketbase	backend	Firebase	PocketBase
 appwrite/appwrite	backend	Firebase	Appwrite
+baserow/baserow	databases	Airtable	Baserow

@@ -55,4 +55,5 @@ export const GUIDES = [
   { href: '/compare/pocketbase-vs-supabase-vs-appwrite/', title: 'PocketBase vs Supabase vs Appwrite: what an app backend costs, cloud and self-hosted', tools: ['pocketbase--pocketbase', 'supabase--supabase', 'appwrite--appwrite'], checked: 'Nov 2026' },
   { href: '/compare/railway-vs-render-vs-fly/', title: 'Railway vs Render vs Fly.io: what it costs to host n8n, Umami, Vaultwarden and PocketBase', tools: ['n8n-io--n8n', 'umami-software--umami', 'dani-garcia--vaultwarden', 'pocketbase--pocketbase'], checked: 'Nov 2026' },
   { href: '/compare/mattermost-vs-slack/', title: 'Mattermost vs Slack: what team chat costs for 10, 25 and 50 people', tools: ['mattermost--mattermost', 'rocketchat--rocket.chat'], checked: 'Nov 2026' },
+  { href: '/compare/nocodb-vs-baserow-vs-airtable/', title: 'NocoDB vs Baserow vs Airtable: what a team database costs for 5, 10 and 25 editors', tools: ['nocodb--nocodb', 'baserow--baserow'], checked: 'Nov 2026' },
 ];
