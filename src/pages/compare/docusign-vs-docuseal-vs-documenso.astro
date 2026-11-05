@@ -1,0 +1,165 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const ds = listings.find(l => l.slug === 'docusealco--docuseal')!;
+const dm = listings.find(l => l.slug === 'documenso--documenso')!;
+const CHECKED = 'Nov 5, 2026';
+const S = {
+  dsign: 'https://ecom.docusign.com/plans-and-pricing/esignature',
+  dseal: 'https://www.docuseal.com/pricing',
+  dsealCode: 'https://github.com/docusealco/docuseal',
+  dsealTerms: 'https://github.com/docusealco/docuseal/blob/master/LICENSE_ADDITIONAL_TERMS',
+  dsealApi: 'https://www.docuseal.com/docs/api',
+  dm: 'https://documenso.com/pricing',
+  dmSelf: 'https://documenso.com/self-hosted',
+  dmReq: 'https://docs.documenso.com/docs/self-hosting/getting-started/requirements',
+  dmLicense: 'https://github.com/documenso/documenso/blob/main/LICENSE',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// Read Nov 5, 2026, USD per month.
+// DocuSign eSignature (annual plan billed monthly, the page default): Personal $11 (1 user, 5 envelopes a month), Standard $30/user, Business Pro $45/user; Standard and Business Pro include 100 envelopes per user per year.
+// DocuSeal Cloud Pro $20/user monthly ($200/user/year). DocuSeal on-prem Pro license $240/user/year. Open-source edition free.
+// Documenso Cloud (billed yearly): Free 5 documents/month, Individual $25, Teams $40 incl. 5 users + $8 per extra user.
+// DigitalOcean 1 GiB Droplet $6, 2 GiB $12, +20% weekly backups.
+const sizes = [1, 3, 10];
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const teams = (n: number) => 40 + Math.max(0, n - 5) * 8;
+const rows = [
+  { who: 'DocuSign Standard', how: '$30 a sender; 100 envelopes per sender per year', c: sizes.map(n => money(n * 30)) },
+  { who: 'DocuSign Business Pro', how: '$45 a sender; 100 envelopes per sender per year', c: sizes.map(n => money(n * 45)) },
+  { who: 'DocuSeal Cloud Pro', how: '$20 a sender billed monthly; unlimited requests', c: sizes.map(n => money(n * 20)) },
+  { who: 'Documenso Cloud', how: 'Individual $25 for one person; Teams $40 for 5, then $8 each', c: sizes.map(n => n === 1 ? '$25' : money(teams(n))) },
+  { who: 'DocuSeal self-hosted (free)', how: 'open-source edition on a 1 GiB server + backups', c: sizes.map(() => '$7.20') },
+  { who: 'Documenso self-hosted (free)', how: 'Community Edition, server only, not tested by me', c: sizes.map(() => '$14.40') },
+];
+const chart = [
+  { label: 'DocuSign Business Pro', v: 135, t: '$135/mo' },
+  { label: 'DocuSign Standard', v: 90, t: '$90/mo' },
+  { label: 'DocuSeal Cloud Pro', v: 60, t: '$60/mo' },
+  { label: 'Documenso Teams', v: 40, t: '$40/mo' },
+  { label: 'DocuSeal, own server', v: 7.2, t: '$7.20/mo + your time' },
+];
+const maxC = 150;
+const mem = [
+  { label: 'Idle after 100 requests, 25 signed', avg: 275, max: 275 },
+  { label: 'Idle after a restart', avg: 176, max: 179 },
+];
+const maxM = 400;
+const faq = [
+  { q: 'How much does DocuSign cost per month?', a: `On ${CHECKED}, DocuSign’s own price page showed Personal at $11 a month (one person, 5 envelopes a month), Standard at $30 per user a month and Business Pro at $45 per user a month. Those are annual plans paid monthly. Standard and Business Pro come with 100 envelopes per user per year, and extra envelopes are billed on top.` },
+  { q: 'Is DocuSeal really free?', a: 'The self-hosted open-source edition is free, with unlimited documents and signature requests, under the AGPL-3.0 license plus one extra term: you have to keep the DocuSeal attribution in the interface. You pay for the server. Branding, reminders, bulk send, SSO and SMS checks need the Pro license at $20 per user a month, billed yearly ($240).' },
+  { q: 'What server do I need to self-host DocuSeal?', a: `In my test on ${CHECKED}, DocuSeal 3.3.5 (one container with its built-in SQLite database and Redis) used about 275 MB of memory idle after I sent 100 signature requests and completed 25. A 1 GiB server ($6 at DigitalOcean, $7.20 with backups) has room for that. For a team, or if you point it at Postgres on the same machine, I’d buy 2 GiB.` },
+  { q: 'Is Documenso cheaper than DocuSign?', a: 'For a team, yes. Documenso Teams is $40 a month billed yearly and covers 5 users with unlimited documents; 5 users on DocuSign Standard is $150 a month and still caps envelopes at 100 per user per year. For a single person, Documenso Individual is $25 against DocuSign Personal at $11, but Personal stops at 5 envelopes a month.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'DocuSign vs DocuSeal vs Documenso: what e-signatures cost for 1, 3 and 10 senders', dateModified: '2026-11-05', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/docusign-vs-docuseal-vs-documenso/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="DocuSign vs DocuSeal vs Documenso (Nov 2026): cost for 1, 3 and 10 senders" description="Prices read Nov 5, 2026 plus a test install of DocuSeal 3.3.5: DocuSign Standard is $90/mo for 3 senders, Documenso Teams $40, and self-hosted DocuSeal ran in about 275 MB of RAM." schema={schema} crumbs={[['Home', '/'], ['DocuSign vs DocuSeal vs Documenso', '/compare/docusign-vs-docuseal-vs-documenso/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>DocuSign vs DocuSeal vs Documenso: what e-signatures cost for 1, 3 and 10 senders</h1>
+  <p class="muted">DocuSign charges per sender and rations envelopes. DocuSeal and Documenso are the two open-source alternatives most people land on, and both sell a hosted version and let you run the software yourself. I read all three pricing pages on {CHECKED}, priced three team sizes, and ran DocuSeal 3.3.5 on my test machine: I sent 100 signature requests through its API, completed 25 of them, and watched how much memory it used. Prices are in US dollars, per month.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. DocuSign, DocuSeal, Documenso and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>DocuSign for 3 people</b> is $90 a month on Standard and $135 on Business Pro, and each person gets 100 envelopes a year, about 8 a month.</li>
+    <li><b>Documenso Teams</b> is $40 a month (billed yearly) for up to 5 people with unlimited documents. It’s the cheapest hosted option here for a small team.</li>
+    <li><b>DocuSeal Cloud Pro</b> is $20 a sender, with unlimited signature requests. Its free plan only sends 10 request emails a month.</li>
+    <li><b>Self-hosted DocuSeal</b> ran in about 275 MB of memory in my test, so a $6 server works: $7.20 a month with backups, at any team size. Add your time for updates.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost for 3 senders</h2>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 172" width="100%" role="img" aria-labelledby="c-t">
+  <title id="c-t">Monthly cost for 3 senders, prices read {CHECKED}: DocuSign Business Pro $135, DocuSign Standard $90, DocuSeal Cloud Pro $60, Documenso Teams $40, DocuSeal on your own server $7.20</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 32; const w = Math.max(3, (b.v / maxC) * 310);
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="170" y={y + 2} width={w} height="16" fill={b.label.includes('own server') ? '#c2410c' : '#2f3a4a'} />
+      <text x={176 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}. DocuSign is the annual plan paid monthly, DocuSeal Cloud is billed monthly, Documenso is billed yearly. DocuSeal on your own server is the free open-source edition on a $6, 1 GiB DigitalOcean Droplet plus 20% for weekly backups; a domain name and an email-sending service are extra.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>By team size</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">How it’s priced</th><th scope="col">1 sender</th><th scope="col">3 senders</th><th scope="col">10 senders</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.how}</td>{r.c.map(x => <td>{x}</td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Per month. A “sender” is someone who logs in to send documents; the people who sign don’t need a paid seat on any of these. For one person DocuSign also has Personal at $11 with 5 envelopes a month. DocuSign’s checkout data on the same page lists cheaper prices if you pay the year up front ($10, $25 and $40) and higher ones month to month ($15, $45 and $65); monthly plans get 10 envelopes per user per month. DocuSeal Cloud Pro is $200 per user a year if you pay yearly. Documenso is about $30 (Individual) and $50 (Teams) billed monthly, going by the yearly savings it shows. The Documenso self-hosted row is a guess at server cost from its own requirements (2 GB of RAM for production, plus Postgres); I didn’t run it. Sources, read {CHECKED}: <a href={S.dsign}>DocuSign eSignature pricing</a>, <a href={S.dseal}>DocuSeal pricing</a>, <a href={S.dm}>Documenso pricing</a>, <a href={S.dmSelf}>Documenso self-hosted editions</a>, <a href={S.dmReq}>Documenso requirements</a>, <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What I measured</h2>
+<p>On {CHECKED} I pulled the official <code>docuseal/docuseal</code> image (version 3.3.5, built Nov 2) and ran it on my Linux test box as one container with its default settings: SQLite for the database and a small Redis it starts by itself. I created an account, uploaded a one-page PDF, added a name field and a signature field, then used the API to create 100 signature requests and complete 25 of them with a drawn signature. After that I left it idle and recorded memory every 10 seconds for 10 minutes, restarted it, and recorded 5 more minutes.</p>
+<figure class="chart" style="margin:0 0 12px">
+<svg viewBox="0 0 640 76" width="100%" role="img" aria-labelledby="m-t">
+  <title id="m-t">DocuSeal 3.3.5 idle memory measured {CHECKED}: 275 MB average and 275 MB peak after 100 requests and 25 signings; 176 MB average and 179 MB peak after a restart</title>
+  {mem.map((b, i) => {
+    const y = 8 + i * 32; const w = (b.avg / maxM) * 300; const w2 = (b.max / maxM) * 300;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="230" y={y + 2} width={w2} height="16" fill="#2f3a4a" opacity="0.35" />
+      <rect x="230" y={y + 2} width={w} height="16" fill="#2f3a4a" />
+      <text x={236 + w2} y={y + 15} font-size="12" fill="currentColor">{`${b.avg} MB avg, ${b.max} MB peak`}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">Memory of the whole DocuSeal container: the Ruby web server with its background worker, plus the bundled Redis (about 6 MB). SQLite runs inside the Ruby process. Dark bar is the average, light bar the peak.</figcaption>
+</figure>
+<ul>
+  <li><b>Speed:</b> 100 signature requests went in in 2.9 seconds (18 ms each, median). Completing a request, which stamps the signature into the PDF and seals it, took 52 ms median; 25 took 3.2 seconds. Uploading the PDF took about 1 second. It answered requests about 2 seconds after a restart.</li>
+  <li><b>CPU:</b> sending 100 requests and completing 25 used about 15 seconds of CPU time in total. Sitting idle afterwards it used 1.6 seconds of CPU over 10 minutes, so it barely touches the processor when nobody is signing. I sampled every 10 seconds, so short spikes during the burst may not show in the peak figure.</li>
+  <li><b>Disk:</b> the data folder was 3.1 MB after the test. The image is about 565 MB unpacked.</li>
+  <li><b>Server size:</b> a 1 GiB server leaves plenty of room for what I ran. If you want Postgres instead of SQLite, or expect heavy use, start with 2 GiB ($12, or $14.40 with backups).</li>
+  <li><b>One surprise:</b> the open-source edition’s API could create and complete signature requests, but there was no API route for creating a template from a PDF (it returned 404). I had to upload the PDF through the web page and add fields over the API. DocuSeal’s own table lists the open-source API as “Free Basic”, and full API and embedding as Pro at $0.20 per completed document.</li>
+</ul>
+
+<h2>How each one charges</h2>
+<p><b>DocuSign</b> (read {CHECKED}): Personal is $11 a month for one person and 5 envelopes a month. Standard ($30 per user) adds shared templates, branding and comments. Business Pro ($45 per user) adds bulk send, web forms, payment collection and the API. Standard and Business Pro allow up to 50 users and 100 envelopes per user per year on annual plans; extra envelopes are billed pay-as-you-go. SMS delivery starts at $0.36 each and ID verification at $2.40 a try. The annual plans are a one-year commitment: after the first 30 days you owe the rest of the year if you cancel.</p>
+<p><b>DocuSeal</b>: Cloud Basic is free but sends only 10 request emails a month. Cloud Pro is $20 per user a month ($200 a year) with unlimited requests, your logo, reminders, bulk send (50 signatures a month included, then $0.20) and SSO. Signing through the API or embedded in your own app costs $0.20 per completed document on Pro, cloud or self-hosted. Self-hosted, the open-source edition is free with unlimited requests, but it signs with a self-signed certificate, so PDF readers won’t show the signature as trusted. The on-premises Pro license is $240 per user a year.</p>
+<p><b>Documenso</b>: Free covers 5 documents a month. Individual is $25 a month billed yearly ($300) with unlimited documents. Teams is $40 a month billed yearly for 5 users, then $8 per extra user, with API access and embedded signing. Platform is $250 a month for unlimited users. Self-hosted, the Community Edition is free with no usage limits, but Documenso says it’s meant for testing and internal use; the Business Edition for production has a fixed yearly price that isn’t published.</p>
+
+<h2>Licenses, briefly</h2>
+<ul>
+  <li><b>DocuSeal</b> is AGPL-3.0 with one added term: you must keep the DocuSeal attribution in the interface (<a href={S.dsealTerms}>additional terms</a>).</li>
+  <li><b>Documenso</b> is AGPL-3.0 (<a href={S.dmLicense}>license file</a>). Fine for running it for your own business; the AGPL matters if you change the code and offer it to others.</li>
+</ul>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>A handful of documents a month, one person:</b> DocuSign Personal at $11 or Documenso Free (5 a month). Free wins if 5 is enough.</li>
+  <li><b>A small team that signs a lot:</b> Documenso Teams at $40 for up to 5 people. DocuSign’s 100 envelopes per user per year runs out fast for anyone sending contracts or work orders every week.</li>
+  <li><b>Someone on your team can look after a Linux server:</b> self-hosted DocuSeal. It ran in under 300 MB in my test, so a $6 server is enough, and there’s no per-document or per-user charge. You give up a trusted signing certificate, reminders and your logo unless you pay for Pro.</li>
+  <li><b>You need DocuSign specifically:</b> some customers, lenders or agencies ask for it by name. Then Standard is the plan most small teams need; check the envelope count before you sign the annual term.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I tested one DocuSeal container with SQLite, on a one-page PDF, with nobody using the web interface. Big PDFs, many people signing at once, or Postgres will use more memory.</li>
+  <li>I didn’t run Documenso or OpenSign, and I didn’t test sending email, since that needs an SMTP service I didn’t set up.</li>
+  <li>DocuSign’s up-front and month-to-month prices come from data embedded in its price page, not from a checkout.</li>
+  <li>The server cost leaves out a domain name, an email-sending service and your time.</li>
+  <li>This isn’t legal advice. If your industry has its own signing rules (real estate, healthcare, government work), check them before you switch.</li>
+  <li>Prices change. The date at the top is when I read them; check again before you commit.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>On SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${ds.slug}/`}><img src={avatar(ds, 56)} alt="" width="28" height="28" loading="lazy"/> DocuSeal</a>: {ds.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(ds.lastPush)}. <a class="tool" href={`/tool/${dm.slug}/`}><img src={avatar(dm, 56)} alt="" width="28" height="28" loading="lazy"/> Documenso</a>: {dm.stars.toLocaleString('en-US')} stars, last push {fmtDate(dm.lastPush)}. Both from the GitHub API, fetched {fmtDate(ds.fetchedAt)}. More options: <a href="/alternatives/docusign/">open-source DocuSign alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</div></section>
+</Base>
