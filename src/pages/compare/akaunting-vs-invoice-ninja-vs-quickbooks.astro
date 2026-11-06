@@ -1,0 +1,151 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const ak = listings.find(l => l.slug === 'akaunting--akaunting')!;
+const inv = listings.find(l => l.slug === 'invoiceninja--invoiceninja')!;
+const CHECKED = 'Nov 6, 2026';
+const S = {
+  qb: 'https://quickbooks.intuit.com/pricing/',
+  fb: 'https://www.freshbooks.com/pricing',
+  ak: 'https://akaunting.com/pricing',
+  akOnprem: 'https://akaunting.com/plans-on-premise',
+  akCode: 'https://github.com/akaunting/akaunting',
+  inv: 'https://www.invoiceninja.com/pricing/',
+  invSelf: 'https://www.invoiceninja.com/self-host/',
+  invCode: 'https://github.com/invoiceninja/invoiceninja',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// Prices read Nov 6, 2026, USD per month unless noted.
+// QuickBooks Online list (US): Free $0; Simple Start $38 (1 user); Essentials $85 (3); Plus $140 (5); Advanced $340 (25).
+//   Official page timed out from this box; figures match Intuit’s pricing page as indexed Nov 6 and NerdWallet’s capture of the same list prices.
+// FreshBooks list: Lite $23 (5 clients); Plus $43 (50); Premium $70 (unlimited). Team members $11/user. Promo 80% off 4 months ignored for list.
+// Akaunting Cloud (monthly / yearly equiv): Standard $12 / $8; Premium $36 / $24; Elite $84 / $56; Ultimate $218 / $145.
+// Akaunting On-Premise: Standard free (1 company, 1 user + 1 accountant, 1,000 invoices); Premium $72/yr or $756 life (10/10/10k); Elite $168/yr (30/30/30k); Ultimate $684/yr (unlimited).
+// Invoice Ninja Cloud: Free $0 (5 clients); Pro $14/mo or $140/yr; Enterprise monthly by seats: 1–2 $18, 3–5 $32, 6–10 $54, 11–20 $84, 21–30 $120, 31–50 $160, 51–100 $300 (annual = 10× = 2 months free).
+// DigitalOcean Basic Droplets: 1 GiB $6, 2 GiB $12, 4 GiB $24; weekly backups 20%.
+// Image sizes measured Nov 6: Invoice Ninja 5.13.53 Docker rootfs 2.2 GB unpacked; Akaunting 3.3.0-fpm 991 MB. Both PHP-FPM only (port 9000); need MySQL/MariaDB + web server. Apt mirrors returned 500, so no live RAM run.
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const sizes = [1, 3, 10];
+// FreshBooks team cost: owner on plan + (n-1) team members at $11; Premium includes 2 team seats.
+const fb = (plan: number, n: number, includedTeam = 0) => plan + Math.max(0, n - 1 - includedTeam) * 11;
+const rows = [
+  { who: 'QuickBooks Online', how: 'Simple Start $38 · Essentials $85 (3 users) · Plus $140 (5) · Advanced $340 (25)', c: [money(38), money(85), money(340)] },
+  { who: 'FreshBooks', how: 'Lite $23 · Plus $43 · Premium $70; team seats $11 each (Premium includes 2)', c: [money(23), money(fb(43, 3)), money(fb(70, 10, 2))] },
+  { who: 'Akaunting Cloud (yearly)', how: 'Standard $8 · Premium $24 · Elite $56 · Ultimate $145 a month, billed yearly', c: [money(8), money(24), money(56)] },
+  { who: 'Invoice Ninja Cloud', how: 'Free $0 (5 clients) · Pro $14 · Enterprise by seat count', c: [money(14), money(32), money(54)] },
+  { who: 'Akaunting self-hosted (free)', how: 'On-Premise Standard free + 2 GiB server + backups (not run by me)', c: sizes.map(() => money(14.4)) },
+  { who: 'Invoice Ninja self-hosted (free)', how: 'open-source self-host + 2 GiB server + backups (not run by me)', c: sizes.map(() => money(14.4)) },
+];
+const chart = [
+  { label: 'QuickBooks Essentials', v: 85, t: '$85/mo' },
+  { label: 'FreshBooks Plus + 2 seats', v: 65, t: '$65/mo' },
+  { label: 'Invoice Ninja Enterprise 3–5', v: 32, t: '$32/mo' },
+  { label: 'Akaunting Cloud Premium', v: 24, t: '$24/mo yearly' },
+  { label: 'Self-host (either), own server', v: 14.4, t: '$14.40/mo + your time' },
+];
+const maxC = 100;
+const faq = [
+  { q: 'How much does QuickBooks Online cost per month?', a: `On ${CHECKED}, QuickBooks Online’s US list prices were Simple Start at $38 a month (1 user), Essentials at $85 (3 users), Plus at $140 (5 users) and Advanced at $340 (25 users). Intuit’s page often shows a temporary discount next to those figures; the higher number is the list price the plan renews at. There is also a Free plan at $0.` },
+  { q: 'Is Akaunting really free to self-host?', a: 'Yes for the On-Premise Standard plan: one company, one user plus one accountant, and 1,000 invoices, with the source code available. Paid On-Premise plans unlock more companies, users and invoices (Premium is $72 a year for 10 of each). Cloud plans are separate and only run on akaunting.com.' },
+  { q: 'Is Invoice Ninja free?', a: 'The hosted Free plan covers 5 clients with unlimited invoicing. Self-hosted Invoice Ninja is free to download and run (MIT / ELv2); you pay for the server and for whatever payment gateway you connect. Hosted Pro is $14 a month ($140 a year) for unlimited clients.' },
+  { q: 'What server do I need to self-host these?', a: `I did not get either app running end-to-end on ${CHECKED}: both official Docker images are PHP-FPM only and expect a separate MySQL/MariaDB database and a web server, and the Debian apt mirrors from this test box returned HTTP 500 so I could not install those. I did pull the images: Invoice Ninja 5.13.53 unpacked to 2.2 GB, Akaunting 3.3.0-fpm to 991 MB. I’d start on a 2 GiB Droplet ($12, or $14.40 with weekly backups) and watch memory once MySQL is on the same machine.` },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Akaunting vs Invoice Ninja vs QuickBooks: what accounting software costs for 1, 3 and 10 people', dateModified: '2026-11-06', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/akaunting-vs-invoice-ninja-vs-quickbooks/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Akaunting vs Invoice Ninja vs QuickBooks (Nov 2026): cost for 1, 3 and 10 people" description="Prices read Nov 6, 2026: QuickBooks Essentials is $85/mo for 3 users, Invoice Ninja Enterprise $32, Akaunting Cloud Premium $24 yearly, and self-hosting either open-source app is about $14.40/mo for the server." schema={schema} crumbs={[['Home', '/'], ['Akaunting vs Invoice Ninja vs QuickBooks', '/compare/akaunting-vs-invoice-ninja-vs-quickbooks/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Akaunting vs Invoice Ninja vs QuickBooks: what accounting software costs for 1, 3 and 10 people</h1>
+  <p class="muted">QuickBooks Online and FreshBooks charge a flat monthly fee that climbs with users or clients. Akaunting and Invoice Ninja are the two open-source options people land on when they search for a QuickBooks alternative they can run themselves — and both also sell a hosted version. I read the pricing pages on {CHECKED}, priced three team sizes, and pulled both official Docker images to see how big they are. I could not finish a live install: both images are PHP-FPM only and need MySQL, and apt on this test box was broken. Prices are in US dollars, per month.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. QuickBooks, FreshBooks, Akaunting, Invoice Ninja and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>QuickBooks for 3 people</b> is $85 a month on Essentials. Plus is $140 for up to 5 users; Advanced jumps to $340 for up to 25.</li>
+    <li><b>FreshBooks</b> is cheaper on the plan card ($43 for Plus) but team seats are $11 each, so 3 people on Plus is about $65 a month.</li>
+    <li><b>Akaunting Cloud Premium</b> is $24 a month billed yearly. Self-hosted Standard is free for one company and one user, then you pay for the server.</li>
+    <li><b>Invoice Ninja</b> hosted Pro is $14 a month; Enterprise for 3–5 users is $32. Self-hosted is free software on your own box.</li>
+    <li><b>Self-hosting either</b> looks like about $14.40 a month for a 2 GiB DigitalOcean Droplet with backups, plus your time. I measured image size, not RAM, on {CHECKED}.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost for 3 people</h2>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 172" width="100%" role="img" aria-labelledby="c-t">
+  <title id="c-t">Monthly cost for 3 people, prices read {CHECKED}: QuickBooks Essentials $85, FreshBooks Plus with 2 team seats $65, Invoice Ninja Enterprise 3–5 $32, Akaunting Cloud Premium $24, self-hosted on your own server $14.40</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 32; const w = Math.max(3, (b.v / maxC) * 310);
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="210" y={y + 2} width={w} height="16" fill={b.label.includes('own server') ? '#c2410c' : '#2f3a4a'} />
+      <text x={216 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}. Akaunting Cloud is the yearly rate. FreshBooks is Plus at $43 plus two team members at $11. Self-hosted is a $12, 2 GiB DigitalOcean Droplet plus 20% for weekly backups; a domain name, outbound email and your time are extra. I did not run either self-hosted stack.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>By team size</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">How it’s priced</th><th scope="col">1 person</th><th scope="col">3 people</th><th scope="col">10 people</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.how}</td>{r.c.map(x => <td>{x}</td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Per month. QuickBooks columns use Simple Start, Essentials and Advanced (Plus tops out at 5 users, so 10 people need Advanced). FreshBooks 1-person is Lite; 3-person is Plus + 2 team seats; 10-person is Premium (2 team seats included) + 7 more at $11. Akaunting Cloud uses yearly billing (Standard / Premium / Elite). Invoice Ninja 1-person is Pro; 3-person and 10-person are Enterprise tiers ($32 for 3–5 users, $54 for 6–10). Self-hosted rows assume the free editions on a 2 GiB Droplet with backups. Sources, read {CHECKED}: <a href={S.qb}>QuickBooks Online pricing</a>, <a href={S.fb}>FreshBooks pricing</a>, <a href={S.ak}>Akaunting Cloud pricing</a>, <a href={S.akOnprem}>Akaunting On-Premise plans</a>, <a href={S.inv}>Invoice Ninja pricing</a>, <a href={S.invSelf}>Invoice Ninja self-host</a>, <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What I measured</h2>
+<p>On {CHECKED} I pulled the official Docker Hub images the same way I’ve done for other tools on this site (layer download + unpack, no Docker daemon). I did <b>not</b> get a working login screen: both images expose PHP-FPM on port 9000 and expect MySQL/MariaDB plus nginx or Caddy next to them, and <code>apt-get</code> on this Debian test box could not refresh its package lists (deb.debian.org returned HTTP 500). So the numbers below are image size and shape, not idle RAM.</p>
+<ul>
+  <li><b>Invoice Ninja 5.13.53</b> (<code>invoiceninja/invoiceninja</code>): about 2.2 GB unpacked. PHP 8.5.12, supervisord entrypoint, working directory <code>/var/www/app</code>. Default <code>.env</code> wants MySQL. Their self-host page also points at Docker Compose as the usual path.</li>
+  <li><b>Akaunting 3.3.0-fpm</b> (<code>akaunting/akaunting:3.3.0-fpm</code>): about 991 MB unpacked. Also PHP-FPM on port 9000. Official compose brings up MariaDB beside it; Akaunting 3.2+ wants PHP 8.2 or newer.</li>
+  <li><b>Release tarballs</b> (for anyone installing without Docker): Invoice Ninja v5.13.53 <code>invoiceninja.tar</code> is about 189 MB compressed; Akaunting 3.3.0 Stable zip is about 73 MB. Those still need PHP, a database and a web server on the host.</li>
+  <li><b>Server size I’d buy:</b> 2 GiB ($12, or $14.40 with weekly backups) as a starting point for app + database on one machine. A 1 GiB Droplet is likely too tight once MySQL is running. I have not verified that with a live process list.</li>
+</ul>
+
+<h2>How each one charges</h2>
+<p><b>QuickBooks Online</b> (US list, {CHECKED}): Free is $0. Simple Start is $38 a month for one user. Essentials is $85 for up to 3 users, Plus $140 for up to 5, Advanced $340 for up to 25. Prices are per company, not per seat beyond those caps. Intuit’s page usually puts a short promotional price beside the list price; treat the higher figure as what you renew at. I could not load quickbooks.intuit.com/pricing from this box (connection timed out); the figures above match Intuit’s own page as returned by search indexes on {CHECKED} and NerdWallet’s side-by-side of the same list prices.</p>
+<p><b>FreshBooks</b> (read {CHECKED}): Lite $23 a month for 5 billable clients, Plus $43 for 50, Premium $70 for unlimited. Extra team members are $11 a month each; Premium includes two. The site was showing 80% off for the first four months when I looked — list prices above ignore that promo. Card payments run about 2.9% + $0.30; ACH about 1%.</p>
+<p><b>Akaunting</b>: Cloud Standard is $12 a month ($8 billed yearly), Premium $36 ($24), Elite $84 ($56), Ultimate $218 ($145). Those cloud plans do not apply to a self-hosted install. On-Premise Standard is a free download for one company, one user plus one accountant and 1,000 invoices. Premium On-Premise is $72 a year (or $756 lifetime) for 10 companies / 10 users / 10,000 invoices; Elite $168 a year for 30 of each; Ultimate $684 a year for unlimited.</p>
+<p><b>Invoice Ninja</b>: Hosted Free covers 5 clients. Pro is $14 a month or $140 a year (2 months free) with unlimited clients. Enterprise adds extra account users: $18 a month for 1–2 users, $32 for 3–5, $54 for 6–10, then $84 / $120 / $160 / $300 up to 51–100 users (from their pricing page’s own seat selector script). Self-hosted is free; you bring the server and a payment gateway (Stripe, PayPal and others).</p>
+
+<h2>Licenses, briefly</h2>
+<ul>
+  <li><b>Akaunting</b> is open source; the project markets the On-Premise Standard plan as free in price and in source availability (<a href={S.akCode}>GitHub repo</a>).</li>
+  <li><b>Invoice Ninja</b> is MIT / ELv2 on <a href={S.invCode}>GitHub</a>. Fine for running your own books; check ELv2 if you plan to offer it as a hosted service to others.</li>
+</ul>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>Solo freelancer, under 5 clients, hate servers:</b> Invoice Ninja Free, or FreshBooks Lite at $23 if you want a polished hosted product and don’t mind the client cap.</li>
+  <li><b>Small team that wants hosted and cheap:</b> Akaunting Cloud Premium at $24 a month yearly, or Invoice Ninja Enterprise at $32 for up to 5 users. Both undercut QuickBooks Essentials at $85.</li>
+  <li><b>Someone on the team can run Linux + MySQL:</b> self-host Invoice Ninja or Akaunting Standard. Budget about $14.40 a month for a 2 GiB Droplet with backups and plan on an afternoon for Compose, backups and SMTP. I did not finish that install myself on {CHECKED}.</li>
+  <li><b>You need QuickBooks specifically:</b> accountants, lenders and some bookkeepers still ask for it by name. Then Essentials or Plus is the usual small-business pick; check the user cap before you pay for Advanced.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I did not run Akaunting or Invoice Ninja as a live app. No idle-RAM chart, no invoice-create timing. The measured section is image size only.</li>
+  <li>QuickBooks’ official pricing URL timed out from this network; I used Intuit’s published list prices as reported by search indexes on {CHECKED} and confirmed against NerdWallet’s copy of the same numbers. FreshBooks, Akaunting and Invoice Ninja I fetched directly.</li>
+  <li>Promotional discounts (FreshBooks 80% off for 4 months, QuickBooks first-months offers) are ignored on purpose so the table is what you renew at.</li>
+  <li>Self-hosted cost leaves out the domain, email sending, payment-gateway fees and your time for updates and backups.</li>
+  <li>Akaunting Cloud feature caps (companies / users / invoices per tier) mirror the On-Premise table closely, but confirm on their pricing page before you buy — the cloud and on-prem checkout pages are separate.</li>
+  <li>This isn’t tax or bookkeeping advice. If you need certified payroll, inventory costing or accountant hand-off features, try the product before you cancel QuickBooks.</li>
+  <li>Prices change. The date at the top is when I read them.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>On SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${ak.slug}/`}><img src={avatar(ak, 56)} alt="" width="28" height="28" loading="lazy"/> Akaunting</a>: {ak.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(ak.lastPush)}. <a class="tool" href={`/tool/${inv.slug}/`}><img src={avatar(inv, 56)} alt="" width="28" height="28" loading="lazy"/> Invoice Ninja</a>: {inv.stars.toLocaleString('en-US')} stars, last push {fmtDate(inv.lastPush)}. Both from the GitHub API, fetched {fmtDate(ak.fetchedAt)}. More options: <a href="/alternatives/quickbooks/">open-source QuickBooks alternatives</a> and <a href="/alternatives/freshbooks/">FreshBooks alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</div></section>
+</Base>

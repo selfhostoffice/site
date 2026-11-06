@@ -57,4 +57,5 @@ export const GUIDES = [
   { href: '/compare/mattermost-vs-slack/', title: 'Mattermost vs Slack: what team chat costs for 10, 25 and 50 people', tools: ['mattermost--mattermost', 'rocketchat--rocket.chat'], checked: 'Nov 2026' },
   { href: '/compare/nocodb-vs-baserow-vs-airtable/', title: 'NocoDB vs Baserow vs Airtable: what a team database costs for 5, 10 and 25 editors', tools: ['nocodb--nocodb', 'baserow--baserow'], checked: 'Nov 2026' },
   { href: '/compare/docusign-vs-docuseal-vs-documenso/', title: 'DocuSign vs DocuSeal vs Documenso: what e-signatures cost for 1, 3 and 10 senders', tools: ['docusealco--docuseal', 'documenso--documenso'], checked: 'Nov 2026' },
+  { href: '/compare/akaunting-vs-invoice-ninja-vs-quickbooks/', title: 'Akaunting vs Invoice Ninja vs QuickBooks: what accounting software costs for 1, 3 and 10 people', tools: ['akaunting--akaunting', 'invoiceninja--invoiceninja'], checked: 'Nov 2026' },
 ];
