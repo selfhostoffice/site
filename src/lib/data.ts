@@ -45,7 +45,7 @@ export const GUIDES = [
   { href: '/pricing/n8n/', title: 'n8n pricing: Cloud vs self-hosted, real monthly cost', tools: ['n8n-io--n8n'], checked: 'Oct 2026' },
   { href: '/pricing/cal-com/', title: 'Cal.com pricing: cloud plans vs self-hosting Cal.diy', tools: ['calcom--cal.diy'], checked: 'Oct 2026' },
   { href: '/compare/n8n-vs-make/', title: 'n8n vs Make: what 2,500, 10,000 and 50,000 runs a month really cost', tools: ['n8n-io--n8n'], checked: 'Oct 2026' },
-  { href: '/pricing/chatwoot/', title: 'Chatwoot pricing: cloud plans vs self-hosting', tools: ['chatwoot--chatwoot'], checked: 'Oct 2026' },
+  { href: '/pricing/chatwoot/', title: 'Chatwoot pricing: cloud plans vs self-hosting', tools: ['chatwoot--chatwoot'], checked: 'Nov 2026' },
   { href: '/pricing/n8n-server-requirements/', title: 'n8n server requirements: measured RAM and the server to buy', tools: ['n8n-io--n8n'], checked: 'Oct 2026' },
   { href: '/pricing/supabase/', title: 'Supabase pricing: cloud plans vs self-hosting, and what you give up', tools: ['supabase--supabase'], checked: 'Oct 2026' },
   { href: '/compare/hetzner-vs-digitalocean-vs-vultr/', title: 'Hetzner vs DigitalOcean vs Vultr: what a 2, 4 or 8 GB server costs', tools: [], checked: 'Oct 2026' },
@@ -58,4 +58,5 @@ export const GUIDES = [
   { href: '/compare/nocodb-vs-baserow-vs-airtable/', title: 'NocoDB vs Baserow vs Airtable: what a team database costs for 5, 10 and 25 editors', tools: ['nocodb--nocodb', 'baserow--baserow'], checked: 'Nov 2026' },
   { href: '/compare/docusign-vs-docuseal-vs-documenso/', title: 'DocuSign vs DocuSeal vs Documenso: what e-signatures cost for 1, 3 and 10 senders', tools: ['docusealco--docuseal', 'documenso--documenso'], checked: 'Nov 2026' },
   { href: '/compare/akaunting-vs-invoice-ninja-vs-quickbooks/', title: 'Akaunting vs Invoice Ninja vs QuickBooks: what accounting software costs for 1, 3 and 10 people', tools: ['akaunting--akaunting', 'invoiceninja--invoiceninja'], checked: 'Nov 2026' },
+  { href: '/compare/zendesk-vs-chatwoot-vs-freescout-vs-zammad/', title: 'Zendesk vs Chatwoot vs FreeScout vs Zammad: what a helpdesk costs for 3, 10 and 25 agents', tools: ['chatwoot--chatwoot', 'freescout-help-desk--freescout', 'zammad--zammad'], checked: 'Nov 2026' },
 ];

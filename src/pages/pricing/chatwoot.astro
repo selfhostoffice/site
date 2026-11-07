@@ -4,7 +4,7 @@ import { listings, avatar, fmtDate } from '../../lib/data';
 import affiliates from '../../data/affiliates.json';
 const cw = listings.find(l => l.slug === 'chatwoot--chatwoot')!;
 const aff = (affiliates as Record<string, { href: string; label: string; terms: string }>)['chatwoot--chatwoot'];
-const CHECKED = 'Oct 23, 2026';
+const CHECKED = 'Nov 7, 2026';
 const S = {
   cloud: 'https://www.chatwoot.com/pricing',
   self: 'https://www.chatwoot.com/pricing/self-hosted-plans/',
@@ -16,7 +16,7 @@ const cloud = [
   { plan: 'Hacker', price: '$0', note: 'up to 2 agents, 500 conversations/month, live chat only, 30 days of data retention; no help center, automation or AI' },
   { plan: 'Startups', price: '$19 per agent/mo', note: 'unlimited conversations (fair use), help center, 300 Captain AI credits/month; no automation rules or teams' },
   { plan: 'Business', price: '$39 per agent/mo', note: 'adds automation rules, voice, teams, 500 Captain AI credits/month' },
-  { plan: 'Enterprise', price: 'Not listed', note: 'adds SSO/SAML, audit logs, 3-year data retention, 800 Captain AI credits/month' },
+  { plan: 'Enterprise', price: '$99 per agent/mo', note: 'adds SSO/SAML, audit logs, 3-year data retention, 800 Captain AI credits/month' },
 ];
 const self = [
   { plan: 'Community Edition', price: '$0', note: 'the open-source app on your own server; help comes from Discord and GitHub' },
@@ -27,16 +27,16 @@ const sizes = [2, 3, 5, 10, 20];
 const SERVER = 24; // DigitalOcean 2 vCPU / 4 GiB Basic Droplet, read Oct 21, 2026
 const maxV = 20 * 39;
 const faq = [
-  { q: 'How much does Chatwoot cost?', a: 'Chatwoot Cloud is free for up to 2 agents and 500 conversations a month. Paid plans are $19 per agent per month (Startups) and $39 per agent per month (Business); Enterprise has no public price (chatwoot.com/pricing, checked Oct 23, 2026).' },
+  { q: 'How much does Chatwoot cost?', a: 'Chatwoot Cloud is free for up to 2 agents and 500 conversations a month. Paid plans are $19 per agent per month (Startups), $39 (Business) and $99 (Enterprise) (chatwoot.com/pricing, checked Nov 7, 2026).' },
   { q: 'Is self-hosted Chatwoot free?', a: 'Yes. The Community Edition is $0 per agent. You pay for a server (Chatwoot asks for at least 4 GB RAM) and your own time. Paid self-hosted plans are $19 per agent per month for Premium Support and $99 for Enterprise Edition.' },
   { q: 'When is self-hosting Chatwoot cheaper?', a: 'Almost as soon as you pass the free cloud plan. Two agents on Business is $78 a month; a 4 GB server is about $20–24 a month. The catch is that the free Community Edition leaves out Captain AI, voice and roles, and you run upgrades and backups yourself.' },
 ];
 const schema = [
-  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Chatwoot pricing: cloud plans vs self-hosting', dateModified: '2026-10-23', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/pricing/chatwoot/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Chatwoot pricing: cloud plans vs self-hosting', dateModified: '2026-11-07', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/pricing/chatwoot/', Astro.site).toString() },
   { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
 ];
 ---
-<Base title="Chatwoot pricing (Oct 2026): cloud plans vs self-hosting, per-agent cost" description="Chatwoot Cloud is free for 2 agents, then $19 or $39 per agent per month. Self-hosted Community Edition is $0 plus a 4 GB server. Worked monthly costs for 2 to 20 agents, checked Oct 23, 2026." schema={schema} crumbs={[['Home', '/'], ['Chatwoot pricing', '/pricing/chatwoot/']]}>
+<Base title="Chatwoot pricing (Nov 2026): cloud plans vs self-hosting, per-agent cost" description="Chatwoot Cloud is free for 2 agents, then $19 or $39 per agent per month. Self-hosted Community Edition is $0 plus a 4 GB server. Worked monthly costs for 2 to 20 agents, checked Nov 7, 2026." schema={schema} crumbs={[['Home', '/'], ['Chatwoot pricing', '/pricing/chatwoot/']]}>
 <div class="wrap page-head prose">
   <span class="eyebrow">Pricing guide · Checked on {CHECKED}</span>
   <h1>Chatwoot pricing: cloud plans vs self-hosting</h1>

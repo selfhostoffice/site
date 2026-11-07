@@ -1,0 +1,184 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+import affiliates from '../../data/affiliates.json';
+const cw = listings.find(l => l.slug === 'chatwoot--chatwoot')!;
+const fs = listings.find(l => l.slug === 'freescout-help-desk--freescout')!;
+const zm = listings.find(l => l.slug === 'zammad--zammad')!;
+const aff = (affiliates as Record<string, { href: string; label: string; terms: string }>)['chatwoot--chatwoot'];
+const CHECKED = 'Nov 7, 2026';
+const ECB = 1.1165; // ECB eurofxref USD per EUR, time=2026-11-06
+const eur = (n: number) => Math.round(n * ECB * 100) / 100;
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const S = {
+  zd: 'https://www.zendesk.com/pricing/',
+  hs: 'https://www.helpscout.com/pricing/',
+  cw: 'https://www.chatwoot.com/pricing',
+  cwSelf: 'https://www.chatwoot.com/pricing/self-hosted-plans/',
+  cwReq: 'https://developers.chatwoot.com/self-hosted/deployment/requirements',
+  fs: 'https://freescout.net/',
+  fsMod: 'https://freescout.net/modules/',
+  fsWiki: 'https://github.com/freescout-help-desk/freescout/wiki/Cloud-Hosted-FreeScout',
+  pika: 'https://www.pikapods.com/apps?q=freescout',
+  zm: 'https://zammad.com/en/pricing',
+  zmHw: 'https://docs.zammad.org/en/latest/prerequisites/hardware.html',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  ecb: 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml',
+};
+// Prices read Nov 7, 2026.
+// Zendesk (annual billed monthly): Support Team $19/agent, Suite Team $55, Suite Professional $115. Monthly: $25 / $69 / $149.
+// Help Scout (Annual toggle −16% on page): Standard $25, Plus $45, Pro $75 per user/mo. Monthly toggle not captured in this fetch.
+// Chatwoot Cloud: Hacker $0 (≤2 agents), Startups $19, Business $39, Enterprise $99 per agent/mo.
+// Chatwoot self-hosted: Community $0, Premium Support $19, Enterprise $99 per agent/mo.
+// Zammad Cloud (excl. VAT): Starter v2 €7/€9 (max 5), Professional v2 €16/€18 (max 35), Plus v2 €25/€27 (unlimited) per agent/mo annual/monthly.
+// Zammad self-hosted support packages (annual): Business €2,999, Enterprise €5,999, Corporation €9,999 — software itself is free/open source.
+// FreeScout: free self-host; paid modules are lifetime licenses (Tags $6.99, Saved Replies $4.99, Knowledge Base $12, API $12.99, Workflows/Reports $14.99 each). PikaPods lists FreeScout from $3.05/mo.
+// DO Basic: 1 GiB $6, 2 GiB $12, 4 GiB $24, 8 GiB $48; weekly backups +20%.
+// Image sizes measured Nov 7 from Docker Hub manifests / layer pull: Chatwoot latest-ce 749.9 MB compressed; Zammad latest 330.5 MB; bfren/freescout php8.3 (FreeScout 1.8.222) 72.9 MB compressed / 198.9 MB unpacked. FreeScout image is PHP only (needs MySQL). Apt mirrors HTTP 500 — no live RAM run.
+const sizes = [3, 10, 25];
+const zmProf = (n: number) => money(eur(n * 16));
+const zmPlus = (n: number) => money(eur(n * 25));
+const rows = [
+  { who: 'Zendesk Support Team', how: '$19/agent, yearly billing (email inbox)', c: sizes.map(n => money(n * 19)) },
+  { who: 'Zendesk Suite Team', how: '$55/agent, yearly (omnichannel + AI agents)', c: sizes.map(n => money(n * 55)) },
+  { who: 'Help Scout Standard', how: '$25/user/mo on the Annual toggle (−16%)', c: sizes.map(n => money(n * 25)) },
+  { who: 'Help Scout Plus', how: '$45/user/mo on the Annual toggle', c: sizes.map(n => money(n * 45)) },
+  { who: 'Chatwoot Cloud Startups', how: '$19/agent (affiliate link below)', c: sizes.map(n => money(n * 19)) },
+  { who: 'Chatwoot Cloud Business', how: '$39/agent (automation, voice, teams)', c: sizes.map(n => money(n * 39)) },
+  { who: 'Zammad Cloud Professional', how: `€16/agent yearly ≈ ${money(eur(16))}/agent (ECB ${ECB})`, c: sizes.map(n => zmProf(n)) },
+  { who: 'Zammad Cloud Plus', how: `€25/agent yearly ≈ ${money(eur(25))}/agent`, c: sizes.map(n => zmPlus(n)) },
+  { who: 'Chatwoot self-hosted (free CE)', how: 'Community Edition + 4 GiB server + backups', c: sizes.map(() => money(28.8)) },
+  { who: 'FreeScout self-hosted (free)', how: 'open-source + 2 GiB server + backups; modules optional', c: sizes.map(() => money(14.4)) },
+  { who: 'Zammad self-hosted (free soft.)', how: 'open-source + 8 GiB server + backups (ES may need more)', c: sizes.map(() => money(57.6)) },
+];
+const chart = [
+  { label: 'Zendesk Suite Team', v: 550, t: '$550/mo' },
+  { label: 'Help Scout Plus', v: 450, t: '$450/mo' },
+  { label: 'Chatwoot Business', v: 390, t: '$390/mo' },
+  { label: 'Zendesk Support / Chatwoot Startups', v: 190, t: '$190/mo' },
+  { label: 'Zammad Professional', v: eur(160), t: money(eur(160)) + '/mo' },
+  { label: 'Chatwoot, own server', v: 28.8, t: '$28.80/mo + your time' },
+  { label: 'FreeScout, own server', v: 14.4, t: '$14.40/mo + your time' },
+];
+const maxC = 600;
+const imgs = [
+  { label: 'Chatwoot latest-ce (compressed)', mb: 750 },
+  { label: 'Zammad latest (compressed)', mb: 331 },
+  { label: 'FreeScout 1.8.222 image (unpacked)', mb: 199 },
+];
+const maxI = 800;
+const faq = [
+  { q: 'How much does Zendesk cost per agent?', a: `On ${CHECKED}, Zendesk’s pricing page showed Support Team at $19 per agent per month, Suite Team at $55, and Suite Professional at $115, all on annual billing paid monthly. Month-to-month was $25, $69 and $149. Suite plans add messaging channels and AI agents; Support Team is the email-inbox plan.` },
+  { q: 'Is Chatwoot cheaper than Zendesk?', a: `For the same seat count, Chatwoot Cloud Startups ($19/agent) matches Zendesk Support Team’s yearly price, and Chatwoot Business ($39) undercuts Suite Team ($55). Self-hosted Chatwoot Community Edition is $0 for the software; Chatwoot asks for at least 4 GB of RAM, so budget about $28.80 a month for a 4 GiB DigitalOcean Droplet with weekly backups, plus your time.` },
+  { q: 'Is FreeScout really free?', a: 'The helpdesk itself is free and open source (AGPL). You pay for a server (or a host like PikaPods, listed from $3.05/mo on Nov 7) and optionally for modules sold as lifetime licenses — Tags $6.99, Knowledge Base $12, Workflows $14.99, and so on. There is no per-agent subscription from FreeScout.' },
+  { q: 'What does Zammad cost in US dollars?', a: `Zammad lists cloud prices in euros, excluding VAT. On ${CHECKED} with the ECB rate of ${ECB} USD per EUR (published ${'2026-11-06'}), Professional was about ${money(eur(16))} per agent per month on yearly billing, and Plus about ${money(eur(25))}. Starter is cheaper (€7 ≈ ${money(eur(7))}) but capped at 5 agents. Self-hosted Zammad software is free; paid packages are annual support contracts starting at €2,999 a year.` },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Zendesk vs Chatwoot vs FreeScout vs Zammad: what a helpdesk costs for 3, 10 and 25 agents', dateModified: '2026-11-07', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/zendesk-vs-chatwoot-vs-freescout-vs-zammad/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Zendesk vs Chatwoot vs FreeScout vs Zammad (Nov 2026): cost for 3, 10 and 25 agents" description="Prices read Nov 7, 2026: Zendesk Suite Team is $550/mo for 10 agents, Chatwoot Business $390, Zammad Professional about $179, and self-hosted FreeScout about $14.40 for the server. Help Scout included." schema={schema} crumbs={[['Home', '/'], ['Zendesk vs Chatwoot vs FreeScout vs Zammad', '/compare/zendesk-vs-chatwoot-vs-freescout-vs-zammad/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Zendesk vs Chatwoot vs FreeScout vs Zammad: what a helpdesk costs for 3, 10 and 25 agents</h1>
+  <p class="muted">Zendesk and Help Scout charge per agent every month. Chatwoot, FreeScout and Zammad are the open-source helpdesks people land on when they search for a way out — Chatwoot and Zammad also sell a hosted version, FreeScout is self-host first with optional paid modules. I read the pricing pages on {CHECKED}, converted Zammad’s euro prices with that day’s ECB rate, priced three team sizes, and pulled the Docker images to see how big they are. I did not get a live RAM figure: FreeScout and friends need MySQL/Postgres, and apt on this test box was returning HTTP 500. Prices are in US dollars, per month.</p>
+  <p class="note"><b>Disclosure:</b> the Chatwoot Cloud link on this page is an affiliate link ({aff.terms}). FreeScout, Zammad, Zendesk, Help Scout and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>Zendesk for 10 agents</b> is $190 a month on Support Team and $550 on Suite Team (yearly billing). Suite Professional is $1,150.</li>
+    <li><b>Help Scout</b> showed Standard $25, Plus $45 and Pro $75 per user on the Annual toggle: $250 / $450 / $750 for 10 people.</li>
+    <li><b>Chatwoot Cloud</b> is $19 (Startups) or $39 (Business) per agent — $190 or $390 for 10. Enterprise is now listed at $99/agent (it had no public price when I last checked in October).</li>
+    <li><b>Zammad Cloud Professional</b> is about {money(eur(16))} per agent yearly (≈{money(eur(160))} for 10). Plus is about {money(eur(25))}/agent.</li>
+    <li><b>Self-hosted FreeScout</b> is free software; a 2 GiB server with backups is about $14.40/mo. <b>Chatwoot CE</b> wants 4 GB (≈$28.80). <b>Zammad</b> wants 6 GB minimum, more with Elasticsearch on the same box (I priced an 8 GiB Droplet at $57.60).</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost for 10 agents</h2>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 236" width="100%" role="img" aria-labelledby="c-t">
+  <title id="c-t">Monthly cost for 10 agents, prices read {CHECKED}: Zendesk Suite Team $550, Help Scout Plus $450, Chatwoot Business $390, Zendesk Support / Chatwoot Startups $190, Zammad Professional {money(eur(160))}, Chatwoot on your own server $28.80, FreeScout on your own server $14.40</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 32; const w = Math.max(3, (b.v / maxC) * 280);
+    return <g>
+      <text x="0" y={y + 14} font-size="11" fill="currentColor">{b.label}</text>
+      <rect x="250" y={y + 2} width={w} height="16" fill={b.label.includes('own server') ? '#c2410c' : '#2f3a4a'} />
+      <text x={256 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month for 10 agents. Zendesk and Zammad rows use yearly billing. Help Scout uses the Annual-toggle prices shown on its page. Zammad converted from EUR at ECB {ECB} (ECB rate date 2026-11-06). Self-hosted rows are DigitalOcean Droplet + 20% weekly backups only — domain, email sending and your time are extra. I did not run the stacks.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>By team size</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">How it’s priced</th><th scope="col">3 agents</th><th scope="col">10 agents</th><th scope="col">25 agents</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.how}</td>{r.c.map(x => <td>{x}</td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Per month. Zendesk figures are annual plans paid monthly; month-to-month is higher ($25 / $69 / $149 per agent for Support / Suite Team / Suite Professional). Chatwoot’s free Hacker plan only covers 2 agents, so it isn’t in the table. Zammad Starter (€7 ≈ {money(eur(7))}/agent yearly) tops out at 5 agents, so Professional is the fair row for 10 and 25. FreeScout has no per-agent fee; the self-hosted row is server cost only. Sources, read {CHECKED}: <a href={S.zd}>Zendesk pricing</a>, <a href={S.hs}>Help Scout pricing</a>, <a href={S.cw}>Chatwoot Cloud</a>, <a href={S.cwSelf}>Chatwoot self-hosted plans</a>, <a href={S.zm}>Zammad pricing</a>, <a href={S.fs}>FreeScout</a>, <a href={S.fsMod}>FreeScout modules</a>, <a href={S.do}>DigitalOcean Droplets</a>, <a href={S.ecb}>ECB eurofxref</a>.</p>
+<p><a class="btn ghost" href={aff.href} rel="sponsored nofollow" data-track="outbound" data-tool={cw.slug} data-kind="affiliate">{aff.label} (affiliate link)</a></p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What I measured</h2>
+<p>On {CHECKED} I pulled the published Docker image manifests (and for FreeScout, the layers themselves) from Docker Hub. Apt mirrors from this box returned HTTP 500, so I could not install MySQL/Postgres/Redis and finish a live boot the way I have for lighter single-binary apps. Image size is what I have:</p>
+<figure class="chart" style="margin:0 0 12px">
+<svg viewBox="0 0 640 108" width="100%" role="img" aria-labelledby="i-t">
+  <title id="i-t">Docker image sizes measured {CHECKED}: Chatwoot latest-ce 750 MB compressed, Zammad latest 331 MB compressed, FreeScout 1.8.222 199 MB unpacked</title>
+  {imgs.map((b, i) => {
+    const y = 8 + i * 32; const w = (b.mb / maxI) * 300;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="280" y={y + 2} width={w} height="16" fill="#2f3a4a" />
+      <text x={286 + w} y={y + 15} font-size="12" fill="currentColor">{b.mb} MB</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">Chatwoot and Zammad sizes are the compressed amd64 layer totals from the registry manifest. FreeScout is the <code>bfren/freescout:php8.3</code> image unpacked on disk (FreeScout app version 1.8.222 inside; GitHub’s latest release the same day was 1.8.250). That FreeScout image is PHP-FPM/web only — it still needs MySQL or MariaDB beside it.</figcaption>
+</figure>
+<ul>
+  <li><b>Chatwoot</b> (<a href={S.cwReq}>system requirements</a>): minimum 4 GB RAM / recommended enough for ~10,000 conversations a day; 8 GB for ~20,000. Stack is Rails + PostgreSQL + Redis (and more in the full compose file). Image alone is ~750 MB compressed before databases.</li>
+  <li><b>Zammad</b> (<a href={S.zmHw}>hardware docs</a>): minimum 2 CPU / 6 GB RAM, plus 4 GB more if Elasticsearch shares the server (10 GB total). Example for up to 40 agents: 6 CPU / 6 GB (+6 GB for ES). That’s why the self-hosted row uses an 8 GiB Droplet, with a note that ES on the same box may push you to 16 GiB ($96, or $115.20 with backups).</li>
+  <li><b>FreeScout</b>: PHP + MySQL. No official RAM floor on the marketing page; the app image unpacked to 199 MB. I’d start on 2 GiB ($12 / $14.40 with backups) for a small team and watch MySQL. Managed hosts exist — <a href={S.pika}>PikaPods lists FreeScout from $3.05/mo</a>; FreeScout’s wiki collects other <a href={S.fsWiki}>cloud-hosted options</a>.</li>
+</ul>
+
+<h2>How each one charges</h2>
+<p><b>Zendesk</b> (read {CHECKED}): Support Team is the email-focused plan at $19/agent yearly. Suite Team ($55) and Suite Professional ($115) add chat/messaging channels and AI agents; AI resolutions are billed on top ($1.50–$2.00 depending on the meter on the page). Copilot and extra action packs are add-ons.</p>
+<p><b>Help Scout</b>: Standard $25, Plus $45, Pro $75 per user per month on the Annual toggle (page marks Annual as −16%). Extra Docs sites and inboxes have their own monthly fees. AI “Envoy” resolutions are $0.75 each. I could not flip the Monthly toggle from this HTML fetch, so treat the three figures as the annual-billed prices the page displayed.</p>
+<p><b>Chatwoot Cloud</b>: Hacker free for 2 agents / 500 conversations / month. Startups $19, Business $39, Enterprise $99 per agent. Extra Captain AI credits $20 per 1,000. Self-hosted Community Edition is free; Premium Support $19 and Enterprise Edition $99 per agent add branding, roles, Captain AI (per the FAQ — the plan table still marks some AI rows oddly, ask before you buy), SSO and phone support on Enterprise.</p>
+<p><b>Zammad Cloud</b>: Starter / Professional / Plus in euros per agent, yearly or monthly, prices exclude VAT. AI features optional at €0.03 per AI call. Self-hosted software is free; Zammad sells annual support packages (Business €2,999, Enterprise €5,999, Corporation €9,999).</p>
+<p><b>FreeScout</b>: no seat fee. Core app free. Modules are one-time lifetime licenses (examples checked {CHECKED}: Tags $6.99, Saved Replies $4.99, Knowledge Base $12, API &amp; Webhooks $12.99, Workflows $14.99, Reports $14.99). A useful starter set (tags + saved replies + knowledge base + workflows) is about $39 one time, not monthly.</p>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>Small team, email-first, wants zero ops:</b> Help Scout Standard or Chatwoot Startups. At 3 agents that’s $75 vs $57.</li>
+  <li><b>Omnichannel / live chat and you don’t want to run servers:</b> Chatwoot Business ($39/agent) or Zammad Professional (~{money(eur(16))}/agent). Both beat Zendesk Suite Team ($55) on list price.</li>
+  <li><b>Someone on the team can mind a Linux box and you live in email:</b> FreeScout. Cheapest ongoing cost; buy the modules you actually need once.</li>
+  <li><b>You need Zendesk-shaped workflows and reporting without Zendesk’s seat price:</b> Zammad, hosted or self-hosted. Budget real RAM for Elasticsearch.</li>
+  <li><b>You’re already on Zendesk and only comparing:</b> check whether you need Suite or Support. Support Team at $19 matches Chatwoot Startups on paper; Suite is where the bill blows up.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>No live RAM measurement this run — PHP/Rails stacks need databases I couldn’t apt-install (Debian mirrors returned HTTP 500 from the test box). Image sizes and vendor requirements only.</li>
+  <li>Help Scout monthly (non-annual) prices were not visible in the static HTML; only the Annual-toggle figures.</li>
+  <li>Zammad USD figures use ECB {ECB} from 2026-11-06. Your card issuer’s rate and VAT (Zammad excludes it) will differ.</li>
+  <li>Chatwoot’s page still doesn’t state clearly whether cloud per-agent prices assume monthly or yearly billing.</li>
+  <li>Server rows leave out domain, SMTP/email provider, backups beyond DO’s weekly option, and your time.</li>
+  <li>Feature fit matters as much as price — channel support, SLA, help center, and AI are not identical across these tools.</li>
+  <li>Prices change. The date at the top is when I read them.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>On SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${cw.slug}/`}><img src={avatar(cw, 56)} alt="" width="28" height="28" loading="lazy"/> Chatwoot</a>: {cw.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(cw.lastPush)}. <a class="tool" href={`/tool/${fs.slug}/`}><img src={avatar(fs, 56)} alt="" width="28" height="28" loading="lazy"/> FreeScout</a>: {fs.stars.toLocaleString('en-US')} stars, last push {fmtDate(fs.lastPush)}. <a class="tool" href={`/tool/${zm.slug}/`}><img src={avatar(zm, 56)} alt="" width="28" height="28" loading="lazy"/> Zammad</a>: {zm.stars.toLocaleString('en-US')} stars, last push {fmtDate(zm.lastPush)}. Stars from the GitHub API, fetched {fmtDate(cw.fetchedAt)}. More options: <a href="/alternatives/zendesk/">open-source Zendesk alternatives</a>, <a href="/alternatives/help-scout/">Help Scout alternatives</a>. Chatwoot cloud vs self-host deep-dive: <a href="/pricing/chatwoot/">Chatwoot pricing</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</div></section>
+</Base>
