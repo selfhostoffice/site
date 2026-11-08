@@ -59,4 +59,5 @@ export const GUIDES = [
   { href: '/compare/docusign-vs-docuseal-vs-documenso/', title: 'DocuSign vs DocuSeal vs Documenso: what e-signatures cost for 1, 3 and 10 senders', tools: ['docusealco--docuseal', 'documenso--documenso'], checked: 'Nov 2026' },
   { href: '/compare/akaunting-vs-invoice-ninja-vs-quickbooks/', title: 'Akaunting vs Invoice Ninja vs QuickBooks: what accounting software costs for 1, 3 and 10 people', tools: ['akaunting--akaunting', 'invoiceninja--invoiceninja'], checked: 'Nov 2026' },
   { href: '/compare/zendesk-vs-chatwoot-vs-freescout-vs-zammad/', title: 'Zendesk vs Chatwoot vs FreeScout vs Zammad: what a helpdesk costs for 3, 10 and 25 agents', tools: ['chatwoot--chatwoot', 'freescout-help-desk--freescout', 'zammad--zammad'], checked: 'Nov 2026' },
+  { href: '/compare/mailchimp-vs-mailerlite-vs-listmonk-vs-mautic/', title: 'Mailchimp vs MailerLite vs listmonk vs Mautic: what email marketing costs at 1,500, 5,000 and 10,000 contacts', tools: ['knadh--listmonk', 'mautic--mautic'], checked: 'Nov 2026' },
 ];

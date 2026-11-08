@@ -1,0 +1,143 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const lm = listings.find(l => l.slug === 'knadh--listmonk')!;
+const mt = listings.find(l => l.slug === 'mautic--mautic')!;
+const CHECKED = 'Nov 8, 2026';
+const S = {
+  mailchimp: 'https://mailchimp.com/pricing/marketing/',
+  mailerlite: 'https://www.mailerlite.com/pricing',
+  ses: 'https://aws.amazon.com/ses/pricing/',
+  sesSandbox: 'https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  mauticPricing: 'https://mautic.org/pricing/',
+  mauticReq: 'https://mautic.org/mautic-requirements/',
+  mauticDownload: 'https://mautic.org/download/',
+  mauticImage: 'https://hub.docker.com/r/mautic/mautic',
+  ecb: 'https://data.ecb.europa.eu/data/datasets/EXR/EXR.D.USD.EUR.SP00.A',
+};
+// Monthly cost of a weekly campaign (4 sends a month) to 1,500 / 5,000 / 10,000 contacts. US$ list prices read Nov 8, 2026.
+// Mailchimp: monthly price for the contact tier (501-1,500, 2,501-5,000, 5,001-10,000). No annual price is published below 10,000 contacts.
+// MailerLite: price for the subscriber tier (2,500 / 5,000 / 10K) on monthly billing; yearly billing per month in brackets (10% off).
+// listmonk: DigitalOcean 1 GiB Droplet $6 + Amazon SES $0.10 (a la carte) to $0.16 (Essentials plan) per 1,000 emails.
+// Mautic self-hosted: DigitalOcean 2 GiB Droplet $12 (my estimate, not measured) + the same SES range.
+const rows = [
+  { who: 'Mailchimp Essentials', how: 'Hosted', c: ['$26.50', '$75', '$110 ($93.50 for the first 12 months)'] },
+  { who: 'Mailchimp Standard', how: 'Hosted', c: ['$45', '$100', '$135 ($114.75 for the first 12 months)'] },
+  { who: 'MailerLite Comfort', how: 'Hosted', c: ['$33 ($29.70 yearly)', '$49 ($44.10 yearly)', '$89 ($80.10 yearly)'] },
+  { who: 'MailerLite Power', how: 'Hosted', c: ['$49 ($44.10 yearly)', '$69 ($62.10 yearly)', '$129 ($116.10 yearly)'] },
+  { who: 'listmonk, self-hosted', how: 'Your server + Amazon SES', c: ['about $6.60–6.96', 'about $8–9.20', 'about $10–12.40'] },
+  { who: 'Mautic, self-hosted', how: 'Your server + Amazon SES', c: ['about $12.60–12.96', 'about $14–15.20', 'about $16–18.40'] },
+];
+const chart = [
+  { label: 'Mailchimp Standard', v: 135, t: '$135/mo' },
+  { label: 'MailerLite Power', v: 129, t: '$129/mo' },
+  { label: 'Mailchimp Essentials', v: 110, t: '$110/mo' },
+  { label: 'MailerLite Comfort', v: 89, t: '$89/mo' },
+  { label: 'Mautic + SES', v: 18.4, t: 'up to $18.40/mo' },
+  { label: 'listmonk + SES', v: 12.4, t: 'up to $12.40/mo' },
+];
+const maxC = 150;
+const faq = [
+  { q: 'Is MailerLite cheaper than Mailchimp?', a: `At the three list sizes I priced on ${CHECKED}, yes. On monthly billing MailerLite Comfort was $33, $49 and $89 for 1,500 (it bills you at its 2,500 tier), 5,000 and 10,000 subscribers. Mailchimp Essentials was $26.50, $75 and $110. Mailchimp is cheaper only at 1,500, and only because MailerLite has no tier between 1,000 and 2,500.` },
+  { q: 'What does a self-hosted Mailchimp alternative really cost?', a: 'The software is free. You pay for a server and an email sending service. With listmonk on a $6 DigitalOcean server and Amazon SES, a weekly email to 10,000 people came to about $10–12 a month. Mautic needs PHP and MySQL, so I’d put it on a $12 server, which makes it about $16–18.' },
+  { q: 'listmonk or Mautic?', a: 'listmonk if you send newsletters and simple campaigns. It is one small program plus Postgres; in my October test it used about 160 MB of memory together with its database. Mautic if you need marketing automation: lead scoring, multi-step campaigns, landing pages and forms tied to contact behavior. It is a much bigger PHP application that also needs cron jobs set up.' },
+  { q: 'Is there a hosted Mautic?', a: 'Yes. Mautic’s official managed hosting is run by Dropsolid. Its Essential plan started at €247.50 a month billed annually (€275 quarterly), about $276 to $307, for up to 50,000 contacts and 50,000 emails a month. That’s well above Mailchimp at 10,000 contacts, so it only makes sense if you need Mautic’s automation and don’t want to run it.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Mailchimp vs MailerLite vs listmonk vs Mautic: what email marketing costs at 1,500, 5,000 and 10,000 contacts', dateModified: '2026-11-08', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/mailchimp-vs-mailerlite-vs-listmonk-vs-mautic/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Mailchimp vs MailerLite vs listmonk vs Mautic (Nov 2026): cost at 1.5K, 5K and 10K contacts" description="Prices read Nov 8, 2026: at 10,000 contacts Mailchimp Standard is $135/mo, MailerLite Comfort $89, self-hosted Mautic with Amazon SES about $16–18 and listmonk about $10–12." schema={schema} crumbs={[['Home', '/'], ['Mailchimp vs MailerLite vs listmonk vs Mautic', '/compare/mailchimp-vs-mailerlite-vs-listmonk-vs-mautic/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Mailchimp vs MailerLite vs listmonk vs Mautic: what email marketing costs at 1,500, 5,000 and 10,000 contacts</h1>
+  <p class="muted">Mailchimp gets more expensive fast as a list grows, so this is the question I wanted answered: what does the same weekly email cost on Mailchimp, on MailerLite, and on the two open-source tools people usually move to, listmonk and Mautic? I read both hosted price pages on {CHECKED}, set Mailchimp’s contact picker to each tier, and priced the self-hosted options with a real server and email service. Everything is in US dollars. The only euro price, Mautic’s official managed hosting, is converted at the ECB rate of 1.1165 from Nov 6, 2026.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. Mailchimp, MailerLite, AWS, DigitalOcean and the Mautic and listmonk projects don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>You want hosted and cheap:</b> MailerLite Comfort. At 10,000 subscribers it was $89 a month against $110 for Mailchimp Essentials, and $80.10 if you pay yearly.</li>
+    <li><b>You’re staying on Mailchimp:</b> know where the tiers jump. Standard went from $45 at 1,500 contacts to $100 at 5,000 and $135 at 10,000. Cleaning out unsubscribed and dead contacts can drop you a whole tier.</li>
+    <li><b>You just send newsletters and updates:</b> listmonk with Amazon SES, about $10–12 a month at 10,000 contacts. That’s roughly a tenth of Mailchimp.</li>
+    <li><b>You need real marketing automation and can run a PHP app:</b> Mautic, about $16–18 a month self-hosted. Its official hosted version starts around $276 a month, so self-hosting is the whole point.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost at 10,000 contacts</h2>
+<p class="muted">A weekly campaign, so about 40,000 emails a month. Hosted plans on monthly billing at their regular price.</p>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 255" width="100%" role="img" aria-labelledby="em-t">
+  <title id="em-t">Monthly cost of a weekly email to 10,000 contacts, prices read {CHECKED}: Mailchimp Standard $135, MailerLite Power $129, Mailchimp Essentials $110, MailerLite Comfort $89, self-hosted Mautic with Amazon SES up to $18.40, listmonk with Amazon SES up to $12.40</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 40; const w = (b.v / maxC) * 340;
+    const self = b.label.includes('SES');
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="165" y={y + 2} width={w} height="16" fill={self ? '#c2410c' : '#2f3a4a'} />
+      <text x={171 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}. Self-hosted rows include a DigitalOcean server ($6 for listmonk, $12 for Mautic) and Amazon SES; backups and a domain are extra.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>All three list sizes</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">Who runs it</th><th scope="col">1,500 contacts</th><th scope="col">5,000</th><th scope="col">10,000</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.how}</td>{r.c.map(c => <td>{c}</td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Per month, one campaign a week (about 6,000, 20,000 and 40,000 emails). Mailchimp: monthly price for the 501–1,500, 2,501–5,000 and 5,001–10,000 contact tiers. MailerLite: monthly billing, yearly billing per month in brackets; 1,500 subscribers falls in its 2,500 tier. Sources, all read {CHECKED}: <a href={S.mailchimp}>Mailchimp pricing</a>, <a href={S.mailerlite}>MailerLite pricing</a>, <a href={S.ses}>Amazon SES pricing</a>, <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+
+<figure style="margin:18px 0 14px"><img src="/img/mailchimp-standard-10001-15000-contacts-2026-11-08.png" alt="Screenshot of Mailchimp's pricing page with 10,001-15,000 contacts selected: Standard plan $195.50 a month for 12 months with the 15% offer, then $230 a month" width="1305" height="510" loading="lazy" style="max-width:100%;height:auto;border:1px solid #ccc"/><figcaption class="note">Mailchimp’s Standard card one tier up, at 10,001–15,000 contacts, as it showed on {CHECKED}: $195.50 for 12 months, then $230. The 15% offer is the only discount I saw on the page.</figcaption></figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What each price gets you</h2>
+<h3>Mailchimp</h3>
+<p>Mailchimp prices by contacts, in tiers. Essentials ($13 a month up to 500 contacts) lets you send 10 times your contact count each month, with 3 seats and 3 audiences. Standard ($20 up to 500) raises that to 12 times, raises automation from 4 flow steps to up to 200 flows, custom reports, dynamic content and branded templates, with 5 seats. Premium starts at $350 and allows 15 times. The free plan stops at 250 contacts and 500 emails a month. From the 5,001–10,000 tier up, the page offered 15% off for the first 12 months ($114.75 instead of $135 on Standard). Annual plans exist only from 10,000 contacts and you have to ask sales for them. One thing that catches people: Mailchimp says it bills overages automatically if you pass your contact or send limit.</p>
+<h3>MailerLite</h3>
+<p>MailerLite renamed its paid plans to Comfort and Power. Comfort includes 10 times your subscriber count in emails per month (25,000 on the 2,500 tier), 50 automations and 3 seats. Power has unlimited emails, automations and seats. The free plan covers 250 subscribers and 2,500 emails a month. Yearly billing takes 10% off. The tier steps are coarse at the bottom: 500, 1,000, then 2,500, so 1,001 subscribers costs the same as 2,500.</p>
+<h3>listmonk on your own server</h3>
+<p>listmonk is a single Go program plus a Postgres database. It manages lists, sends campaigns and handles double opt-in and bounces; it does not do landing pages or behavior-based automation. It sends through any SMTP service. I priced Amazon SES: $0.10 per 1,000 emails on à la carte pricing, or $0.16 per 1,000 on the Essentials plan that AWS says new accounts start on since July 21, 2026, which is why I show a range. New SES accounts also start in a <a href={S.sesSandbox}>sandbox</a> until AWS approves production sending.</p>
+<h3>Mautic on your own server</h3>
+<p>Mautic is the open-source answer to HubSpot-style marketing automation more than to Mailchimp: contact scoring, campaign builders, forms, landing pages, segments that update from behavior. It’s free to download. Its <a href={S.mauticReq}>requirements page</a> says Mautic 7 needs PHP 8.2 or newer, MySQL 8.4 or MariaDB 10.11, Apache or NGINX, and a list of PHP extensions. Its <a href={S.mauticDownload}>download page</a> says you should know your way around the command line, web server config, MySQL and cron jobs, and strongly advises against cheap shared hosting. The <a href={S.mauticPricing}>official managed hosting</a>, run by Dropsolid, starts at €247.50 a month billed annually or €275 quarterly (about $276 and $307), for up to 50,000 contacts and 50,000 emails a month.</p>
+
+<h2>What I measured, and what I couldn’t</h2>
+<ul>
+  <li><b>listmonk:</b> I installed listmonk 6.2.0 with Postgres 17 on my test machine on Oct 30, 2026, loaded 10,000 subscribers and sent one campaign to all of them through a local mail server that discarded the messages. It took 101 seconds at default settings, and listmonk peaked at 51 MB of memory with Postgres at about 108 MB. Full numbers are in my <a href="/compare/ghost-vs-beehiiv-vs-listmonk/">Ghost vs beehiiv vs listmonk</a> test. 6.2.0 is still the version in the official Docker image (14.8 MB compressed, checked {CHECKED}).</li>
+  <li><b>Mautic:</b> I wasn’t able to run it this time. My test machine couldn’t install PHP or MySQL because its package mirror was returning errors. What I could check: the official <a href={S.mauticImage}>mautic/mautic Docker image</a> (latest tag, built Oct 26, 2026 with PHP 8.3.36) is 653.4 MB compressed across 33 layers, and the latest GitHub release is 7.2.2 from Oct 26. MySQL 8.4 with stock settings used about 520 MB on its own in my Ghost test, so I would not put Mautic and MySQL on a 1 GiB server. The $12, 2 GiB server in my table is my estimate, not a measurement.</li>
+</ul>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>A small business with a few thousand contacts and no technical help:</b> MailerLite Comfort. It does the same job as Mailchimp Essentials or Standard for most small senders and was $21–51 a month cheaper at 5,000 and 10,000 contacts, depending on which Mailchimp plan you compare it with.</li>
+  <li><b>A company newsletter or product update list:</b> listmonk plus SES. The setup is a weekend, mostly DNS (SPF, DKIM, DMARC) and getting out of the SES sandbox. After that it’s about $10 a month at 10,000 contacts.</li>
+  <li><b>A team that wants scoring and multi-step campaigns:</b> Mautic, but only if someone will own the server, cron jobs and upgrades. If nobody will, MailerLite Power or Mailchimp Standard is cheaper than Mautic’s managed hosting.</li>
+  <li><b>I wouldn’t move off Mailchimp to save money below about 1,500 contacts.</b> Essentials was $26.50 there, and the switching work isn’t worth $20 a month.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>No real email left my machine. I didn’t test deliverability on any of these; Mailchimp and MailerLite manage their own sending reputation, and with SES that part is on you.</li>
+  <li>The Mautic server size is an estimate. I didn’t measure its memory.</li>
+  <li>Mailchimp’s Premium card showed “starts at $350” for every tier up to 10,000 contacts, so I left Premium out of the table rather than guess per-tier prices.</li>
+  <li>The table assumes one campaign a week. Send more and the SES line grows; Mailchimp Essentials and MailerLite Comfort may also hit their send limits sooner.</li>
+  <li>Prices change, and Mailchimp’s page changes with offers. The date at the top is when I read them; check again before you commit.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>On SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${lm.slug}/`}><img src={avatar(lm, 56)} alt="" width="28" height="28" loading="lazy"/> listmonk</a>: {lm.stars.toLocaleString('en-US')} GitHub stars, {lm.license} license, last push {fmtDate(lm.lastPush)}.</p>
+<p><a class="tool" href={`/tool/${mt.slug}/`}><img src={avatar(mt, 56)} alt="" width="28" height="28" loading="lazy"/> Mautic</a>: {mt.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(mt.lastPush)} (GitHub API, fetched {fmtDate(mt.fetchedAt)}).</p>
+<p>More options: <a href="/alternatives/mailchimp/">open-source Mailchimp alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</div></section>
+</Base>
