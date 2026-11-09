@@ -1,0 +1,122 @@
+---
+import Base from '../../layouts/Base.astro';
+const CHECKED = 'Nov 9, 2026';
+const FX = 1.1165; // ECB euro reference rate, Nov 6, 2026
+const S = {
+  vpricing: 'https://vercel.com/pricing',
+  vhobby: 'https://vercel.com/docs/plans/hobby',
+  vflat: 'https://vercel.com/docs/pricing/flat-rate-cdn',
+  cpricing: 'https://coolify.io/pricing',
+  cinstall: 'https://coolify.io/docs/get-started/installation',
+  hzCost: 'https://www.hetzner.com/cloud/cost-optimized',
+  ecb: 'https://data.ecb.europa.eu/data/datasets/EXR/EXR.D.USD.EUR.SP00.A',
+};
+const usd = (eur: number) => Math.round(eur * FX * 100) / 100;
+const f = (n: number) => '$' + n.toFixed(2).replace(/\.00$/, '');
+const cx23 = usd(5.99);   // 2 vCPU, 4 GB, Germany/Finland
+const cpx21 = usd(32.49); // 3 vCPU, 4 GB, US (Ashburn/Hillsboro), read Oct 28 on the Hetzner page
+// Monthly cost for one commercial web app with light traffic that stays inside the plan's included usage.
+const rows = [
+  { who: 'Vercel Pro', how: 'Hosted', c: [20, 60, 100].map(f) },
+  { who: 'Coolify Cloud + Hetzner CX23 (Europe)', how: 'Coolify hosts the dashboard; you rent the server', c: Array(3).fill(f(5 + cx23)) },
+  { who: 'Self-hosted Coolify on Hetzner CX23 (Europe)', how: 'You run everything', c: Array(3).fill(f(cx23)) },
+  { who: 'Self-hosted Coolify on Hetzner CPX21 (US)', how: 'You run everything', c: Array(3).fill(f(cpx21)) },
+];
+const chart = [
+  { label: 'Vercel Pro', v: 100, t: '$100/mo' },
+  { label: 'Coolify, US server', v: cpx21, t: f(cpx21) + '/mo' },
+  { label: 'Coolify Cloud + EU server', v: 5 + cx23, t: f(5 + cx23) + '/mo' },
+  { label: 'Coolify, EU server', v: cx23, t: f(cx23) + '/mo' },
+];
+const maxC = 120;
+const faq = [
+  { q: 'Is Vercel free?', a: `Its Hobby plan is $0, but Vercel’s Hobby page says it is limited to non-commercial, personal use. A project that makes money belongs on Pro, which I read on ${CHECKED} as $20 a month for the first developer seat.` },
+  { q: 'Is Coolify really free?', a: 'The self-hosted version has no license fee and no feature limits according to its pricing page. You still pay for the server it runs on, and you do the updates, backups and security yourself.' },
+  { q: 'Do I pay Vercel per teammate?', a: 'Developer seats are $20 a month each on Pro. Viewer seats, for people who only look at deployments, are free. Coolify lists unlimited team members on both its self-hosted and cloud versions.' },
+  { q: 'What server does Coolify need?', a: 'Its install page lists 2 CPU cores, 2 GB of RAM and 10 GB of disk as the minimum to run Coolify, plus more for whatever you deploy. It says it can run on 1 core and 512 MB but doesn’t recommend it. A 1 vCPU / 2 GB server is below that minimum.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Coolify vs Vercel: what hosting an app costs for 1, 3 and 5 developers', dateModified: '2026-11-09', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/coolify-vs-vercel/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Coolify vs Vercel (Nov 2026): cost for 1, 3 and 5 developers" description={`Prices read Nov 9, 2026: Vercel Pro is $20 per developer seat; Coolify is free to self-host, so a team of five pays about ${f(cx23)} a month for a server in Europe.`} schema={schema} crumbs={[['Home', '/'], ['Coolify vs Vercel', '/compare/coolify-vs-vercel/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Coolify vs Vercel: what hosting an app costs for 1, 3 and 5 developers</h1>
+  <p class="muted">People move off Vercel when the team grows, because the plan is charged per developer and the usage meters add up. Coolify is the open-source tool most often named as the replacement. I read both price pages on {CHECKED} and priced one commercial web app with light traffic. Everything is in US dollars. Hetzner bills in euros, so I converted at the ECB rate of 1.1165 from Nov 6, 2026, before VAT.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. Vercel, Coolify and Hetzner don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>The seat price is the main difference.</b> Vercel Pro was $20 a month for the first developer and $20 for each one after, so $20, $60 and $100 for 1, 3 and 5 developers. Coolify and its server cost the same whether one person or five use them.</li>
+    <li><b>A self-hosted setup in Europe was about {f(cx23)} a month</b> (a 2 vCPU, 4 GB Hetzner server). Coolify Cloud adds $5, so about {f(5 + cx23)}.</li>
+    <li><b>The price gap is not free money.</b> With Coolify you do the server updates and backups, and you lose Vercel’s global CDN and preview comments unless you add your own.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost for a team of 5</h2>
+<p class="muted">One app, light traffic, inside the plan’s included usage. Hosted plan on monthly billing.</p>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 175" width="100%" role="img" aria-labelledby="cv-t">
+  <title id="cv-t">Monthly cost for a team of five developers, prices read {CHECKED}: Vercel Pro $100, Coolify on a US Hetzner server {f(cpx21)}, Coolify Cloud plus a European server {f(5 + cx23)}, self-hosted Coolify on a European server {f(cx23)}</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 40; const w = (b.v / maxC) * 340;
+    const self = b.label.includes('Coolify');
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="165" y={y + 2} width={w} height="16" fill={self ? '#c2410c' : '#2f3a4a'} />
+      <text x={171 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}. Hetzner converted from euros at 1.1165, before VAT. Red: Coolify setups.</figcaption>
+</figure>
+
+<h2>Cost by team size</h2>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Setup</th><th>What you run</th><th>1 developer</th><th>3 developers</th><th>5 developers</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.how}</td>{r.c.map(c => <td><b class="usd">{c}/mo</b></td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Sources, all read {CHECKED} unless noted: <a href={S.vpricing}>Vercel pricing</a>, <a href={S.vhobby}>Vercel Hobby plan docs</a>, <a href={S.cpricing}>Coolify pricing</a>, <a href={S.hzCost}>Hetzner Cost-Optimized</a> (CX23, €5.99). The US server is Hetzner’s CPX21 at €32.49, which I read on Oct 28 on its Regular Performance page; it’s the 4 GB plan offered in Ashburn and Hillsboro. Exchange rate: <a href={S.ecb}>ECB</a>.</p>
+
+<h2>Vercel: what the $20 covers</h2>
+<p>Vercel’s <a href={S.vpricing}>pricing page</a> lists Hobby at $0 and Pro at $20 a month with $20 of included usage credit. Its Pro table prices a developer seat at $20 a month, with viewer seats free. Hobby is not for business use: the <a href={S.vhobby}>Hobby docs</a> say it is limited to non-commercial, personal use.</p>
+<p>Beyond the credit you pay per unit. A few of the listed rates: image transformations from $0.05 per 1,000, function invocations from $0.60 per million, and build minutes at $0.007 a minute on basic machines. Pro also includes a <a href={S.vflat}>Flat Rate CDN</a> tier of 1 million CDN requests and 1 TB of transfer; its docs list $20 a month for 10 million requests and 50 TB, then $100 and $300. My table assumes you stay inside what’s included, so a busy site will cost more than the numbers above.</p>
+
+<h2>Coolify: free software, you pay for the machine</h2>
+<p>Coolify is a control panel that deploys apps, databases and one-click services as Docker containers on servers you connect over SSH. Its <a href={S.cpricing}>pricing page</a> lists the self-hosted version as free with all features, and Coolify Cloud at $5 a month for two connected servers plus $3 for each extra one (20% off if billed annually). With Cloud you still bring your own servers; only the dashboard is hosted.</p>
+<p>The server has to meet the <a href={S.cinstall}>install page’s</a> minimum of 2 cores, 2 GB of RAM and 10 GB of disk, and that is only for Coolify itself. Your apps need room on top. The page shows one production example, a 4 GB, 2 vCPU Hetzner server averaging 2.6 GB used while running 16 static sites, several small Rust services and one Postgres database. That’s why I priced a 4 GB server, not the smallest one. In my <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">server comparison</a>, Hetzner’s European 4 GB plan was far cheaper than its US plan, and every shared plan showed a “not available” note when I looked, as the CX23 did again on {CHECKED}. If you need a US location, <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">DigitalOcean or Vultr</a> may be the better pick.</p>
+
+<h2>What you give up by leaving Vercel</h2>
+<ul>
+  <li><b>The edge network.</b> Vercel serves your site from many locations. A Coolify app runs on the one server you pick, so visitors far from it see slower first loads unless you put a CDN in front, such as Cloudflare’s free plan.</li>
+  <li><b>Your own time.</b> OS updates, Docker upgrades, disk space and backups are yours. Budget about 20% of the server price for provider backups, and keep a database copy somewhere else.</li>
+  <li><b>Next.js extras.</b> Features that Vercel runs for you, like image optimization at the edge and ISR caching across regions, run on your one server instead.</li>
+</ul>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>A solo developer with a side project that earns money:</b> Vercel Pro at $20 is fine. The savings from Coolify, about $13 a month, don’t pay for an evening of server maintenance.</li>
+  <li><b>A team of three or more, steady traffic, someone comfortable with Linux:</b> Coolify. By five developers the gap is about $93 a month with a European server, or about $64 with a US one.</li>
+  <li><b>A team that ships Next.js and wants zero server work:</b> stay on Vercel and keep an eye on the usage page. You’re paying to not think about servers.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li><b>I didn’t run Coolify for this page.</b> My test machine doesn’t have Docker, so I have no RAM or install-time numbers of my own. Server sizes come from Coolify’s own docs.</li>
+  <li>I didn’t price a traffic-heavy app. Vercel’s overage rates and Hetzner’s extra-traffic charges would change the totals.</li>
+  <li>The US server price is from Oct 28; the European one was re-read on {CHECKED}. The euro conversion will drift from your actual card charge.</li>
+  <li>Vercel’s plans and meters change often. Check the page again before you move.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>Related on SelfHost Office</h2></div>
+<p>Other hosting costs: <a href="/compare/railway-vs-render-vs-fly/">Railway vs Render vs Fly.io</a>, <a href="/compare/pocketbase-vs-supabase-vs-appwrite/">PocketBase vs Supabase vs Appwrite</a>, <a href="/pricing/supabase/">self-hosting Supabase</a>.</p>
+</div></section>
+</Base>
