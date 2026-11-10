@@ -1,0 +1,141 @@
+---
+import Base from '../../layouts/Base.astro';
+const CHECKED = 'Nov 10, 2026';
+const FX = 1.1193; // ECB euro reference rate, Nov 9, 2026
+const S = {
+  fm: 'https://www.fastmail.com/pricing/',
+  pb: 'https://proton.me/business/plans',
+  pm: 'https://proton.me/mail/pricing',
+  mcReq: 'https://docs.mailcow.email/getstarted/prerequisite-system/',
+  mcRepo: 'https://github.com/mailcow/mailcow-dockerized',
+  mcCompose: 'https://github.com/mailcow/mailcow-dockerized/blob/master/docker-compose.yml',
+  hzCost: 'https://www.hetzner.com/cloud/cost-optimized',
+  hzFaq: 'https://docs.hetzner.com/cloud/servers/faq/',
+  doSmtp: 'https://docs.digitalocean.com/support/why-is-smtp-blocked/',
+  vuSmtp: 'https://docs.vultr.com/support/products/compute/why-is-smtp-blocked',
+  ecb: 'https://data.ecb.europa.eu/data/datasets/EXR/EXR.D.USD.EUR.SP00.A',
+};
+const usd = (eur: number) => Math.round(eur * FX * 100) / 100;
+const f = (n: number) => '$' + n.toFixed(2).replace(/\.00$/, '');
+const cx33 = usd(8.99);          // 4 vCPU, 8 GB, 80 GB, Germany/Finland
+const cx33b = usd(8.99 * 1.2);   // with Hetzner's 20% backup add-on
+const users = [1, 5, 10];
+const per = (p: number) => users.map(n => f(p * n));
+const rows = [
+  { who: 'Fastmail Standard', bill: 'Yearly', c: per(5) },
+  { who: 'Fastmail Standard', bill: 'Monthly', c: per(6) },
+  { who: 'Proton Mail Essentials', bill: 'Yearly', c: per(6.99) },
+  { who: 'Proton Mail Essentials', bill: 'Monthly', c: per(7.99) },
+  { who: 'Proton Workspace Standard', bill: 'Yearly, Black Friday price (first year only)', c: per(8.99) },
+  { who: 'Proton Workspace Standard', bill: 'Yearly at the regular price, or monthly', c: per(14.99) },
+  { who: 'Mailcow on Hetzner CX33 (Europe) + backups', bill: 'Monthly server bill', c: Array(3).fill(f(cx33b)) },
+  { who: 'Mailcow on Vultr 8 GB (US)', bill: 'Monthly server bill, no backups', c: Array(3).fill('$40') },
+];
+const chart = [
+  { label: 'Proton Workspace Std', v: 149.9, t: '$149.90/mo' },
+  { label: 'Proton Mail Essentials', v: 69.9, t: '$69.90/mo' },
+  { label: 'Fastmail Standard', v: 50, t: '$50/mo' },
+  { label: 'Mailcow, US server', v: 40, t: '$40/mo' },
+  { label: 'Mailcow, EU server', v: cx33b, t: f(cx33b) + '/mo' },
+];
+const maxC = 160;
+const faq = [
+  { q: 'Is Fastmail cheaper than Proton Mail?', a: `For plain business email, yes. On ${CHECKED} Fastmail Standard was $5 per user a month billed yearly ($6 monthly), and Proton Mail Essentials was $6.99 yearly ($7.99 monthly). Proton’s Workspace Standard is cheaper than its regular $14.99 only during the Black Friday offer, and only for the first year.` },
+  { q: 'Can I run Mailcow on a $5 server?', a: 'No. Mailcow’s own docs ask for at least 6 GiB of RAM plus 1 GiB of swap, and recommend 8 GiB for about 5 to 10 users. A 2 or 4 GB server is below that.' },
+  { q: 'Why can’t my new server send email?', a: 'Most cloud hosts block outbound port 25 on new servers. DigitalOcean blocks SMTP on all Droplets, Vultr blocks port 25 on new instances until you ask, and Hetzner unblocks ports 25 and 465 only after you’ve been a customer for a month, paid your first invoice and filed a request.' },
+  { q: 'Does Proton have a free plan?', a: 'Proton Free exists for personal use with 1 GB of storage and one address. It doesn’t cover a business with its own domain.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Proton Mail vs Fastmail vs self-hosted Mailcow: what business email costs for 1, 5 and 10 people', dateModified: '2026-11-10', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/proton-vs-fastmail-vs-mailcow/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Proton Mail vs Fastmail vs Mailcow (Nov 2026): business email cost for 1, 5, 10 people" description={`Prices read Nov 10, 2026: Fastmail Standard $5/user/mo yearly, Proton Mail Essentials $6.99, and self-hosted Mailcow about ${f(cx33b)} a month for the whole server in Europe, if your host will open port 25.`} schema={schema} crumbs={[['Home', '/'], ['Proton vs Fastmail vs Mailcow', '/compare/proton-vs-fastmail-vs-mailcow/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Proton Mail vs Fastmail vs self-hosted Mailcow: what business email costs for 1, 5 and 10 people</h1>
+  <p class="muted">If you want your company email off Google and Microsoft, the usual shortlist is Proton Mail, Fastmail, or running your own server with Mailcow. I read the price pages for all three on {CHECKED}, checked what Mailcow needs from a server, and checked which cloud hosts will even let a mail server send. Everything is in US dollars. Hetzner bills in euros, so I converted at the ECB rate of 1.1193 from Nov 9, 2026, before VAT.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. Proton, Fastmail, Mailcow and the hosts mentioned don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>Fastmail is the cheapest hosted option.</b> $5 per user a month on yearly billing, so $50 a month for 10 people.</li>
+    <li><b>Proton Mail Essentials is $6.99 per user yearly</b> ($69.90 for 10). Its Workspace Standard plan shows $8.99 right now, but that’s a Black Friday price for the first year that ends Nov 30; the regular price is $14.99.</li>
+    <li><b>Mailcow costs one server, about {f(cx33b)} a month in Europe with backups, for any number of users up to roughly 10.</b> The catch isn’t the money. It’s that new cloud servers usually can’t send mail on port 25, and a new mail server’s reputation starts at zero.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost for 10 people</h2>
+<p class="muted">Hosted plans on yearly billing at the regular price. Mailcow is the server bill only.</p>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 215" width="100%" role="img" aria-labelledby="pf-t">
+  <title id="pf-t">Monthly cost for 10 users, prices read {CHECKED}: Proton Workspace Standard $149.90, Proton Mail Essentials $69.90, Fastmail Standard $50, Mailcow on a US Vultr server $40, Mailcow on a European Hetzner server {f(cx33b)}</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 40; const w = (b.v / maxC) * 330;
+    const self = b.label.includes('Mailcow');
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="175" y={y + 2} width={w} height="16" fill={self ? '#c2410c' : '#2f3a4a'} />
+      <text x={181 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}, before tax. Hetzner converted from euros at 1.1193 and includes its 20% backup add-on. Red: self-hosted Mailcow.</figcaption>
+</figure>
+
+<h2>Cost by team size</h2>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Plan</th><th>Billing</th><th>1 user</th><th>5 users</th><th>10 users</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.bill}</td>{r.c.map(c => <td><b class="usd">{c}/mo</b></td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Sources, all read {CHECKED} unless noted: <a href={S.fm}>Fastmail pricing</a>, <a href={S.pb}>Proton business plans</a>, <a href={S.hzCost}>Hetzner Cost-Optimized</a> (CX33, €8.99, 4 vCPU, 8 GB, 80 GB disk). The Vultr price is its 8 GB Regular Performance plan, which I read on Oct 28 for my <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">server comparison</a>; Vultr’s pricing page blocks my checker, so I didn’t re-read it tonight. Exchange rate: <a href={S.ecb}>ECB</a>.</p>
+
+<h2>Fastmail: $5 a user, and simple</h2>
+<p>Fastmail’s <a href={S.fm}>pricing page</a> lists three business plans. Basic is $4 a month ($3 yearly) with 6 GB per user. Standard is $6 a month ($5 yearly) with 60 GB per user, custom domains, and use with Outlook or iPhone Mail. Professional is $10 ($9 yearly) with 150 GB and a retention archive for legal compliance. You can mix plans on one account, and the page says that if at least one person is on Standard or Professional, everyone can use your shared custom domains. Prices are before tax and there’s no contract.</p>
+<p>For a small office I’d put everyone on Standard. Basic’s 5 GB of mail storage fills up within a couple of years for anyone who sends attachments.</p>
+
+<h2>Proton: watch which plan the discount is on</h2>
+<figure style="margin:18px 0 14px"><img src="/img/proton-business-plans-2026-11-10.png" alt="Screenshot of Proton's business plans page on yearly billing: Mail Essentials $6.99 per user per month (was $7.99), Workspace Standard $8.99 (was $14.99), Workspace Premium $14.99 (was $24.99), under a Black Friday 40% off banner" width="1024" height="572" loading="lazy" style="max-width:100%;height:auto;border:1px solid #ccc"/><figcaption class="note">Proton’s business plans on yearly billing as they showed on {CHECKED}. The 40% offer applies to the Workspace plans only.</figcaption></figure>
+<p>Proton’s <a href={S.pb}>business page</a> showed three plans. Mail Essentials is $7.99 per user monthly or $6.99 yearly, with 15 GB per user and 3 custom domains. Workspace Standard is $14.99 monthly; on yearly billing it showed $8.99 under a Black Friday offer, with 1 TB per user, 15 domains, and Proton’s VPN, password manager and video calls bundled in. Workspace Premium is $24.99 monthly, or $14.99 yearly under the same offer.</p>
+<p>The fine print matters here. The offer is for new users only, for up to 10 users, and if your plan goes over 10 users at any point, every user is charged the regular price. It renews at the regular price after 12 months, and it ends Nov 30, 2026. So a 10-person team that signs up this month pays $89.90 a month for year one and $149.90 a month after that. If you only need email and a calendar, Mail Essentials is the cheaper plan in year two.</p>
+<p>Proton’s draw is end-to-end encryption between Proton users and zero-access storage of your mail. Fastmail encrypts mail in transit and at rest but can technically read it, like most providers. If that difference matters to your clients, it’s a real reason to pay more.</p>
+
+<h2>Mailcow: one server, but read the requirements</h2>
+<p>Mailcow is an open-source mail server bundle: Postfix, Dovecot, the SOGo webmail and calendar, Rspamd spam filtering, ClamAV antivirus and a web admin panel, all as Docker containers. Its latest release on <a href={S.mcRepo}>GitHub</a> was tagged 2026-11 on Nov 5. There’s no license fee and no per-user price.</p>
+<p>It is not small. I pulled the image manifests listed in its <a href={S.mcCompose}>docker-compose.yml</a> from the registries tonight: <b>18 containers, about 1.16 GB of compressed images</b> for x86 (that adds up each image on its own, so shared base layers are counted more than once; the real download is a little smaller). The biggest were SOGo at 175 MB, Dovecot at 120 MB and Postfix at 115 MB.</p>
+<p>The <a href={S.mcReq}>requirements page</a> asks for at least <b>6 GiB of RAM plus 1 GiB of swap</b> and 20 GiB of disk before any mail, and recommends 8 GiB for about 5 to 10 users. It gives one bigger example: 15 phones using ActiveSync and about 50 IMAP connections should plan on 16 GiB. You can turn off ClamAV and full-text search to save memory. That’s why I priced 8 GB servers: Hetzner’s CX33 in Germany or Finland at €8.99 (about {f(cx33)}), or {f(cx33b)} with Hetzner’s backups, and Vultr’s 8 GB plan in the US at $40.</p>
+
+<h2>The port 25 problem</h2>
+<p>A mail server has to connect out on port 25 to deliver to Gmail, Outlook and everyone else. Cloud hosts block that by default to stop spam:</p>
+<ul>
+  <li><b>DigitalOcean</b> blocks ports 25, 465 and 587 on all Droplets, and its <a href={S.doSmtp}>support page</a> recommends against running your own mail server at all. I wouldn’t put Mailcow there.</li>
+  <li><b>Vultr</b> blocks outbound port 25 on new instances; its <a href={S.vuSmtp}>docs</a> say you can request an unblock.</li>
+  <li><b>Hetzner</b> blocks ports 25 and 465 on all cloud servers until you’ve been a customer for a month and paid your first invoice. Then you can file a request, which its <a href={S.hzFaq}>FAQ</a> says it decides case by case.</li>
+</ul>
+<p>So budget a month of waiting on Hetzner, or route outgoing mail through a paid relay service on port 587, which adds a bill and another moving part. On top of that, a brand-new server IP has no sending reputation. Expect to set SPF, DKIM, DMARC and reverse DNS correctly and still see some mail land in spam for the first weeks.</p>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>Most small businesses:</b> Fastmail Standard. It’s the cheapest hosted plan here, it works with the mail apps people already use, and nobody on your team has to know what port 25 is.</li>
+  <li><b>You handle sensitive client data, or your clients ask about encryption:</b> Proton Mail Essentials. If you also want the VPN and password manager, Workspace Standard at the Black Friday price is a good first year, but plan for $14.99 after it.</li>
+  <li><b>You already run Linux servers and want full control, about 10 people or fewer:</b> Mailcow on an 8 GB Hetzner server. At 10 users it’s roughly a quarter of the Fastmail bill. Below 3 users the savings are a few dollars a month and not worth the upkeep.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li><b>I didn’t run Mailcow for this page.</b> My test machine doesn’t have Docker. The image sizes are measured from the registries; the RAM figures are Mailcow’s own.</li>
+  <li>Proton’s prices load in your browser and change with promotions; the numbers above are what showed on {CHECKED} with US dollars selected. Proton didn’t show a Mail Professional plan or a 24-month option when I looked.</li>
+  <li>I didn’t price a mail relay, extra storage, or tax. Fastmail lets you buy storage up to 300 GB per user, which would change the totals for heavy users.</li>
+  <li>The Vultr price is from Oct 28. The euro conversion will drift from your card charge.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>Related on SelfHost Office</h2></div>
+<p>Picking the server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>. Other email costs: <a href="/compare/mailchimp-vs-mailerlite-vs-listmonk-vs-mautic/">Mailchimp vs MailerLite vs listmonk vs Mautic</a>, <a href="/compare/ghost-vs-beehiiv-vs-listmonk/">Ghost vs beehiiv vs listmonk</a>. Team tools: <a href="/compare/mattermost-vs-slack/">Mattermost vs Slack</a>.</p>
+</div></section>
+</Base>
