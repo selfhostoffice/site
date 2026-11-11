@@ -62,4 +62,5 @@ export const GUIDES = [
   { href: '/compare/mailchimp-vs-mailerlite-vs-listmonk-vs-mautic/', title: 'Mailchimp vs MailerLite vs listmonk vs Mautic: what email marketing costs at 1,500, 5,000 and 10,000 contacts', tools: ['knadh--listmonk', 'mautic--mautic'], checked: 'Nov 2026' },
   { href: '/compare/coolify-vs-vercel/', title: 'Coolify vs Vercel: what hosting an app costs for 1, 3 and 5 developers', tools: [], checked: 'Nov 2026' },
   { href: '/compare/proton-vs-fastmail-vs-mailcow/', title: 'Proton Mail vs Fastmail vs Mailcow: what business email costs for 1, 5 and 10 people', tools: [], checked: 'Nov 2026' },
+  { href: '/compare/notion-vs-appflowy-vs-affine/', title: 'Notion vs AppFlowy vs AFFiNE: what a team wiki costs for 5, 10 and 25 people', tools: ['appflowy-io--appflowy', 'toeverything--affine'], checked: 'Nov 2026' },
 ];

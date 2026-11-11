@@ -1,0 +1,170 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+const af = listings.find(l => l.slug === 'appflowy-io--appflowy');
+const aff = listings.find(l => l.slug === 'toeverything--affine');
+const CHECKED = 'Nov 11, 2026';
+const S = {
+  notion: 'https://www.notion.com/pricing',
+  affine: 'https://affine.pro/pricing',
+  affineInstall: 'https://docs.affine.pro/self-host-affine/install',
+  affineCompose: 'https://github.com/toeverything/AFFiNE/blob/canary/.docker/selfhost/compose.yml',
+  affineLicense: 'https://github.com/toeverything/AFFiNE/blob/v0.27.4/LICENSE',
+  appflowy: 'https://appflowy.com/pricing',
+  afCloudRepo: 'https://github.com/AppFlowy-IO/AppFlowy-Cloud',
+  afSelfHost: 'https://github.com/AppFlowy-IO/AppFlowy-SelfHost-Commercial',
+  afCompose: 'https://github.com/AppFlowy-IO/AppFlowy-SelfHost-Commercial/blob/main/docker-compose.yml',
+  afSizing: 'https://github.com/AppFlowy-IO/AppFlowy-SelfHost-Commercial/blob/main/docs/HARDWARE_SIZING.md',
+  afLicense: 'https://github.com/AppFlowy-IO/AppFlowy-SelfHost-Commercial/blob/main/SELF_HOST_LICENSE_AGREEMENT.md',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// Read Nov 11, 2026, USD per month, billed yearly unless noted.
+// Notion Plus $10 / Business $20 per member ($12 / $24 billed monthly).
+// AppFlowy Cloud Pro $12 per member ($16 monthly). AppFlowy self-hosted: Free 1 seat, One $6 (1 seat), Team $10/seat, yearly only.
+// AFFiNE Cloud Pro $6.75 (up to 10 members per workspace), Team $10/seat. AFFiNE self-hosted free up to 10 members per workspace, Team $10/seat.
+// DigitalOcean Droplets: 2 GiB $12, 4 GiB $24, 8 GiB $48; weekly backups +20%.
+const sizes = [5, 10, 25];
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const per = (p: number) => sizes.map(n => money(n * p));
+const rows = [
+  { who: 'Notion Plus', how: '$10 a member', c: per(10) },
+  { who: 'Notion Business', how: '$20 a member; includes Notion AI', c: per(20) },
+  { who: 'AppFlowy Cloud Pro', how: '$12 a member', c: per(12) },
+  { who: 'AFFiNE Cloud', how: 'Pro $6.75 covers up to 10 members a workspace; Team $10 a seat above that', c: ['$6.75', '$6.75', '$250'] },
+  { who: 'AFFiNE self-hosted', how: 'free up to 10 members a workspace, on a 2 GiB server + backups; Team license $10 a seat above that', c: ['$14.40', '$14.40', '$264.40'] },
+  { who: 'AppFlowy self-hosted', how: 'free tier is 1 seat, so a team needs Team at $10 a seat, plus a server I didn’t test (4 to 8 GiB)', c: sizes.map(n => `${money(n * 10 + 28.8)} to ${money(n * 10 + 57.6)}`) },
+];
+const chart = [
+  { label: 'Notion Business', v: 200, t: '$200/mo' },
+  { label: 'AppFlowy self-hosted', v: 128.8, t: '$128.80+/mo (license + server)' },
+  { label: 'AppFlowy Cloud Pro', v: 120, t: '$120/mo' },
+  { label: 'Notion Plus', v: 100, t: '$100/mo' },
+  { label: 'AFFiNE, own server', v: 14.4, t: '$14.40/mo + your time' },
+  { label: 'AFFiNE Cloud Pro', v: 6.75, t: '$6.75/mo' },
+];
+const maxC = 240;
+const mem = [
+  { label: 'AFFiNE server (Node.js)', avg: 318, max: 329 },
+  { label: 'Postgres 16 + pgvector', avg: 95, max: 100 },
+  { label: 'Redis 8', avg: 13, max: 13 },
+];
+const maxM = 400;
+const faq = [
+  { q: 'How much does Notion cost for 10 people?', a: `With list prices read ${CHECKED}: Plus is $100 a month billed yearly ($10 a member) or $120 billed monthly ($12). Business, which is the plan with Notion AI built in, is $200 a month yearly or $240 monthly. Notion bills every member; guests are free but only see the pages they’re invited to.` },
+  { q: 'Is AFFiNE free to self-host?', a: 'For a small team, yes. AFFiNE’s pricing page lists the self-hosted plan as free with up to 10 members per workspace, and the server I ran (AFFiNE 0.27.4) reported exactly that for a new workspace: 10 members, 100 GB storage, 100 MB per file, 30 days of history. Above 10 members in one workspace, the Self-Hosted Team plan is $10 a seat a month billed yearly. The editor is MIT-licensed; the backend uses separate licenses, so read them before you resell it.' },
+  { q: 'Is AppFlowy free to self-host?', a: 'Only for one person. AppFlowy’s self-hosted Free tier allows 1 user seat plus up to 3 guest editors, and on the free tier the desktop and mobile apps aren’t included, only the web app. Workspace members start on the Team plan at $10 a seat a month, billed yearly; AppFlowy says it doesn’t offer monthly billing for self-hosters. The current server images ship under AppFlowy’s own commercial license, not AGPL.' },
+  { q: 'What server do I need for AFFiNE?', a: 'In my test, AFFiNE 0.27.4 with Postgres and Redis used about 425 MB of memory in total while idle after I loaded 200 pages, with a peak of 437 MB. A 1 GiB server would be tight once you add the operating system and a reverse proxy, so I’d buy 2 GiB: $12 a month at DigitalOcean, $14.40 with weekly backups.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Notion vs AppFlowy vs AFFiNE: what a team wiki costs for 5, 10 and 25 people', dateModified: '2026-11-11', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/notion-vs-appflowy-vs-affine/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Notion vs AppFlowy vs AFFiNE (Nov 2026): cost for 5, 10 and 25 people" description="Prices read Nov 11, 2026 plus a test install of AFFiNE 0.27.4 with 200 pages: Notion Plus is $100/mo for 10 people, AFFiNE self-hosted is free up to 10 members and ran in about 425 MB of RAM, AppFlowy self-hosted is free for 1 seat only." schema={schema} crumbs={[['Home', '/'], ['Notion vs AppFlowy vs AFFiNE', '/compare/notion-vs-appflowy-vs-affine/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Notion vs AppFlowy vs AFFiNE: what a team wiki costs for 5, 10 and 25 people</h1>
+  <p class="muted">AppFlowy and AFFiNE are the two open-source Notion alternatives people usually shortlist. Both sell a hosted version and let you run the server yourself, but their self-hosting terms are very different. I read all three pricing pages on {CHECKED}, priced three team sizes, and ran the AFFiNE 0.27.4 server with Postgres and Redis on my test machine to see how much server it needs. I didn’t run AppFlowy’s server; more on why below. All prices are in US dollars as listed, per month, billed yearly unless I say otherwise.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. Notion, AppFlowy, AFFiNE and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>Notion for 10 people:</b> $100 a month on Plus, $200 on Business (the plan with Notion AI). It grows with every member.</li>
+    <li><b>AFFiNE is the cheap one up to 10 people.</b> Its Cloud Pro plan is $6.75 a month and covers a workspace of up to 10 members. Self-hosted, it’s free up to 10 members, and my test install ran in about 425 MB of RAM, so a $14.40 server does it.</li>
+    <li><b>AppFlowy self-hosted isn’t free for a team.</b> The free tier is one seat. A team pays $10 a seat for the license, the same as AFFiNE’s paid tier, plus a bigger server.</li>
+    <li><b>Past 10 people</b> the open-source options cost about what Notion Plus does ($10 a seat), and you’re choosing on features and data control, not price.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost for 10 people</h2>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 204" width="100%" role="img" aria-labelledby="c-t">
+  <title id="c-t">Monthly cost for 10 people, prices read {CHECKED}, billed yearly: Notion Business $200, AppFlowy self-hosted $128.80 or more, AppFlowy Cloud Pro $120, Notion Plus $100, AFFiNE on your own server $14.40, AFFiNE Cloud Pro $6.75</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 32; const w = Math.max(3, (b.v / maxC) * 290);
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="160" y={y + 2} width={w} height="16" fill={b.label.includes('own server') ? '#c2410c' : '#2f3a4a'} />
+      <text x={166 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}, billed yearly. AFFiNE on your own server is the free self-hosted tier on a $12, 2 GiB DigitalOcean Droplet plus 20% for weekly backups. AppFlowy self-hosted is 10 Team seats at $10 plus a 4 GiB Droplet with backups ($28.80); I didn’t measure that stack, so treat its server cost as a floor.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>By team size</h2>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">How it’s priced</th><th scope="col">5 people</th><th scope="col">10 people</th><th scope="col">25 people</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.how}</td>{r.c.map(x => <td>{x}</td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Per month, billed yearly. Billed monthly: Notion Plus is $12 a member and Business $24; AppFlowy Cloud Pro is $16. AFFiNE’s page shows yearly prices only (“Billed Annually Saving 15%”), and AppFlowy doesn’t sell monthly self-hosted licenses at all. The 25-person AFFiNE rows assume everyone works in one workspace; I priced all 25 seats on Team because the pricing page doesn’t say otherwise. Sources, read {CHECKED}: <a href={S.notion}>Notion pricing</a>, <a href={S.affine}>AFFiNE pricing</a>, <a href={S.appflowy}>AppFlowy pricing</a> (Cloud and Self-Hosted tabs), <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What I measured</h2>
+<p>On {CHECKED} I pulled the official <code>ghcr.io/toeverything/affine:stable</code> image (AFFiNE 0.27.4, the current stable release, from Aug 18) plus the <code>pgvector/pgvector:pg16</code> and <code>redis</code> images that AFFiNE’s <a href={S.affineCompose}>self-host compose file</a> uses, and ran all three on my Linux test box without Docker, the same three services the compose file starts. AFFiNE’s migration step finished in about 1.4 seconds on an empty database. Then I created an admin account and a workspace, and pushed 200 pages through AFFiNE’s own sync protocol, each with a title and 10 paragraphs added one edit at a time: 2,200 edits, about 1.1 MB of updates, in 10.5 seconds. I left it idle for 10 minutes with one health check a minute and recorded memory every 10 seconds, then restarted AFFiNE and recorded 5 more minutes.</p>
+<figure class="chart" style="margin:0 0 12px">
+<svg viewBox="0 0 640 108" width="100%" role="img" aria-labelledby="m-t">
+  <title id="m-t">AFFiNE 0.27.4 stack idle memory measured {CHECKED} after loading 200 pages: AFFiNE server 318 MB average and 329 MB peak, Postgres 95 MB average and 100 MB peak, Redis 13 MB</title>
+  {mem.map((b, i) => {
+    const y = 8 + i * 32; const w = (b.avg / maxM) * 300; const w2 = (b.max / maxM) * 300;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="180" y={y + 2} width={w2} height="16" fill="#2f3a4a" opacity="0.35" />
+      <rect x="180" y={y + 2} width={w} height="16" fill="#2f3a4a" />
+      <text x={186 + w2} y={y + 15} font-size="12" fill="currentColor">{`${b.avg} MB avg, ${b.max} MB peak`}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">Memory in the 10 minutes after loading 200 pages (proportional set size for AFFiNE and all Postgres processes, resident size for Redis). Dark bar is the average, light bar the peak.</figcaption>
+</figure>
+<figure style="margin:0 0 12px">
+<img src="/img/affine-selfhosted-200-pages-2026-11-11.png" alt="AFFiNE 0.27.4 self-hosted web app on my test server, showing the load-test workspace with the 200 pages I created" width="1280" height="800" loading="lazy" style="max-width:100%;height:auto;border:1px solid #ddd" />
+<figcaption class="note">My test server on {CHECKED}: the workspace with the 200 generated pages, opened in AFFiNE’s own web app.</figcaption>
+</figure>
+<ul>
+  <li><b>Total:</b> 425 MB on average for all three services, 437 MB at the peak. That would squeeze onto a 1 GiB server, but I’d buy 2 GiB so the operating system, a reverse proxy and the extra memory AFFiNE uses while people edit have room.</li>
+  <li><b>After a restart:</b> AFFiNE answered requests 1.5 seconds after I started it. Over the next 5 minutes the three services averaged 310 MB together (AFFiNE 233 MB, Postgres 64 MB, Redis 13 MB) and peaked at 377 MB.</li>
+  <li><b>CPU:</b> low while idle. The AFFiNE process used 1.59 CPU-seconds in the 10 minutes after the load and 0.98 in the 5 minutes after the restart.</li>
+  <li><b>Disk:</b> the Postgres database was 16 MB with 200 pages. The AFFiNE image is 228 MB compressed (633 MB unpacked); with Postgres and Redis the three images are 440 MB to download.</li>
+  <li><b>Limits:</b> the self-hosted server reported a 10-member limit, 100 GB of storage, 100 MB per file and 30 days of page history for the new workspace, which matches the free self-hosted plan on AFFiNE’s pricing page.</li>
+</ul>
+
+<h2>Why I didn’t run AppFlowy</h2>
+<p>AppFlowy has archived its open-source server repository (<a href={S.afCloudRepo}>AppFlowy-Cloud</a>, AGPL); its last push was on Sep 11, 2026. New installs now come from <a href={S.afSelfHost}>AppFlowy-SelfHost-Commercial</a>, which ships prebuilt images under AppFlowy’s own <a href={S.afLicense}>license agreement</a>, granted per server for internal business use. Its <a href={S.afCompose}>compose file</a> starts 12 services: nginx, MinIO, Postgres with pgvector, Redis, an auth server, the AppFlowy server, an admin site, an AI service, a worker, search, backup and the web app. I added up the image sizes from the registries: about 1.35 GB compressed, three times AFFiNE’s three images. AppFlowy’s <a href={S.afSizing}>sizing guide</a> starts at 100 people online at once (4 vCPU, 16 GiB) and gives no smaller profile. Running 12 services by hand wasn’t something I could do well tonight, so the AppFlowy server cost in my table is a range, not a measurement.</p>
+<p>If you follow an older AppFlowy self-hosting guide: the archived repo’s compose file pulls <code>minio/minio</code>, which Docker Hub returned “not found” for when I checked on {CHECKED}. The current compose file uses AppFlowy’s own copy of MinIO instead.</p>
+
+<h2>How each one charges</h2>
+<p><b>Notion</b> (read {CHECKED}): Free works for one person; with 2 or more members it caps the number of blocks you can add. Plus is $10 a member billed yearly ($12 monthly) and Business $20 ($24); Business adds Notion Agent, AI meeting notes, SAML SSO and private teamspaces. Enterprise is a quote. Guests are free. Custom Agents cost $10 per 1,000 Notion credits on top.</p>
+<p><b>AppFlowy Cloud</b>: Personal is free for one workspace owner, with 100 MB of storage and 7 MB uploads. Pro is $12 a member billed yearly or $16 monthly, with unlimited storage and guest editors. <b>Self-hosted</b>: Free and One ($6 a month) are both one seat; One adds the desktop and mobile apps and local AI. Team is $10 a seat for up to 1,000 seats, and Enterprise is a quote. Each server needs its own license code.</p>
+<p><b>AFFiNE Cloud</b>: Free has 10 GB of storage and up to 3 members per workspace. Pro is $6.75 a month billed yearly with 100 GB and up to 10 members per workspace. Team is $10 a seat with 100 GB plus 20 GB per seat. AFFiNE AI is $8.90 a month on top, billed yearly. There’s also a one-time $499.99 Believer plan for lifetime personal Pro. <b>Self-hosted</b>: free with up to 10 members per workspace, or Team at $10 a seat billed yearly for priority support, multiple admins and more than 10 members.</p>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>Up to 10 people who just want a cheap Notion:</b> AFFiNE Cloud Pro at $6.75 a month. Nothing else here comes close on price. Check that its docs-and-whiteboard style suits you; it’s less database-heavy than Notion.</li>
+  <li><b>Up to 10 people who want their data on their own server:</b> self-hosted AFFiNE. It took me a few minutes to get running from the official image, and it runs in under half a gigabyte.</li>
+  <li><b>You live in Notion databases and AI:</b> stay on Notion. At 25 people AFFiNE Team and AppFlowy Team are $250 a month, the same as Notion Plus, so there’s no saving to make up for a migration.</li>
+  <li><b>AppFlowy:</b> pick it for its Notion-like databases and offline desktop app, not to save money. Self-hosted, a team pays the same $10 a seat as AFFiNE Team, and the server is bigger.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I tested one AFFiNE workspace with generated pages and no one editing at the same time. Real teams with images, attachments and several editors will use more memory and disk than my numbers.</li>
+  <li>I ran the images’ programs directly on my test box, not inside Docker, so container overhead isn’t counted.</li>
+  <li>I didn’t run AppFlowy’s server, try importing a Notion export into either tool, or test AI features.</li>
+  <li>The server cost leaves out a domain name, an email service for invites, and your time.</li>
+  <li>Prices change. The date at the top is when I read them; check again before you commit.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>On SelfHost Office</h2></div>
+<p>{af && <><a class="tool" href={`/tool/${af.slug}/`}><img src={avatar(af, 56)} alt="" width="28" height="28" loading="lazy"/> AppFlowy</a>: {af.stars.toLocaleString('en-US')} GitHub stars (the desktop app), last push {fmtDate(af.lastPush)}. </>}{aff && <><a class="tool" href={`/tool/${aff.slug}/`}><img src={avatar(aff, 56)} alt="" width="28" height="28" loading="lazy"/> AFFiNE</a>: {aff.stars.toLocaleString('en-US')} stars, last push {fmtDate(aff.lastPush)}. </>}Both from the GitHub API{af && <>, fetched {fmtDate(af.fetchedAt)}</>}. More options: <a href="/alternatives/notion/">open-source Notion alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>. For a team database instead of a wiki: <a href="/compare/nocodb-vs-baserow-vs-airtable/">NocoDB vs Baserow vs Airtable</a>.</p>
+</div></section>
+</Base>
