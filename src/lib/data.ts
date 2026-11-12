@@ -63,4 +63,5 @@ export const GUIDES = [
   { href: '/compare/coolify-vs-vercel/', title: 'Coolify vs Vercel: what hosting an app costs for 1, 3 and 5 developers', tools: [], checked: 'Nov 2026' },
   { href: '/compare/proton-vs-fastmail-vs-mailcow/', title: 'Proton Mail vs Fastmail vs Mailcow: what business email costs for 1, 5 and 10 people', tools: [], checked: 'Nov 2026' },
   { href: '/compare/notion-vs-appflowy-vs-affine/', title: 'Notion vs AppFlowy vs AFFiNE: what a team wiki costs for 5, 10 and 25 people', tools: ['appflowy-io--appflowy', 'toeverything--affine'], checked: 'Nov 2026' },
+  { href: '/compare/calendly-vs-cal-com-vs-cal-diy/', title: 'Calendly vs Cal.com vs Cal.diy: what scheduling costs for 1, 5, 10 and 25 people', tools: ['calcom--cal.diy'], checked: 'Nov 2026' },
 ];

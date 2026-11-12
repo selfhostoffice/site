@@ -1,0 +1,140 @@
+---
+import Base from '../../layouts/Base.astro';
+import { listings, avatar, fmtDate } from '../../lib/data';
+import affiliates from '../../data/affiliates.json';
+const cal = listings.find(l => l.slug === 'calcom--cal.diy')!;
+const aff = (affiliates as Record<string, { href: string; label: string; terms: string }>)['calcom--cal.diy'];
+const CHECKED = 'Nov 12, 2026';
+const S = {
+  calendly: 'https://calendly.com/pricing',
+  calcom: 'https://cal.com/pricing',
+  diy: 'https://www.cal.diy/',
+  repo: 'https://github.com/calcom/cal.diy',
+  hubDiy: 'https://hub.docker.com/r/calcom/cal.diy',
+  hubCom: 'https://hub.docker.com/r/calcom/cal.com/tags',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  monthly1: 'https://tools8020.com/tools/calendly/pricing/',
+  monthly2: 'https://saascrmreview.com/calendly-pricing/',
+};
+// Per seat per month, billed yearly, read off the vendor pages on CHECKED.
+const CY = { std: 10, teams: 16 }; // Calendly yearly
+const CM = { std: 12, teams: 20 }; // Calendly monthly (third-party reads, see note)
+const K = { teams: 12, orgs: 28 }; // Cal.com yearly
+const DO4 = 24; // DigitalOcean Basic 4 GiB / 2 vCPU
+const f = (n: number) => '$' + n.toLocaleString('en-US');
+const yr = (seats: number, per: number) => seats * per * 12;
+const sizes = [5, 10, 25];
+const rows = [
+  { who: 'Calendly Teams, billed yearly', c: sizes.map(n => yr(n, CY.teams)) },
+  { who: 'Calendly Teams, billed monthly', c: sizes.map(n => yr(n, CM.teams)) },
+  { who: 'Cal.com Teams, billed yearly', c: sizes.map(n => yr(n, K.teams)) },
+  { who: 'Cal.com Organizations, billed yearly', c: sizes.map(n => yr(n, K.orgs)) },
+];
+const chart = [
+  { label: 'Calendly Teams (monthly)', v: yr(10, CM.teams) },
+  { label: 'Calendly Teams (yearly)', v: yr(10, CY.teams) },
+  { label: 'Cal.com Teams (yearly)', v: yr(10, K.teams) },
+];
+const maxC = yr(10, CM.teams) * 1.15;
+const faq = [
+  { q: 'Is Cal.com cheaper than Calendly?', a: `For teams, yes. On yearly billing Cal.com Teams was $${K.teams} per user a month and Calendly Teams was $${CY.teams} per seat when I read both pages on ${CHECKED}. For ten people that is ${f(yr(10, K.teams))} vs ${f(yr(10, CY.teams))} a year.` },
+  { q: 'Is Calendly free?', a: 'Calendly’s Free plan gives you one event type and one calendar connection. Cal.com’s Free plan has unlimited event types and calendars, and it takes Stripe and PayPal payments, which Calendly puts on Standard.' },
+  { q: 'Can I self-host Cal.com instead?', a: 'The free, self-hostable version is Cal.diy (MIT). It has no team features such as round-robin, routing forms or workflows, and its docs say it is for personal, non-production use. It replaces a single person’s booking page, not a team plan.' },
+  { q: 'Does Calendly charge for people who book with me?', a: 'No. Calendly’s pricing page says seats are only needed for hosts who connect calendars; invitees don’t need a seat. Cal.com prices the same way, per user who hosts.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Calendly vs Cal.com vs Cal.diy: what scheduling costs for 1, 5, 10 and 25 people', dateModified: '2026-11-12', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/calendly-vs-cal-com-vs-cal-diy/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Calendly vs Cal.com vs Cal.diy (Nov 2026): cost for 1, 5, 10 and 25 people" description={`Prices read Nov 12, 2026: Calendly Teams is $16/seat/mo and Cal.com Teams $12/user/mo, both billed yearly. Ten people pay ${f(yr(10, CY.teams))} vs ${f(yr(10, K.teams))} a year. Where self-hosting Cal.diy fits, and where it doesn’t.`} schema={schema} crumbs={[['Home', '/'], ['Calendly vs Cal.com vs Cal.diy', '/compare/calendly-vs-cal-com-vs-cal-diy/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Calendly vs Cal.com vs Cal.diy: what scheduling costs for 1, 5, 10 and 25 people</h1>
+  <p class="muted">I read <a href={S.calendly}>Calendly’s pricing page</a> and <a href={S.calcom}>Cal.com’s pricing page</a> on {CHECKED} and worked out what one person and teams of 5, 10 and 25 would pay. I also checked what you can actually download if you want to run it yourself. All prices are US dollars.</p>
+  <p class="note"><b>Disclosure:</b> the “{aff.label}” link on this page is an affiliate link. If you buy a paid Cal.com plan through it, we may earn {aff.terms}, at no extra cost to you. Calendly doesn’t pay us, and self-hosting earns us nothing. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>One person:</b> Cal.com Free does more than Calendly Free. Calendly Free stops at one event type and one calendar; Cal.com Free has unlimited of both and takes payments. Calendly Standard to match that is ${CY.std}/mo billed yearly.</li>
+    <li><b>A team that shares bookings (round-robin, routing forms):</b> both put that on their Teams plan. Cal.com is ${K.teams} per user a month and Calendly ${CY.teams} per seat, billed yearly. That’s 25% less on Cal.com at every team size.</li>
+    <li><b>Self-hosting:</b> Cal.diy is free and MIT-licensed but has no team features, and there was still no ready-made Docker image for it when I checked. It’s a fit for one person who wants the data on their own server, not a way out of a team bill.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Yearly cost for a team of 10</h2>
+<p class="muted">Ten hosts on the plan that includes round-robin and routing forms.</p>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 135" width="100%" role="img" aria-labelledby="cc-t">
+  <title id="cc-t">Yearly cost for ten hosts, prices read {CHECKED}: Calendly Teams billed monthly {f(yr(10, CM.teams))}, Calendly Teams billed yearly {f(yr(10, CY.teams))}, Cal.com Teams billed yearly {f(yr(10, K.teams))}</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 40; const w = (b.v / maxC) * 330;
+    const isCal = b.label.startsWith('Cal.com');
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="175" y={y + 2} width={w} height="16" fill={isCal ? '#c2410c' : '#2f3a4a'} />
+      <text x={181 + w} y={y + 15} font-size="12" fill="currentColor">{f(b.v)}/yr</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per year, seats × price × 12. Calendly yearly and Cal.com prices from the vendor pages on {CHECKED}; Calendly monthly price from third-party reads (see the note under the table).</figcaption>
+</figure>
+
+<h2>Cost by team size</h2>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Plan</th>{sizes.map(n => <th>{n} people</th>)}</tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th>{r.c.map(c => <td><b class="usd">{f(c)}/yr</b></td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Sources: <a href={S.calendly}>calendly.com/pricing</a> (billed-yearly view: Standard ${CY.std}, Teams ${CY.teams} per seat a month; Enterprise “starts at $15k/yr” from 50 seats) and <a href={S.calcom}>cal.com/pricing</a> (Teams ${K.teams}, Organizations ${K.orgs} per user a month, “Save 25% yearly”), both read {CHECKED}. The copy of Calendly’s page I could read only showed the yearly prices, so the month-to-month figures (${CM.std} Standard, ${CM.teams} Teams) come from two independent reviews that read both toggles, <a href={S.monthly1} rel="nofollow">tools8020</a> (Oct 17) and <a href={S.monthly2} rel="nofollow">SaaS CRM Review</a> (Nov 7). I didn’t get Cal.com’s month-to-month price, so it isn’t in the table.</p>
+<p><a class="btn ghost" href={aff.href} rel="sponsored nofollow" data-track="outbound" data-tool={cal.slug} data-kind="affiliate">{aff.label} (affiliate link)</a></p>
+
+<div class="prose">
+<h2>One person: the free plans are not the same</h2>
+<p>This is where the two differ most, and it costs nothing to check. From each pricing page on {CHECKED}:</p>
+<ul>
+  <li><b>Calendly Free:</b> one event type, one calendar connection, one-on-one scheduling, a booking page and the browser extension. Unlimited event types, more calendars (the comparison table shows 6), reminders and Stripe or PayPal payments start on Standard at ${CY.std} a month billed yearly.</li>
+  <li><b>Cal.com Free:</b> one user, unlimited links and calendars, email and SMS notifications, Stripe and PayPal payments, Salesforce and HubSpot sync, and an “Import from Calendly” option.</li>
+</ul>
+<p>If you’re a consultant or a coach with a few meeting types and paid sessions, Cal.com Free already covers what Calendly charges ${f(yr(1, CY.std))} a year for. I’d try it before paying for Standard.</p>
+
+<h2>Teams: same features, different price</h2>
+<p>Both companies hold back the team features for the Teams plan. Calendly Teams adds round-robin and team scheduling, lead routing, centrally managed event types and Salesforce sync, with SSO as a paid add-on. Cal.com Teams adds team scheduling with shared availability, round-robin, managed and collective events, routing forms, workflows, removal of Cal.com branding and booking analytics. SAML SSO and SCIM are in Cal.com Organizations at ${K.orgs} a user.</p>
+<p>So the real question for most teams is whether Calendly’s extras are worth ${CY.teams - K.teams} more per person per month. The ones I’d look at: Calendly’s Notetaker and its AI assistant, Callie, which it sells as an add-on, and its Marketo and Pardot connections. If you don’t use those, I can’t see a reason to pay the difference.</p>
+<p>Two smaller things. Calendly’s Enterprise starts at $15,000 a year and 50 seats, which is ${f(Math.round(15000 / 50 / 12))} per seat a month at the minimum. Cal.com Enterprise is priced by sales, so I can’t compare it.</p>
+
+<h2>Self-hosting Cal.diy: what I found tonight</h2>
+<p>Cal.diy is the community edition Cal.com split off, with the commercial code removed. Its <a href={S.repo}>GitHub repo</a> had {cal.stars.toLocaleString('en-US')} stars and a push on {fmtDate(cal.lastPush)} when I fetched it ({fmtDate(cal.fetchedAt)}). <a href={S.diy}>Its docs</a> list what it leaves out: teams, round-robin, managed events, workflows, routing forms, insights and SSO. What stays is a solid personal booking page with event types, calendars, video links, paid bookings, webhooks and embeds.</p>
+<ul>
+  <li>I queried Docker Hub’s API on {CHECKED}. The <a href={S.hubDiy}>calcom/cal.diy</a> repository still had <b>no tags and 0 pulls</b>, the same as when I first looked on Oct 22. You build the image yourself from the repo.</li>
+  <li>The old <a href={S.hubCom}>calcom/cal.com</a> image stops at v6.2.0 from Mar 2, 2026. Docker Hub lists it at 1,642,768,247 bytes compressed for amd64, about 1.6 GB. It’s a large Next.js app with Postgres beside it.</li>
+  <li>For a server, I’d use a 4 GiB box so the app and Postgres fit on one machine. DigitalOcean’s Basic 4 GiB / 2 vCPU droplet was ${DO4} a month on {CHECKED}, so {f(DO4 * 12)} a year before backups. That’s a judgment call; I didn’t load-test Cal.diy.</li>
+</ul>
+<p>Put next to the free plan, that {f(DO4 * 12)} buys you one thing: the booking data lives on your server. That can matter for a clinic or a law office. For anyone else, Cal.com Free is cheaper and you don’t have to run updates.</p>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>Solo, a few meeting types:</b> Cal.com Free. Calendly Free’s single event type runs out fast.</li>
+  <li><b>Solo, and the data must stay in-house:</b> Cal.diy on a 4 GiB server, about ${DO4} a month plus your time.</li>
+  <li><b>A sales or support team sharing leads:</b> Cal.com Teams, unless you use Calendly’s Notetaker or Marketo/Pardot. At 10 people the gap is {f(yr(10, CY.teams) - yr(10, K.teams))} a year on yearly billing, or {f(yr(10, CM.teams) - yr(10, K.teams))} if you’d otherwise pay Calendly month to month.</li>
+  <li><b>Already deep in Calendly with Salesforce routing set up:</b> price out the switching time before you move. The licence saving is real but not huge for a small team.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I didn’t run Cal.diy for this page. The numbers above are Docker Hub and GitHub reads, plus a server price.</li>
+  <li>Calendly’s month-to-month prices are second-hand (two independent reviews that agree). Its yearly prices I read myself.</li>
+  <li>I compared list prices. Neither page showed a discount for small teams, and Calendly’s Notetaker add-on price isn’t in my totals.</li>
+  <li>Both companies change plans often. Check the pages again before you buy.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<div class="sec-head"><h2>Related on SelfHost Office</h2></div>
+<p><a class="tool" href={`/tool/${cal.slug}/`}><img src={avatar(cal, 56)} alt="" width="28" height="28" loading="lazy"/> Cal.diy</a> listing, <a href="/pricing/cal-com/">Cal.com pricing in detail</a>, and <a href="/alternatives/calendly/">every Calendly alternative we list</a>.</p>
+</div></section>
+</Base>
