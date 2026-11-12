@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { listings, avatar, fmtDate } from '../../lib/data';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
 const lm = listings.find(l => l.slug === 'knadh--listmonk')!;
 const CHECKED = 'Oct 30, 2026';
 const S = {
@@ -156,8 +157,12 @@ const schema = [
 {faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
 </div></section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>listmonk on SelfHost Office</h2></div>
-<p><a class="tool" href={`/tool/${lm.slug}/`}><img src={avatar(lm, 56)} alt="" width="28" height="28" loading="lazy"/> listmonk</a>: {lm.stars.toLocaleString('en-US')} GitHub stars, {lm.license} license, last push {fmtDate(lm.lastPush)} (GitHub API, fetched {fmtDate(lm.fetchedAt)}). More options: <a href="/alternatives/mailchimp/">open-source Mailchimp alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
-</div></section>
+<OnSelfHost
+  title="listmonk on SelfHost Office"
+  tools={[{ listing: lm, name: 'listmonk', license: true, lastPush: true }]}
+  fetchedAt={lm.fetchedAt}
+>
+  <p>More options: <a href="/alternatives/mailchimp/">open-source Mailchimp alternatives</a>.</p>
+  <p>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</OnSelfHost>
 </Base>

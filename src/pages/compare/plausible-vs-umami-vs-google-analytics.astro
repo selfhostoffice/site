@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { listings, avatar, fmtDate } from '../../lib/data';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
 const um = listings.find(l => l.slug === 'umami-software--umami')!;
 const pl = listings.find(l => l.slug === 'plausible--analytics')!;
 const CHECKED = 'Nov 1, 2026';
@@ -153,8 +154,14 @@ const schema = [
 {faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
 </div></section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>On SelfHost Office</h2></div>
-<p><a class="tool" href={`/tool/${um.slug}/`}><img src={avatar(um, 56)} alt="" width="28" height="28" loading="lazy"/> Umami</a>: {um.stars.toLocaleString('en-US')} GitHub stars, {um.license} license, last push {fmtDate(um.lastPush)}. <a class="tool" href={`/tool/${pl.slug}/`}><img src={avatar(pl, 56)} alt="" width="28" height="28" loading="lazy"/> Plausible</a>: {pl.stars.toLocaleString('en-US')} stars, {pl.license} license, last push {fmtDate(pl.lastPush)}. Both from the GitHub API, fetched {fmtDate(um.fetchedAt)}. More options: <a href="/alternatives/google-analytics/">open-source Google Analytics alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
-</div></section>
+<OnSelfHost
+  tools={[
+    { listing: um, name: 'Umami', license: true, lastPush: true },
+    { listing: pl, name: 'Plausible', license: true, lastPush: true },
+  ]}
+  fetchedAt={um.fetchedAt}
+>
+  <p>More options: <a href="/alternatives/google-analytics/">open-source Google Analytics alternatives</a>.</p>
+  <p>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</OnSelfHost>
 </Base>

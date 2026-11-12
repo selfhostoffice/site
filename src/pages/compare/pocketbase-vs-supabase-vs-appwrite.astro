@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { listings, avatar, fmtDate } from '../../lib/data';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
 const pb = listings.find(l => l.slug === 'pocketbase--pocketbase')!;
 const sb = listings.find(l => l.slug === 'supabase--supabase')!;
 const aw = listings.find(l => l.slug === 'appwrite--appwrite')!;
@@ -153,8 +154,15 @@ const schema = [
 {faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
 </div></section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>On SelfHost Office</h2></div>
-<p><a class="tool" href={`/tool/${pb.slug}/`}><img src={avatar(pb, 56)} alt="" width="28" height="28" loading="lazy"/> PocketBase</a>: {pb.stars.toLocaleString('en-US')} GitHub stars, {pb.license} license, last push {fmtDate(pb.lastPush)}. <a class="tool" href={`/tool/${sb.slug}/`}><img src={avatar(sb, 56)} alt="" width="28" height="28" loading="lazy"/> Supabase</a>: {sb.stars.toLocaleString('en-US')} stars, {sb.license} license. <a class="tool" href={`/tool/${aw.slug}/`}><img src={avatar(aw, 56)} alt="" width="28" height="28" loading="lazy"/> Appwrite</a>: {aw.stars.toLocaleString('en-US')} stars, {aw.license} license. All from the GitHub API, fetched {fmtDate(pb.fetchedAt)}. More options: <a href="/alternatives/firebase/">open-source Firebase alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
-</div></section>
+<OnSelfHost
+  tools={[
+    { listing: pb, name: 'PocketBase', license: true, lastPush: true },
+    { listing: sb, name: 'Supabase', license: true },
+    { listing: aw, name: 'Appwrite', license: true },
+  ]}
+  fetchedAt={pb.fetchedAt}
+>
+  <p>More options: <a href="/alternatives/firebase/">open-source Firebase alternatives</a>.</p>
+  <p>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</OnSelfHost>
 </Base>

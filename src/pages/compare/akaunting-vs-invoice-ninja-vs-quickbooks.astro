@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { listings, avatar, fmtDate } from '../../lib/data';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
 const ak = listings.find(l => l.slug === 'akaunting--akaunting')!;
 const inv = listings.find(l => l.slug === 'invoiceninja--invoiceninja')!;
 const CHECKED = 'Nov 6, 2026';
@@ -144,8 +145,14 @@ const schema = [
 {faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
 </div></section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>On SelfHost Office</h2></div>
-<p><a class="tool" href={`/tool/${ak.slug}/`}><img src={avatar(ak, 56)} alt="" width="28" height="28" loading="lazy"/> Akaunting</a>: {ak.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(ak.lastPush)}. <a class="tool" href={`/tool/${inv.slug}/`}><img src={avatar(inv, 56)} alt="" width="28" height="28" loading="lazy"/> Invoice Ninja</a>: {inv.stars.toLocaleString('en-US')} stars, last push {fmtDate(inv.lastPush)}. Both from the GitHub API, fetched {fmtDate(ak.fetchedAt)}. More options: <a href="/alternatives/quickbooks/">open-source QuickBooks alternatives</a> and <a href="/alternatives/freshbooks/">FreshBooks alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
-</div></section>
+<OnSelfHost
+  tools={[
+    { listing: ak, name: 'Akaunting', lastPush: true },
+    { listing: inv, name: 'Invoice Ninja', lastPush: true },
+  ]}
+  fetchedAt={ak.fetchedAt}
+>
+  <p>More options: <a href="/alternatives/quickbooks/">open-source QuickBooks alternatives</a> and <a href="/alternatives/freshbooks/">FreshBooks alternatives</a>.</p>
+  <p>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</OnSelfHost>
 </Base>

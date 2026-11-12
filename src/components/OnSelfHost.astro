@@ -1,0 +1,66 @@
+---
+import { avatar, fmtDate, type L } from '../lib/data';
+
+export type OnSelfHostTool = {
+  listing: L;
+  name: string;
+  /** Extra note after the star count, kept verbatim, e.g. "on its GitHub mirror" */
+  starsNote?: string;
+  /** true: "{license} license"; string: custom wording, kept verbatim */
+  license?: true | string;
+  lastPush?: boolean;
+};
+
+interface Props {
+  title?: string;
+  intro?: string;
+  tools: OnSelfHostTool[];
+  fetchedAt: string;
+}
+
+const { title = 'On SelfHost Office', intro, tools, fetchedAt } = Astro.props;
+const showLicense = tools.some((t) => t.license);
+const showPush = tools.some((t) => t.lastPush);
+const cols = 1 + (showLicense ? 1 : 0) + (showPush ? 1 : 0) + 1; // tool + stars + optional
+
+function licenseText(t: OnSelfHostTool) {
+  if (t.license === true) return `${t.listing.license} license`;
+  if (typeof t.license === 'string') return t.license;
+  return '';
+}
+---
+<section class="onsh">
+  <div class="wrap">
+    <div class="sec-head"><h2>{title}</h2></div>
+    {intro && <p class="onsh-intro">{intro}</p>}
+    <ul class={`onsh-list cols-${cols}`}>
+      {tools.map((t) => (
+        <li class="onsh-row">
+          <a class="onsh-tool" href={`/tool/${t.listing.slug}/`}>
+            <span class="onsh-logo">
+              <img src={avatar(t.listing, 56)} alt="" width="28" height="28" loading="lazy" />
+            </span>
+            {t.name}
+          </a>
+          <span class="onsh-stars">
+            <b>{t.listing.stars.toLocaleString('en-US')}</b>
+            {' '}
+            <span>stars{t.starsNote ? ` ${t.starsNote}` : ''}</span>
+          </span>
+          {showLicense && <span class="onsh-license">{licenseText(t)}</span>}
+          {showPush && (
+            <span class="onsh-push">
+              {t.lastPush ? `Last push ${fmtDate(t.listing.lastPush)}` : ''}
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
+    <p class="note onsh-caption">Star counts from the GitHub API, fetched {fmtDate(fetchedAt)}.</p>
+    {Astro.slots.has('default') && (
+      <div class="onsh-links">
+        <slot />
+      </div>
+    )}
+  </div>
+</section>

@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { listings, avatar, fmtDate } from '../../lib/data';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
 import affiliates from '../../data/affiliates.json';
 const cal = listings.find(l => l.slug === 'calcom--cal.diy')!;
 const aff = (affiliates as Record<string, { href: string; label: string; terms: string }>)['calcom--cal.diy'];
@@ -129,8 +130,11 @@ const schema = [
 {faq.map(f => <><h3>{f.q}</h3><p>{f.a}</p></>)}
 </div></section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>Cal.diy on SelfHost Office</h2></div>
-<p><a class="tool" href={`/tool/${cal.slug}/`}><img src={avatar(cal, 56)} alt="" width="28" height="28" loading="lazy"/> Cal.diy</a>: {cal.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(cal.lastPush)} (GitHub API, fetched {fmtDate(cal.fetchedAt)}). <a href="/compare/calendly-vs-cal-com-vs-cal-diy/">Calendly vs Cal.com cost for 1–25 people</a>, <a href="/alternatives/calendly/">other Calendly alternatives</a>.</p>
-</div></section>
+<OnSelfHost
+  title="Cal.diy on SelfHost Office"
+  tools={[{ listing: cal, name: 'Cal.diy', lastPush: true }]}
+  fetchedAt={cal.fetchedAt}
+>
+  <p><a href="/compare/calendly-vs-cal-com-vs-cal-diy/">Calendly vs Cal.com cost for 1–25 people</a>, <a href="/alternatives/calendly/">other Calendly alternatives</a>.</p>
+</OnSelfHost>
 </Base>

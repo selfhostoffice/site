@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { listings, avatar, fmtDate } from '../../lib/data';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
 const nc = listings.find(l => l.slug === 'nocodb--nocodb')!;
 const br = listings.find(l => l.slug === 'baserow--baserow')!;
 const CHECKED = 'Nov 4, 2026';
@@ -157,8 +158,14 @@ const schema = [
 {faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
 </div></section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>On SelfHost Office</h2></div>
-<p><a class="tool" href={`/tool/${nc.slug}/`}><img src={avatar(nc, 56)} alt="" width="28" height="28" loading="lazy"/> NocoDB</a>: {nc.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(nc.lastPush)}. <a class="tool" href={`/tool/${br.slug}/`}><img src={avatar(br, 56)} alt="" width="28" height="28" loading="lazy"/> Baserow</a>: {br.stars.toLocaleString('en-US')} stars on its GitHub mirror, last push {fmtDate(br.lastPush)}. Both from the GitHub API, fetched {fmtDate(nc.fetchedAt)}. More options: <a href="/alternatives/airtable/">open-source Airtable alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>, or skip the server with <a href="/compare/railway-vs-render-vs-fly/">Railway, Render or Fly.io</a>.</p>
-</div></section>
+<OnSelfHost
+  tools={[
+    { listing: nc, name: 'NocoDB', lastPush: true },
+    { listing: br, name: 'Baserow', starsNote: 'on its GitHub mirror', lastPush: true },
+  ]}
+  fetchedAt={nc.fetchedAt}
+>
+  <p>More options: <a href="/alternatives/airtable/">open-source Airtable alternatives</a>.</p>
+  <p>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>, or skip the server with <a href="/compare/railway-vs-render-vs-fly/">Railway, Render or Fly.io</a>.</p>
+</OnSelfHost>
 </Base>

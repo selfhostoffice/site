@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { listings, avatar, fmtDate } from '../../lib/data';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
 const mm = listings.find(l => l.slug === 'mattermost--mattermost')!;
 const rc = listings.find(l => l.slug === 'rocketchat--rocket.chat')!;
 const CHECKED = 'Nov 3, 2026';
@@ -151,8 +152,14 @@ const schema = [
 {faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
 </div></section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>On SelfHost Office</h2></div>
-<p><a class="tool" href={`/tool/${mm.slug}/`}><img src={avatar(mm, 56)} alt="" width="28" height="28" loading="lazy"/> Mattermost</a>: {mm.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(mm.lastPush)}. <a class="tool" href={`/tool/${rc.slug}/`}><img src={avatar(rc, 56)} alt="" width="28" height="28" loading="lazy"/> Rocket.Chat</a>: {rc.stars.toLocaleString('en-US')} stars, last push {fmtDate(rc.lastPush)}. Both from the GitHub API, fetched {fmtDate(mm.fetchedAt)}. More options: <a href="/alternatives/slack/">open-source Slack alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>, or skip the server with <a href="/compare/railway-vs-render-vs-fly/">Railway, Render or Fly.io</a>.</p>
-</div></section>
+<OnSelfHost
+  tools={[
+    { listing: mm, name: 'Mattermost', lastPush: true },
+    { listing: rc, name: 'Rocket.Chat', lastPush: true },
+  ]}
+  fetchedAt={mm.fetchedAt}
+>
+  <p>More options: <a href="/alternatives/slack/">open-source Slack alternatives</a>.</p>
+  <p>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>, or skip the server with <a href="/compare/railway-vs-render-vs-fly/">Railway, Render or Fly.io</a>.</p>
+</OnSelfHost>
 </Base>

@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { listings, avatar, fmtDate } from '../../lib/data';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
 const n8n = listings.find(l => l.slug === 'n8n-io--n8n')!;
 const CHECKED = 'Oct 22, 2026';
 const S = {
@@ -137,8 +138,11 @@ const schema = [
 </div>
 </section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>n8n on SelfHost Office</h2></div>
-<p><a class="tool" href={`/tool/${n8n.slug}/`}><img src={avatar(n8n, 56)} alt="" width="28" height="28" loading="lazy"/> n8n</a>: {n8n.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(n8n.lastPush)} (GitHub API, fetched {fmtDate(n8n.fetchedAt)}). See also <a href="/alternatives/zapier/">Zapier alternatives</a>.</p>
-</div></section>
+<OnSelfHost
+  title="n8n on SelfHost Office"
+  tools={[{ listing: n8n, name: 'n8n', lastPush: true }]}
+  fetchedAt={n8n.fetchedAt}
+>
+  <p>See also <a href="/alternatives/zapier/">Zapier alternatives</a>.</p>
+</OnSelfHost>
 </Base>

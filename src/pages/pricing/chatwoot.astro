@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { listings, avatar, fmtDate } from '../../lib/data';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
 import affiliates from '../../data/affiliates.json';
 const cw = listings.find(l => l.slug === 'chatwoot--chatwoot')!;
 const aff = (affiliates as Record<string, { href: string; label: string; terms: string }>)['chatwoot--chatwoot'];
@@ -124,8 +125,9 @@ const schema = [
 {faq.map(f => <><h3>{f.q}</h3><p>{f.a}</p></>)}
 </div></section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>Chatwoot on SelfHost Office</h2></div>
-<p><a class="tool" href={`/tool/${cw.slug}/`}><img src={avatar(cw, 56)} alt="" width="28" height="28" loading="lazy"/> Chatwoot</a>: {cw.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(cw.lastPush)} (GitHub API, fetched {fmtDate(cw.fetchedAt)}).</p>
-</div></section>
+<OnSelfHost
+  title="Chatwoot on SelfHost Office"
+  tools={[{ listing: cw, name: 'Chatwoot', lastPush: true }]}
+  fetchedAt={cw.fetchedAt}
+/>
 </Base>

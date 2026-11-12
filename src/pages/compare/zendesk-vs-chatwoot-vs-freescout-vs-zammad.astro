@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { listings, avatar, fmtDate } from '../../lib/data';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
 import affiliates from '../../data/affiliates.json';
 const cw = listings.find(l => l.slug === 'chatwoot--chatwoot')!;
 const fs = listings.find(l => l.slug === 'freescout-help-desk--freescout')!;
@@ -177,8 +178,16 @@ const schema = [
 {faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
 </div></section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>On SelfHost Office</h2></div>
-<p><a class="tool" href={`/tool/${cw.slug}/`}><img src={avatar(cw, 56)} alt="" width="28" height="28" loading="lazy"/> Chatwoot</a>: {cw.stars.toLocaleString('en-US')} GitHub stars, last push {fmtDate(cw.lastPush)}. <a class="tool" href={`/tool/${fs.slug}/`}><img src={avatar(fs, 56)} alt="" width="28" height="28" loading="lazy"/> FreeScout</a>: {fs.stars.toLocaleString('en-US')} stars, last push {fmtDate(fs.lastPush)}. <a class="tool" href={`/tool/${zm.slug}/`}><img src={avatar(zm, 56)} alt="" width="28" height="28" loading="lazy"/> Zammad</a>: {zm.stars.toLocaleString('en-US')} stars, last push {fmtDate(zm.lastPush)}. Stars from the GitHub API, fetched {fmtDate(cw.fetchedAt)}. More options: <a href="/alternatives/zendesk/">open-source Zendesk alternatives</a>, <a href="/alternatives/help-scout/">Help Scout alternatives</a>. Chatwoot cloud vs self-host deep-dive: <a href="/pricing/chatwoot/">Chatwoot pricing</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
-</div></section>
+<OnSelfHost
+  tools={[
+    { listing: cw, name: 'Chatwoot', lastPush: true },
+    { listing: fs, name: 'FreeScout', lastPush: true },
+    { listing: zm, name: 'Zammad', lastPush: true },
+  ]}
+  fetchedAt={cw.fetchedAt}
+>
+  <p>More options: <a href="/alternatives/zendesk/">open-source Zendesk alternatives</a>, <a href="/alternatives/help-scout/">Help Scout alternatives</a>.</p>
+  <p>Chatwoot cloud vs self-host deep-dive: <a href="/pricing/chatwoot/">Chatwoot pricing</a>.</p>
+  <p>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+</OnSelfHost>
 </Base>

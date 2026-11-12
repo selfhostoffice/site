@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { listings, avatar, fmtDate } from '../../lib/data';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
 const af = listings.find(l => l.slug === 'appflowy-io--appflowy');
 const aff = listings.find(l => l.slug === 'toeverything--affine');
 const CHECKED = 'Nov 11, 2026';
@@ -163,8 +164,15 @@ const schema = [
 {faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
 </div></section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>On SelfHost Office</h2></div>
-<p>{af && <><a class="tool" href={`/tool/${af.slug}/`}><img src={avatar(af, 56)} alt="" width="28" height="28" loading="lazy"/> AppFlowy</a>: {af.stars.toLocaleString('en-US')} GitHub stars (the desktop app), last push {fmtDate(af.lastPush)}. </>}{aff && <><a class="tool" href={`/tool/${aff.slug}/`}><img src={avatar(aff, 56)} alt="" width="28" height="28" loading="lazy"/> AFFiNE</a>: {aff.stars.toLocaleString('en-US')} stars, last push {fmtDate(aff.lastPush)}. </>}Both from the GitHub API{af && <>, fetched {fmtDate(af.fetchedAt)}</>}. More options: <a href="/alternatives/notion/">open-source Notion alternatives</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>. For a team database instead of a wiki: <a href="/compare/nocodb-vs-baserow-vs-airtable/">NocoDB vs Baserow vs Airtable</a>.</p>
-</div></section>
+<OnSelfHost
+  tools={[
+    ...(af ? [{ listing: af, name: 'AppFlowy', starsNote: '(the desktop app)', lastPush: true }] : []),
+    ...(aff ? [{ listing: aff, name: 'AFFiNE', lastPush: true }] : []),
+  ]}
+  fetchedAt={(af ?? aff).fetchedAt}
+>
+  <p>More options: <a href="/alternatives/notion/">open-source Notion alternatives</a>.</p>
+  <p>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>.</p>
+  <p>For a team database instead of a wiki: <a href="/compare/nocodb-vs-baserow-vs-airtable/">NocoDB vs Baserow vs Airtable</a>.</p>
+</OnSelfHost>
 </Base>
