@@ -74,14 +74,24 @@ section{padding:44px 0}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);margin:22px 0;border-top:2px solid var(--rule)}
 @media (max-width:640px){.facts{grid-template-columns:1fr 1fr}}
 .fact{padding:10px 14px 12px 0;border-bottom:1px solid var(--line)}.fact span{display:block;font:.74rem var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.fact b{font:500 1.05rem var(--mono)}
-.compare-wrap{overflow-x:auto;border-top:2px solid var(--rule);border-bottom:2px solid var(--rule)}
-table.compare{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}.compare th,.compare td{padding:9px 12px 9px 0;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-.compare td{font-variant-numeric:tabular-nums}
+/* Tables: full width of the column, padded cells, muted row rules. No card chrome. */
+.compare-wrap,main div[style*="overflow-x"]{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;scrollbar-color:var(--line) transparent;scrollbar-width:thin}
+.compare-wrap{border-top:2px solid var(--rule);border-bottom:2px solid var(--rule)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{padding:.5rem .9rem;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+thead th{font-weight:500;border-bottom:1.5px solid var(--rule)}
+tbody th,th:first-child,td:first-child{font-weight:400;text-align:left}
+thead th:not(:first-child),td{text-align:right;font-variant-numeric:tabular-nums}
+table:not(.compare) th,table:not(.compare) td{white-space:nowrap}
+table.compare{min-width:560px}
+table.compare thead th,table.compare td{text-align:left}
+table.compare td:has(.usd),table.compare td:has(.eur){text-align:right;font-variant-numeric:tabular-nums}
 .compare thead th{font:500 .76rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1.5px solid var(--rule)}
-.compare tbody th{font-weight:600;white-space:nowrap}.compare .tool{display:flex;gap:8px;align-items:center;font:600 .95rem var(--sans);text-transform:none;letter-spacing:0;color:var(--text)}.compare .tool img{width:22px;height:22px;border-radius:2px}
+.compare tbody th{white-space:nowrap}
+.compare .tool{display:flex;gap:8px;align-items:center;font:600 .95rem var(--sans);text-transform:none;letter-spacing:0;color:var(--text);text-align:left}.compare .tool img{width:22px;height:22px;border-radius:2px}
 .compare tbody tr:hover{background:var(--surface)}
 .best{font-weight:600;box-shadow:inset 0 -2px 0 var(--brand)}
-.usd{font-family:var(--mono);font-weight:500}.eur{color:var(--muted);font-family:var(--mono)}
+.usd{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums}.eur{color:var(--muted);font-family:var(--mono);font-variant-numeric:tabular-nums}
 .note{font-size:.86rem;color:var(--muted);margin-top:10px;max-width:80ch}
 .tiers{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:0;border-top:2px solid var(--rule)}.tier{padding:20px 20px 20px 0;border-bottom:1px solid var(--line)}.tier.pop .price{color:var(--brand)}.tier .price{font:500 1.7rem var(--mono)}
 .prose{max-width:68ch}.prose h2{margin-top:1.7em;font-size:1.6rem}.prose h3{font-size:1.15rem;margin-bottom:.3em}.prose li{margin:.3em 0}
