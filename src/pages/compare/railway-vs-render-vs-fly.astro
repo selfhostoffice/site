@@ -1,6 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { listings, avatar, fmtDate } from '../../lib/data';
+import affiliates from '../../data/affiliates.json';
+const aff = (affiliates as Record<string, { href: string; label: string; terms: string }>)['railway'];
 const n8n = listings.find(l => l.slug === 'n8n-io--n8n')!;
 const um = listings.find(l => l.slug === 'umami-software--umami')!;
 const vw = listings.find(l => l.slug === 'dani-garcia--vaultwarden')!;
@@ -54,7 +56,7 @@ const schema = [
   <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
   <h1>Railway vs Render vs Fly.io: what it costs to host n8n, Umami, Vaultwarden and PocketBase</h1>
   <p class="muted">If you want to self-host an app but don’t want to look after a server, these three are the usual answer: you push code or a Docker image and they run it. They charge in very different ways, though. Railway bills what your app actually uses, Fly.io bills the machine size you pick by the second, and Render sells fixed instance sizes. So instead of comparing price lists, I ran four apps people often self-host, measured how much memory and CPU each one uses when sitting idle, and priced those numbers on each platform. All prices are in US dollars as listed.</p>
-  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. Railway, Render, Fly.io and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+  <p class="note"><b>Disclosure:</b> the “{aff.label}” link on this page is an affiliate link. If you sign up for a paid Railway plan through it, we may earn {aff.terms}, at no extra cost to you. Render, Fly.io and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
 
   <h2>The short version</h2>
   <ul>
@@ -90,6 +92,7 @@ const schema = [
 <tbody>{rows.map(r => <tr><th scope="row">{r.app}</th><td>{r.rw}</td><td>{r.fly}</td><td>{r.rd}</td><td>{r.note}</td></tr>)}</tbody>
 </table></div>
 <p class="note">Per month, always on. Railway: you pay the larger of $5 or your usage; “uses” is what my measured memory, CPU and a 1 GB volume come to. Fly.io: Ashburn (iad) prices, 30 days, plus $0.15 for a 1 GB volume. Render: Hobby workspace ($0) plus the instance and a 1 GB disk at $0.25. Sources, all read {CHECKED}: <a href={S.rw}>Railway pricing</a>, <a href={S.rwDocs}>Railway plan docs</a>, <a href={S.fly}>Fly.io pricing</a>, <a href={S.rd}>Render pricing</a>, <a href={S.rdFree}>Render free tier docs</a>, <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+<p><a class="btn ghost" href={aff.href} rel="sponsored noopener nofollow" data-track="outbound" data-tool="railway" data-kind="affiliate">{aff.label} (affiliate link)</a></p>
 </div></section>
 
 <section style="padding-top:0"><div class="wrap prose">
