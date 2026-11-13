@@ -62,3 +62,6 @@ pocketbase/pocketbase	backend	Firebase	PocketBase
 appwrite/appwrite	backend	Firebase	Appwrite
 baserow/baserow	databases	Airtable	Baserow
 toeverything/AFFiNE	knowledge-base	Notion	AFFiNE
+Part-DB/Part-DB-server	inventory	Sortly	Part-DB
+sysadminsmedia/homebox	inventory	Sortly	Homebox
+openboxes/openboxes	inventory	Sortly	OpenBoxes

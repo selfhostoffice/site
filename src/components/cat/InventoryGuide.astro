@@ -1,0 +1,125 @@
+---
+import { listings, fmtDate } from '../../lib/data';
+const CHECKED = 'Nov 13, 2026';
+const get = (slug: string) => listings.find(l => l.slug === slug);
+const S = {
+  sortly: 'https://www.sortly.com/pricing/',
+  snipe: 'https://snipeitapp.com/pricing',
+  odoo: 'https://www.odoo.com/pricing',
+  homebox: 'https://homebox.software/en/',
+  partdb: 'https://docs.part-db.de/',
+  openboxes: 'https://openboxes.com/',
+  inventreeDocker: 'https://docs.inventree.org/en/stable/start/docker/',
+  partdbDocker: 'https://docs.part-db.de/installation/installation_docker.html',
+  hubInv: 'https://hub.docker.com/r/inventree/inventree/tags',
+  hubSnipe: 'https://hub.docker.com/r/snipe/snipe-it/tags',
+  hubPart: 'https://hub.docker.com/r/jbtronics/part-db1/tags',
+  hubOB: 'https://hub.docker.com/r/openboxes/openboxes',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+const rows = [
+  { slug: 'inventree--inventree', name: 'InvenTree', best: 'Parts, stock, purchasing and builds for a small shop or manufacturer', hosted: 'No official hosted plan; self-host only' },
+  { slug: 'grokability--snipe-it', name: 'Snipe-IT', best: 'IT assets: laptops, phones, software licenses, who has what', hosted: 'Hosted from $39.99/mo, or $399.99/yr' },
+  { slug: 'sysadminsmedia--homebox', name: 'Homebox', best: 'Home or small-office belongings, with photos, serials and warranties', hosted: 'No hosted plan; self-host only' },
+  { slug: 'part-db--part-db-server', name: 'Part-DB', best: 'Electronic components: footprints, datasheets, storage bins, BOMs', hosted: 'No hosted plan (public demo only)' },
+  { slug: 'openboxes--openboxes', name: 'OpenBoxes', best: 'Multi-site warehouses with lot and expiry tracking (built for healthcare)', hosted: 'Managed cloud ("OpenBoxes Lift"); price not listed' },
+  { slug: 'odoo--odoo', name: 'Odoo (Inventory app)', best: 'Stock that has to flow into sales and accounting', hosted: 'One app free on Odoo Online for unlimited users; more apps priced per user' },
+  { slug: 'frappe--erpnext', name: 'ERPNext', best: 'A full ERP where stock is one module of many', hosted: 'Frappe Cloud (site and server plans)' },
+].map(r => ({ ...r, l: get(r.slug) }));
+const fetched = rows.find(r => r.l)?.l?.fetchedAt;
+const faq = [
+  { q: 'Is there a free open-source inventory management system?', a: 'Yes. InvenTree (MIT), Snipe-IT, Homebox and Part-DB (all AGPL-3.0) and OpenBoxes (EPL-1.0) are free to download and run with no user or item limits. What you pay for is the server and your time keeping it updated and backed up.' },
+  { q: 'What is the best open-source inventory software for a small business?', a: 'For physical stock you buy, store and sell or build with, InvenTree. If “inventory” means company laptops and licenses, Snipe-IT. If you also want invoicing and sales in the same system, Odoo or ERPNext, but expect a bigger setup job.' },
+  { q: 'Is Odoo Inventory free?', a: `Odoo’s pricing page (read ${CHECKED}) says its One App Free plan lets you use one app, plus the apps it depends on, free for unlimited users on Odoo Online. Add a second app and you move to a paid per-user plan. The Community edition source code is also free to self-host.` },
+  { q: 'Can I scan barcodes with these tools?', a: 'InvenTree has barcode support and a mobile app in its docs. Part-DB generates barcode labels and can scan with a webcam in the browser. Snipe-IT prints asset tag labels. I haven’t tested scanning hardware with any of them.' },
+  { q: 'How does open source compare with Sortly on cost?', a: `Sortly’s Ultra plan was $74 a month billed yearly ($888 a year) for 5 users and 2,000 items when I read it on ${CHECKED}; its free plan stops at 100 items and 1 user. A self-hosted tool on a 2 GiB DigitalOcean server with weekly backups is about $14.40 a month, with no item or user cap, but you run it.` },
+  { q: 'Which one needs the smallest server?', a: 'Homebox says it uses under 50 MB of memory at idle (their claim; I haven’t measured it). It’s a single Go program with SQLite. InvenTree runs as several containers (app, worker, database, web server), so plan for more. I haven’t measured RAM for any of these yet.' },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<section style="padding-top:6px"><div class="wrap prose">
+<p class="note"><b>Checked on {CHECKED}.</b> GitHub numbers below refresh nightly{fetched && <> (last fetch {fmtDate(fetched)})</>}. Prices are US dollars as listed on each vendor’s page that night. <b>Disclosure:</b> no affiliate links on this page; none of these projects pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li><b>Most small businesses with physical stock:</b> <a href="/tool/inventree--inventree/">InvenTree</a>. Parts, stock locations, suppliers, purchase and sales orders, and builds, with a mobile app. MIT license, very active.</li>
+  <li><b>“Inventory” means IT gear:</b> <a href="/tool/grokability--snipe-it/">Snipe-IT</a>. It tracks assets checked out to people, not stock levels. The most-starred tool here.</li>
+  <li><b>A home, garage or tiny office:</b> <a href="/tool/sysadminsmedia--homebox/">Homebox</a>. Simple, light, single program. Not built for reorder points or sales.</li>
+  <li><b>Electronics parts:</b> <a href="/tool/part-db--part-db-server/">Part-DB</a>. Footprints, datasheets, bins and project BOMs.</li>
+  <li><b>You also want accounting and sales:</b> skip the stand-alone tools and look at <a href="/tool/odoo--odoo/">Odoo</a> or <a href="/tool/frappe--erpnext/">ERPNext</a>.</li>
+</ul>
+
+<h2>Compared</h2>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th>Tool</th><th>Best for</th><th>License</th><th>GitHub stars</th><th>Last code push</th><th>Hosted option</th></tr></thead>
+<tbody>
+{rows.map(r => <tr>
+  <td>{r.l ? <a href={`/tool/${r.slug}/`}>{r.name}</a> : r.name}</td>
+  <td>{r.best}</td>
+  <td>{r.l?.license ?? '?'}</td>
+  <td>{r.l ? r.l.stars.toLocaleString('en-US') : '?'}</td>
+  <td>{r.l ? fmtDate(r.l.lastPush) : '?'}</td>
+  <td>{r.hosted}</td>
+</tr>)}
+</tbody></table></div>
+<p class="note">Stars and push dates from the GitHub API. Hosted prices from <a href={S.snipe} rel="nofollow">Snipe-IT pricing</a>, <a href={S.odoo} rel="nofollow">Odoo pricing</a> and <a href={S.openboxes} rel="nofollow">openboxes.com</a>, read {CHECKED}. Odoo and ERPNext stars count the whole ERP, not just inventory.</p>
+</div>
+
+<div class="wrap prose">
+<h2>What it costs next to Sortly</h2>
+<p>Sortly is the hosted tool these usually get compared with. Its <a href={S.sortly} rel="nofollow">pricing page</a> on {CHECKED}, billed yearly:</p>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th>Option</th><th>Users</th><th>Item limit</th><th>Per month</th></tr></thead>
+<tbody>
+<tr><td>Sortly Free</td><td>1</td><td>100</td><td><span class="usd">$0</span></td></tr>
+<tr><td>Sortly Advanced</td><td>2</td><td>500</td><td><span class="usd">$24</span></td></tr>
+<tr><td>Sortly Ultra</td><td>5</td><td>2,000</td><td><span class="usd">$74</span></td></tr>
+<tr><td>Sortly Premium</td><td>8</td><td>5,000</td><td><span class="usd">$149</span></td></tr>
+<tr><td>Snipe-IT Basic Hosting (yearly)</td><td>Unlimited</td><td>Unlimited</td><td><span class="usd">$33.33</span></td></tr>
+<tr><td>Any tool above on your own 2 GiB server + backups</td><td>Unlimited</td><td>Unlimited</td><td><span class="usd">$14.40</span></td></tr>
+<tr><td>Odoo One App Free (Inventory only)</td><td>Unlimited</td><td>Unlimited</td><td><span class="usd">$0</span></td></tr>
+</tbody></table></div>
+<p class="note">Sortly monthly billing is $49, $149 and $299 for the paid plans. Snipe-IT is $399.99 a year divided by 12. The server line is a $12 DigitalOcean 2 GiB Droplet plus 20% for weekly backups (<a href={S.do} rel="nofollow">DigitalOcean pricing</a>, read Nov 11, 2026); it leaves out a domain and your time. InvenTree may want more than 2 GiB with real data; I haven’t measured it.</p>
+</div>
+
+<div class="wrap prose">
+<h2>How heavy each one is</h2>
+<p>I couldn’t run test installs on my machine tonight, so this is what I could check directly: the compressed download size of each project’s current official Docker image (amd64), from Docker Hub on {CHECKED}. It tells you roughly how much each install drags in, not how much memory it uses.</p>
+<ul>
+  <li><b>InvenTree 1.7.2:</b> 534 MB (<a href={S.hubInv} rel="nofollow">inventree/inventree</a>). It also needs a database and a web server container; see its <a href={S.inventreeDocker} rel="nofollow">Docker docs</a>.</li>
+  <li><b>Snipe-IT latest:</b> 321 MB, or 141 MB for the Alpine image (<a href={S.hubSnipe} rel="nofollow">snipe/snipe-it</a>). Needs MySQL or MariaDB.</li>
+  <li><b>Part-DB 2.20.5:</b> 239 MB (<a href={S.hubPart} rel="nofollow">jbtronics/part-db1</a>). Can run on SQLite, so one container is enough (<a href={S.partdbDocker} rel="nofollow">install docs</a>).</li>
+  <li><b>Homebox 0.27.1:</b> ships as a single program, about 39 MB compressed for Linux x86-64 on its GitHub release. The project says under 50 MB of memory at idle (<a href={S.homebox} rel="nofollow">homebox.software</a>).</li>
+  <li><b>OpenBoxes:</b> the Docker Hub repo shows no recent image (last updated May 2024), so follow the install guide on <a href={S.openboxes} rel="nofollow">openboxes.com</a> instead.</li>
+</ul>
+
+<h2>My picks, and why</h2>
+<ul>
+  <li><b>Best overall for a small business: InvenTree.</b> It’s the only stand-alone tool here that covers stock levels, suppliers, purchase orders and sales orders together, it’s MIT-licensed, and it ships releases often (1.7.0 to 1.7.2 in the first two weeks of November).</li>
+  <li><b>Best for IT asset tracking: Snipe-IT.</b> Don’t use it for stock you sell; use it to know which laptop is with whom. It’s also the only one with a priced, official hosted plan.</li>
+  <li><b>Best for home or a tiny office: Homebox.</b> The lightest to run. Note it’s a community fork; the original Homebox repo is archived and last changed in June 2024.</li>
+  <li><b>Best for electronics: Part-DB.</b> Built for components: footprints, datasheets, storage locations, price info per part, and project BOMs.</li>
+  <li><b>Best when stock is part of a bigger business system: Odoo.</b> The Inventory app alone is free on their cloud, which is hard to beat until you need a second app.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I didn’t install or time any of these tonight. Image sizes are downloads, not memory use.</li>
+  <li>I haven’t tested scanners, label printers or mobile apps.</li>
+  <li>Odoo’s paid plans show different per-user rates depending on billing and promotions, so I left the number out; check <a href={S.odoo} rel="nofollow">their page</a>.</li>
+  <li>Prices change. The date at the top is when I read them.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/alternatives/sortly/">Open-source Sortly alternatives</a> and <a href="/alternatives/asset-panda/">Asset Panda alternatives</a></li>
+  <li><a href="/alternatives/netsuite/">Open-source NetSuite alternatives</a> (Odoo, ERPNext) and <a href="/compare/akaunting-vs-invoice-ninja-vs-quickbooks/">Akaunting vs Invoice Ninja vs QuickBooks</a></li>
+  <li>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a></li>
+</ul>
+</div></section>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

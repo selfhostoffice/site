@@ -1,13 +1,24 @@
 ---
-import Base from '../../layouts/Base.astro'; import Directory from '../../components/Directory.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro';
+import Base from '../../layouts/Base.astro'; import Directory from '../../components/Directory.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import InventoryGuide from '../../components/cat/InventoryGuide.astro';
 import { listings, cats, CATS, slugify } from '../../lib/data';
 export function getStaticPaths() { return cats.map(cat => ({ params: { cat } })); }
 const { cat } = Astro.params; const items = listings.filter(l => l.category === cat); const C = CATS[cat!];
+// Per-category page copy, matched to the search query each page actually gets.
+const OVR: Record<string, { title: string; description: string; h1: string; intro: string }> = {
+  inventory: {
+    title: 'Open-source inventory management software: 7 self-hosted tools compared (2026)',
+    description: 'InvenTree, Snipe-IT, Homebox, Part-DB, OpenBoxes, Odoo and ERPNext compared on license, activity, hosted price and image size, with Sortly prices read Nov 13, 2026.',
+    h1: 'Open-source inventory management software',
+    intro: 'Free, self-hostable inventory tools for a small business, compared side by side. Which one fits depends on what “inventory” means for you: stock you sell or build with, IT equipment, electronics parts, or household stuff',
+  },
+};
+const O = OVR[cat!];
 const reps = [...new Set(items.map(l => l.replaces))];
 const schema = { '@context': 'https://schema.org', '@type': 'ItemList', name: `Open-source ${C.name} software`, itemListElement: items.map((l, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(`/tool/${l.slug}/`, Astro.site).toString(), name: l.name })) };
 ---
-<Base title={`Best open-source ${C.name} software for small businesses`} description={`${items.length} self-hostable open-source ${C.name.toLowerCase()} tools compared by license, GitHub stars and recent activity.`} schema={schema} crumbs={[['Home', '/'], [C.name, `/category/${cat}/`]]}>
-<div class="wrap page-head"><span class="eyebrow">Category</span><h1>Open-source {C.name.toLowerCase()} software</h1><p class="muted">{C.blurb}. {items.length} self-hostable tools.</p>
+<Base title={O?.title ?? `Best open-source ${C.name} software for small businesses`} description={O?.description ?? `${items.length} self-hostable open-source ${C.name.toLowerCase()} tools compared by license, GitHub stars and recent activity.`} schema={schema} crumbs={[['Home', '/'], [C.name, `/category/${cat}/`]]}>
+<div class="wrap page-head"><span class="eyebrow">Category</span><h1>{O?.h1 ?? `Open-source ${C.name.toLowerCase()} software`}</h1><p class="muted">{O ? `${O.intro}. ${items.length} tools listed below, plus Odoo and ERPNext in the table.` : `${C.blurb}. ${items.length} self-hostable tools.`}</p>
 <div class="quick">{reps.map(r => <a class="chip" href={`/alternatives/${slugify(r)}/`}>Compare alternatives to {r}</a>)}</div></div>
 <section style="padding-top:18px"><div class="wrap"><FeaturedSlot where={C.name}/><Directory items={items} showCat={false}/></div></section>
+{cat === 'inventory' && <InventoryGuide/>}
 </Base>
