@@ -29,5 +29,6 @@ const fetched = fmtDate(items[0].fetchedAt);
 </div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>Each one, briefly</h2></div><div class="grid">{items.map(l => <Card l={l}/>)}</div></div></section>
 {related.length > 0 && <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>More in {catName(cat)}</h2></div><div class="grid">{related.map(l => <Card l={l}/>)}</div></div></section>}
+{cat === 'email-marketing' && <div class="wrap"><p class="note"><b>Full guide:</b> <a href="/category/email-marketing/">Open-source email marketing software compared, with real monthly costs</a></p></div>}
 {guides.length > 0 && <div class="wrap">{guides.map(g => <p class="note"><b>Cost guide:</b> <a href={g.href}>{g.title}</a> (prices checked {g.checked})</p>)}</div>}
 </Base>

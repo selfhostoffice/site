@@ -65,3 +65,6 @@ toeverything/AFFiNE	knowledge-base	Notion	AFFiNE
 Part-DB/Part-DB-server	inventory	Sortly	Part-DB
 sysadminsmedia/homebox	inventory	Sortly	Homebox
 openboxes/openboxes	inventory	Sortly	OpenBoxes
+mettle/sendportal	email-marketing	Mailchimp	SendPortal
+phpList/phplist3	email-marketing	Mailchimp	phpList
+Billionmail/BillionMail	email-marketing	Mailchimp	BillionMail

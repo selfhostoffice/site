@@ -1,0 +1,143 @@
+---
+import { listings, fmtDate } from '../../lib/data';
+const CHECKED = 'Nov 14, 2026';
+const ECB = '1.1052';
+const get = (slug: string) => listings.find(l => l.slug === slug);
+const S = {
+  mailchimp: 'https://mailchimp.com/pricing/marketing/',
+  mailerlite: 'https://www.mailerlite.com/pricing',
+  brevo: 'https://www.brevo.com/pricing/',
+  keila: 'https://www.keila.io/pricing/',
+  mautic: 'https://mautic.org/pricing/',
+  phplist: 'https://www.phplist.com/pricing',
+  ses: 'https://aws.amazon.com/ses/pricing/',
+  sesSandbox: 'https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html',
+  sesPorts: 'https://docs.aws.amazon.com/ses/latest/dg/smtp-connect.html',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  doSmtp: 'https://docs.digitalocean.com/support/why-is-smtp-blocked/',
+  ecb: 'https://data.ecb.europa.eu/data/datasets/EXR/EXR.D.USD.EUR.SP00.A',
+  listmonkInstall: 'https://listmonk.app/docs/installation/',
+  sendportalReq: 'https://github.com/mettle/sendportal#requirements',
+  billionmail: 'https://github.com/Billionmail/BillionMail',
+  hubListmonk: 'https://hub.docker.com/r/listmonk/listmonk/tags',
+  hubMautic: 'https://hub.docker.com/r/mautic/mautic/tags',
+  hubKeila: 'https://hub.docker.com/r/pentacent/keila/tags',
+  hubPhplist: 'https://hub.docker.com/r/phplist/phplist/tags',
+  hubBillion: 'https://hub.docker.com/r/billionmail/core/tags',
+};
+const rows = [
+  { slug: 'knadh--listmonk', name: 'listmonk', lic: 'AGPL-3.0', best: 'Newsletters and list campaigns, cheaply, at any list size', release: '6.2.0 (Jun 26, 2026); 7.0 in beta', hosted: 'No official hosted plan; its docs list third-party hosts', send: 'Any SMTP service' },
+  { slug: 'mautic--mautic', name: 'Mautic', lic: 'GPL-3.0', best: 'Marketing automation: lead scoring, multi-step campaigns, landing pages', release: '7.2.2 (Oct 26, 2026)', hosted: 'Dropsolid managed, from about $274/mo billed yearly', send: 'SMTP or an email API service' },
+  { slug: 'pentacent--keila', name: 'Keila', lic: 'AGPL-3.0', best: 'A simple newsletter tool with an official hosted plan to fall back on', release: '0.40.2 (Nov 4, 2026)', hosted: 'Keila Cloud from about $8.84/mo (2,000 emails)', send: 'SMTP, SES, SendGrid, Mailgun, Postmark' },
+  { slug: 'mettle--sendportal', name: 'SendPortal', lic: 'MIT', best: 'Campaigns for several brands or clients from one install (workspaces)', release: '4.0.0.1 (Oct 22, 2026)', hosted: 'None; self-host only', send: 'SES, Postmark, SendGrid, Mailgun, Mailjet' },
+  { slug: 'phplist--phplist3', name: 'phpList', lic: 'AGPL-3.0', best: 'Old-school, proven list manager on ordinary PHP hosting', release: '3.6.17 (Aug 9, 2026)', hosted: 'phplist.com hosted plans, priced by subscribers or messages', send: 'SMTP' },
+  { slug: 'billionmail--billionmail', name: 'BillionMail', lic: 'AGPL-3.0', best: 'Running your own mail server and newsletters in one box', release: 'v4.9 (Dec 11, 2025)', hosted: 'None; self-host only', send: 'Its own mail server (Postfix)' },
+].map(r => ({ ...r, l: get(r.slug) }));
+const fetched = rows.find(r => r.l)?.l?.fetchedAt;
+// 10,000 contacts, one campaign a week = about 40,000 emails a month. Prices read Nov 14, 2026.
+const cost = [
+  { o: 'Mautic, managed by Dropsolid (Essential)', p: 'about $273.54 ($303.93 billed quarterly)', n: '€247.50 / €275, up to 50,000 contacts and emails' },
+  { o: 'Mailchimp Standard', p: '$135 ($114.75 for the first 12 months)', n: 'monthly price, 5,001–10,000 contacts' },
+  { o: 'Mailchimp Essentials', p: '$110 ($93.50 for the first 12 months)', n: 'monthly price, 5,001–10,000 contacts' },
+  { o: 'MailerLite Comfort', p: '$89 ($80.10 billed yearly)', n: '10,000 subscribers, 100,000 emails' },
+  { o: 'Keila Cloud L', p: 'about $70.73', n: '€64, 50,000 emails, unlimited contacts' },
+  { o: 'Mautic, Keila, SendPortal or phpList on your own server + Amazon SES', p: 'about $16–18.40', n: '$12 server (my estimate, not measured) + $4–6.40 SES' },
+  { o: 'listmonk on your own server + Amazon SES', p: 'about $10–12.40', n: '$6 server (fits, measured) + $4–6.40 SES' },
+];
+const faq = [
+  { q: 'What is the best open-source email marketing software?', a: 'For newsletters and ordinary campaigns, listmonk. It is the most-starred project here, it is one small program plus Postgres, and in my own test it sent 10,000 emails using about 160 MB of RAM including the database. If you need marketing automation (lead scoring, branching campaigns, landing pages), Mautic is the only serious open-source option, but it is a much bigger PHP application.' },
+  { q: 'Is there a free self-hosted alternative to Mailchimp?', a: 'Yes. listmonk, Mautic, Keila, SendPortal, phpList and BillionMail are all free to download and run with no contact limits. None of them is free to operate: you still pay for a server and, in practice, for a sending service such as Amazon SES.' },
+  { q: 'Do I need Amazon SES or another SMTP provider?', a: `For anything but tiny lists, yes. Sending bulk mail straight from a cheap server tends to land in spam, and many hosts block it: DigitalOcean blocks SMTP ports 25, 465 and 587 on every Droplet by default. A sending service fixes both. Amazon SES was $0.10 per 1,000 emails on pay-as-you-go pricing when I read it on ${CHECKED}; new accounts start on an Essentials plan at $0.16 per 1,000 and can switch. SES also listens on port 2587, which gets around the Droplet block.` },
+  { q: 'How much does self-hosted email marketing cost?', a: `For 10,000 contacts and a weekly campaign (about 40,000 emails a month), listmonk on a $6 DigitalOcean server plus Amazon SES comes to about $10–12.40 a month. Mailchimp Essentials was $110 a month for the same list on ${CHECKED}. Add backups and your own time.` },
+  { q: 'Can I send email marketing from my own mail server?', a: 'You can, and BillionMail is built for exactly that: it installs Postfix, Dovecot and Rspamd next to its campaign tool. You then own deliverability yourself: a clean IP, reverse DNS, SPF, DKIM and DMARC, warming up slowly, and a host that allows outbound port 25. For a small business I would point listmonk or Keila at SES instead.' },
+  { q: 'Is Sendy open source?', a: 'No. Sendy is a self-hosted newsletter app that also sends through Amazon SES, but it is sold as a paid license and its source is not under an open-source license, so it is not in this list.' },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<section style="padding-top:6px"><div class="wrap prose">
+<p class="note"><b>Checked on {CHECKED}.</b> GitHub numbers below refresh nightly{fetched && <> (last fetch {fmtDate(fetched)})</>}. Prices are US dollars from each vendor’s page that night; the two euro prices (Keila Cloud, managed Mautic) are converted at the ECB rate of {ECB} from Nov 13, 2026 (<a href={S.ecb} rel="nofollow">source</a>). <b>Disclosure:</b> no affiliate links on this page; none of these projects or services pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li><b>Most small businesses sending a newsletter:</b> <a href="/tool/knadh--listmonk/">listmonk</a> plus Amazon SES. Fast, light, and about a tenth of Mailchimp’s price at 10,000 contacts.</li>
+  <li><b>You need real automation (scoring, journeys, landing pages):</b> <a href="/tool/mautic--mautic/">Mautic</a>. Plan for a bigger server and some PHP admin work.</li>
+  <li><b>You want open source but someone else running it:</b> <a href="/tool/pentacent--keila/">Keila</a>. It’s the only one here with a cheap official hosted plan, so you can start hosted and move to your own server later.</li>
+  <li><b>An agency or several brands:</b> <a href="/tool/mettle--sendportal/">SendPortal</a>, which keeps each client in its own workspace.</li>
+  <li><b>You want to run the mail server too:</b> <a href="/tool/billionmail--billionmail/">BillionMail</a>. Only if you’re ready to handle deliverability yourself.</li>
+</ul>
+
+<h2>Compared</h2>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th>Tool</th><th>Best for</th><th>License</th><th>GitHub stars</th><th>Last code push</th><th>Latest stable release</th><th>Sends through</th><th>Hosted option</th></tr></thead>
+<tbody>
+{rows.map(r => <tr>
+  <td>{r.l ? <a href={`/tool/${r.slug}/`}>{r.name}</a> : r.name}</td>
+  <td>{r.best}</td>
+  <td>{r.lic}</td>
+  <td>{r.l ? r.l.stars.toLocaleString('en-US') : '?'}</td>
+  <td>{r.l ? fmtDate(r.l.lastPush) : '?'}</td>
+  <td>{r.release}</td>
+  <td>{r.send}</td>
+  <td>{r.hosted}</td>
+</tr>)}
+</tbody></table></div>
+<p class="note">Stars and push dates from the GitHub API; release dates from each project’s GitHub releases, read {CHECKED}. Mautic’s license file is GPL-3.0 (GitHub shows it as unrecognized). Hosted prices from <a href={S.keila} rel="nofollow">Keila pricing</a>, <a href={S.mautic} rel="nofollow">Mautic’s managed hosting page</a> and <a href={S.phplist} rel="nofollow">phpList.com</a>. BillionMail’s last release is almost a year old and its last code push was in June; the others all pushed in the past month.</p>
+</div>
+
+<div class="wrap prose">
+<h2>What it costs next to Mailchimp, MailerLite and Brevo</h2>
+<p>Same list for every row: 10,000 contacts and one campaign a week, so about 40,000 emails a month. Prices read {CHECKED}, per month.</p>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th>Option</th><th>Per month</th><th>Notes</th></tr></thead>
+<tbody>
+{cost.map(c => <tr><td>{c.o}</td><td><span class="usd">{c.p}</span></td><td>{c.n}</td></tr>)}
+</tbody></table></div>
+<p class="note">Sources: <a href={S.mailchimp} rel="nofollow">Mailchimp</a> (I set its contact picker to each tier), <a href={S.mailerlite} rel="nofollow">MailerLite</a>, <a href={S.keila} rel="nofollow">Keila</a>, <a href={S.mautic} rel="nofollow">Mautic/Dropsolid</a>, <a href={S.ses} rel="nofollow">Amazon SES</a> ($0.10 per 1,000 pay-as-you-go, $0.16 on the Essentials plan) and <a href={S.do} rel="nofollow">DigitalOcean Droplets</a> ($6 for 1 GiB, $12 for 2 GiB). <b>Brevo</b> isn’t in the table: it prices by emails sent, its page showed Starter from $9 and Standard from $18 a month (5,000 emails; $97 and $194 a year), and the slider wouldn’t give me a clean 40,000-email figure tonight. Self-hosted rows leave out backups (DigitalOcean charges 20% of the server for weekly ones), a domain, and your time.</p>
+</div>
+
+<div class="wrap prose">
+<h2>What I’ve measured, and how heavy each one is</h2>
+<p>On Oct 30, 2026 I installed listmonk 6.2.0 with Postgres 17 on my Linux test machine, loaded 10,000 subscribers and sent one campaign to all of them through a local test mail server. It took 101 seconds at the default settings; listmonk peaked at 51 MB of memory and Postgres at about 108 MB. The full write-up is in <a href="/compare/ghost-vs-beehiiv-vs-listmonk/">Ghost vs Beehiiv vs listmonk</a>.</p>
+<p>I couldn’t run test installs of the others tonight, so for those I checked the compressed download size of each project’s current official Docker image (amd64) on Docker Hub, {CHECKED}. It shows how much each install drags in, not how much memory it uses:</p>
+<ul>
+  <li><b>listmonk 6.2.0:</b> 15 MB (<a href={S.hubListmonk} rel="nofollow">listmonk/listmonk</a>); the Linux release download is about 9.7 MB. Needs Postgres 12 or newer (<a href={S.listmonkInstall} rel="nofollow">install docs</a>).</li>
+  <li><b>Keila 0.40.2:</b> 145 MB (<a href={S.hubKeila} rel="nofollow">pentacent/keila</a>), plus Postgres.</li>
+  <li><b>phpList 3.6.17:</b> 214 MB (<a href={S.hubPhplist} rel="nofollow">phplist/phplist</a>), plus MySQL or MariaDB.</li>
+  <li><b>Mautic 7.2.2:</b> 653 MB for the Apache image (<a href={S.hubMautic} rel="nofollow">mautic/mautic</a>), plus MySQL and the cron jobs Mautic needs to send campaigns.</li>
+  <li><b>BillionMail 4.9.5:</b> the core image is 52 MB (<a href={S.hubBillion} rel="nofollow">billionmail/core</a>), but a full install also pulls its Postfix (87 MB), Dovecot (85 MB) and Rspamd (91 MB) images plus a database.</li>
+  <li><b>SendPortal 4:</b> no official Docker Hub image. It’s a Laravel app needing PHP 8.3+ and MySQL or Postgres (<a href={S.sendportalReq} rel="nofollow">requirements</a>).</li>
+</ul>
+
+<h2>My picks, and why</h2>
+<ul>
+  <li><b>Best overall: listmonk.</b> It’s the one I’ve actually run, it’s tiny, and the 7.0 beta shows it’s still moving. It does lists, campaigns, templates, analytics and transactional mail over an API. It doesn’t do visual automation journeys.</li>
+  <li><b>Best for marketing automation: Mautic.</b> Nothing else open source comes close on features. The cost is complexity: a 650 MB image, a database and cron.</li>
+  <li><b>Best if you might want hosting later: Keila.</b> Same software hosted or self-hosted, with a hosted plan from about $8.84 a month.</li>
+  <li><b>Best for agencies: SendPortal.</b> Workspaces per client, MIT license, works with the common sending services.</li>
+  <li><b>phpList</b> still works and runs on plain PHP hosting, but it’s the least active of the maintained ones (883 stars). <b>BillionMail</b> is popular on GitHub, but I wouldn’t put a business list on your own mail server unless you already run one.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>You need a sending service for any real volume, and it has its own rules. New Amazon SES accounts start in a <a href={S.sesSandbox} rel="nofollow">sandbox</a> limited to 200 messages a day to verified addresses until AWS grants production access.</li>
+  <li>DigitalOcean <a href={S.doSmtp} rel="nofollow">blocks SMTP ports</a> 25, 465 and 587 on Droplets. Use SES on port 2587 (<a href={S.sesPorts} rel="nofollow">AWS docs</a>) or the provider’s HTTP API.</li>
+  <li>You set up SPF, DKIM and DMARC for your domain yourself. Hosted tools walk you through it; self-hosted ones mostly don’t.</li>
+  <li>Only listmonk has been through a real test install by me. Server sizes for the others are estimates.</li>
+  <li>Also looked at and left out: Postal (a mail delivery server, not a campaign tool), Mailtrain (no release since 2021), and Sendy (not open source).</li>
+  <li>Prices change. The date at the top is when I read them.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/alternatives/mailchimp/">Open-source Mailchimp alternatives</a>, side by side on GitHub data</li>
+  <li><a href="/compare/mailchimp-vs-mailerlite-vs-listmonk-vs-mautic/">Mailchimp vs MailerLite vs listmonk vs Mautic</a>: cost at 1,500, 5,000 and 10,000 contacts</li>
+  <li><a href="/compare/ghost-vs-beehiiv-vs-listmonk/">Ghost vs Beehiiv vs listmonk</a> (where my listmonk numbers come from)</li>
+  <li>Running your own inbox instead: <a href="/compare/proton-vs-fastmail-vs-mailcow/">Proton vs Fastmail vs Mailcow</a>. Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a></li>
+</ul>
+</div></section>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
