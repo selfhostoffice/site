@@ -16,11 +16,13 @@ twentyhq/twenty	crm	Salesforce	Twenty
 espocrm/espocrm	crm	HubSpot	EspoCRM
 salesagility/SuiteCRM	crm	Salesforce	
 krayin/laravel-crm	crm	HubSpot	Krayin CRM
+alextselegidis/clientverse	crm	HubSpot	Clientverse
 chatwoot/chatwoot	helpdesk	Zendesk	Chatwoot
 zammad/zammad	helpdesk	Zendesk	Zammad
 freescout-helpdesk/freescout	helpdesk	Help Scout	FreeScout
 kimai/kimai	time-tracking	Harvest	Kimai
 solidtime-io/solidtime	time-tracking	Toggl	solidtime
+alextselegidis/timecrack	time-tracking	Toggl	Timecrack
 frappe/hrms	hr	BambooHR	Frappe HR
 orangehrm/orangehrm	hr	BambooHR	OrangeHRM
 formbricks/formbricks	forms	Typeform	Formbricks

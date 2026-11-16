@@ -4,6 +4,8 @@ import OnSelfHost from '../../components/OnSelfHost.astro';
 import { listings } from '../../lib/data';
 import affiliates from '../../data/affiliates.json';
 const cal = listings.find(l => l.slug === 'calcom--cal.diy')!;
+const ea = listings.find(l => l.slug === 'alextselegidis--easyappointments')!;
+const EA_CHECKED = 'Nov 16, 2026';
 const aff = (affiliates as Record<string, { href: string; label: string; terms: string }>)['calcom--cal.diy'];
 const CHECKED = 'Oct 22, 2026';
 const S = {
@@ -121,8 +123,9 @@ const schema = [
 <h2>So which should you pick?</h2>
 <ul>
   <li><b>Solo, just need a booking link:</b> Cal.com Free. A $10–24/mo server to replace a $0 plan only makes sense if keeping booking data on your own machine is the point.</li>
-  <li><b>Solo, and you want it on your own server:</b> Cal.diy is a good fit. Budget roughly $20–24/mo for a 4 GB box plus your time on updates.</li>
-  <li><b>A team that needs round-robin, routing or reminders:</b> Cal.com Teams. Cal.diy can’t do those at any price, so self-hosting isn’t a real alternative here.</li>
+  <li><b>Solo, and you want it on your own server:</b> Cal.diy is a good fit. Budget roughly $20–24/mo for a 4 GB box plus your time on updates. <a href={`/tool/${ea.slug}/`}>Easy!Appointments</a> is another self-hosted option if you already run PHP and MySQL; it’s a smaller app, not a Cal.com fork.</li>
+  <li><b>A small team that wants staff calendars on their own server:</b> Easy!Appointments. The free release has providers, secretaries and a public booking page, and there’s an official Docker image. Cal.diy has no team features, so it isn’t a substitute here. Prices I read on {EA_CHECKED}: managed hosting from the core team is €20 a month, billed annually (€240 a year), excluding VAT.</li>
+  <li><b>A team that needs round-robin, routing or scheduled reminders:</b> Cal.com Teams. Cal.diy can’t do those at any price. Easy!Appointments sends booking confirmation, update and cancellation emails, but its site says scheduled reminder emails, SMS and online payments are paid custom work, not part of the free release.</li>
   <li><b>A company that must run it in-house with SSO:</b> that’s Cal.com Enterprise on-prem, priced by sales.</li>
 </ul>
 
@@ -131,10 +134,13 @@ const schema = [
 </div></section>
 
 <OnSelfHost
-  title="Cal.diy on SelfHost Office"
-  tools={[{ listing: cal, name: 'Cal.diy', lastPush: true }]}
+  title="On SelfHost Office"
+  tools={[
+    { listing: cal, name: 'Cal.diy', lastPush: true, license: true },
+    { listing: ea, name: 'Easy!Appointments', lastPush: true, license: true },
+  ]}
   fetchedAt={cal.fetchedAt}
 >
-  <p><a href="/compare/calendly-vs-cal-com-vs-cal-diy/">Calendly vs Cal.com cost for 1–25 people</a>, <a href="/alternatives/calendly/">other Calendly alternatives</a>.</p>
+  <p><a href="/compare/calendly-vs-cal-com-vs-cal-diy/">Calendly vs Cal.com cost for 1–25 people</a>, <a href="/alternatives/calendly/">other Calendly alternatives</a>, <a href={`/tool/${ea.slug}/`}>Easy!Appointments listing</a>.</p>
 </OnSelfHost>
 </Base>

@@ -1,8 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
+import OnSelfHost from '../../components/OnSelfHost.astro';
 import { listings, avatar, fmtDate } from '../../lib/data';
 import affiliates from '../../data/affiliates.json';
 const cal = listings.find(l => l.slug === 'calcom--cal.diy')!;
+const ea = listings.find(l => l.slug === 'alextselegidis--easyappointments')!;
+const EA_CHECKED = 'Nov 16, 2026';
 const aff = (affiliates as Record<string, { href: string; label: string; terms: string }>)['calcom--cal.diy'];
 const CHECKED = 'Nov 12, 2026';
 const S = {
@@ -112,11 +115,20 @@ const schema = [
 </ul>
 <p>Put next to the free plan, that {f(DO4 * 12)} buys you one thing: the booking data lives on your server. That can matter for a clinic or a law office. For anyone else, Cal.com Free is cheaper and you don’t have to run updates.</p>
 
+<h2>Another self-hosted option: Easy!Appointments</h2>
+<p>Cal.diy isn’t the only self-hosted booking app on this site. <a href={`/tool/${ea.slug}/`}>Easy!Appointments</a> is a PHP and MySQL scheduler that’s been open source under GPL-3.0 since 2014. I didn’t run it for this page. What follows is from its <a href={ea.homepage} rel="nofollow" data-track="outbound" data-tool={ea.slug} data-kind="website">website</a>, <a href="https://easyappointments.org/pricing/" rel="nofollow" data-track="outbound" data-tool={ea.slug} data-kind="website">pricing page</a>, <a href={ea.repoUrl} rel="nofollow" data-track="outbound" data-tool={ea.slug} data-kind="repo">GitHub repo</a> and Docker Hub, checked {EA_CHECKED}.</p>
+<p>The free release includes a public booking page (customers don’t need an account), a calendar for several staff with admin, provider and secretary roles, confirmation, update and cancellation emails, a REST API and webhooks, LDAP login, Google Calendar and CalDAV sync, and official WordPress, Joomla and Drupal plugins. Latest GitHub release was 1.6.1 on Oct 19, 2026; the repo had {ea.stars.toLocaleString('en-US')} stars and a push on {fmtDate(ea.lastPush)} when I fetched it ({fmtDate(ea.fetchedAt)}).</p>
+<p>Setup is the usual PHP path: PHP 8.2+, MySQL, a writable <code>storage</code> directory, then a browser installer, per its <a href="https://easyappointments.org/documentation/installation/" rel="nofollow" data-track="outbound" data-tool={ea.slug} data-kind="website">installation guide</a> (last updated Oct 21, 2026). There’s an official production image, <a href="https://hub.docker.com/r/alextselegidis/easyappointments" rel="nofollow" data-track="outbound" data-tool={ea.slug} data-kind="website">alextselegidis/easyappointments</a> on Docker Hub; when I queried the API on {EA_CHECKED} the <code>1.6.1</code> and <code>latest</code> tags were dated Oct 22, 2026. The Docker page in the project’s own docs is a development compose file, and it says that setup is not for production.</p>
+<p>If you’d rather not run a server, the core team sells managed hosting at €20 a month, billed annually (€240 a year). White-label help is a one-time €50 (one installation) or €500 (SaaS or reseller). A technical support session is €60 (up to 60 minutes). Custom development and data migration are quoted. All those prices are excluding VAT, read from the pricing page on {EA_CHECKED}.</p>
+<p>What it is not: a drop-in for Cal.com Teams. I didn’t find round-robin or routing forms in the public feature list. The built-in emails cover booking confirmations, updates and cancellations; the site says scheduled reminder emails, SMS and online payments are paid custom development, not part of the free release. If you need those, Cal.com Teams is the closer match.</p>
+<p>I’d pick Easy!Appointments over Cal.diy when you want a simple staff calendar on your own server — a clinic, a salon, a workshop taking bookings — and you can live without Cal.com’s routing and workflows.</p>
+
 <h2>Which I’d pick</h2>
 <ul>
   <li><b>Solo, a few meeting types:</b> Cal.com Free. Calendly Free’s single event type runs out fast.</li>
-  <li><b>Solo, and the data must stay in-house:</b> Cal.diy on a 4 GiB server, about ${DO4} a month plus your time.</li>
-  <li><b>A sales or support team sharing leads:</b> Cal.com Teams, unless you use Calendly’s Notetaker or Marketo/Pardot. At 10 people the gap is {f(yr(10, CY.teams) - yr(10, K.teams))} a year on yearly billing, or {f(yr(10, CM.teams) - yr(10, K.teams))} if you’d otherwise pay Calendly month to month.</li>
+  <li><b>Solo, and the data must stay in-house:</b> Cal.diy on a 4 GiB server, about ${DO4} a month plus your time. Easy!Appointments also works for one person, and it’s a smaller PHP app if you already run PHP and MySQL.</li>
+  <li><b>A small team that wants a staff calendar on their own server:</b> Easy!Appointments. The free release already has providers, secretaries and a public booking page, and there’s an official Docker image. Cal.diy has no team features, so it isn’t a substitute here.</li>
+  <li><b>A sales or support team sharing leads:</b> Cal.com Teams, unless you use Calendly’s Notetaker or Marketo/Pardot. At 10 people the gap is {f(yr(10, CY.teams) - yr(10, K.teams))} a year on yearly billing, or {f(yr(10, CM.teams) - yr(10, K.teams))} if you’d otherwise pay Calendly month to month. Easy!Appointments is not a replacement for those routing features.</li>
   <li><b>Already deep in Calendly with Salesforce routing set up:</b> price out the switching time before you move. The licence saving is real but not huge for a small team.</li>
 </ul>
 
@@ -133,8 +145,14 @@ const schema = [
 </div>
 </div></section>
 
-<section style="padding-top:0"><div class="wrap">
-<div class="sec-head"><h2>Related on SelfHost Office</h2></div>
-<p><a class="tool" href={`/tool/${cal.slug}/`}><img src={avatar(cal, 56)} alt="" width="28" height="28" loading="lazy"/> Cal.diy</a> listing, <a href="/pricing/cal-com/">Cal.com pricing in detail</a>, and <a href="/alternatives/calendly/">every Calendly alternative we list</a>.</p>
-</div></section>
+<OnSelfHost
+  title="On SelfHost Office"
+  tools={[
+    { listing: cal, name: 'Cal.diy', lastPush: true, license: true },
+    { listing: ea, name: 'Easy!Appointments', lastPush: true, license: true },
+  ]}
+  fetchedAt={cal.fetchedAt}
+>
+  <p><a href={`/tool/${cal.slug}/`}>Cal.diy listing</a>, <a href={`/tool/${ea.slug}/`}>Easy!Appointments listing</a>, <a href="/pricing/cal-com/">Cal.com pricing in detail</a>, and <a href="/alternatives/calendly/">every Calendly alternative we list</a>.</p>
+</OnSelfHost>
 </Base>
