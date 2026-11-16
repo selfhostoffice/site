@@ -1,0 +1,89 @@
+---
+import { listings, fmtDate, avatar, type L } from '../../lib/data';
+interface Props { l: L }
+const { l } = Astro.props;
+const CHECKED = 'Nov 16, 2026';
+const clientverse = listings.find(x => x.slug === 'alextselegidis--clientverse');
+const timecrack = listings.find(x => x.slug === 'alextselegidis--timecrack');
+const plainpad = listings.find(x => x.slug === 'alextselegidis--plainpad');
+const apphold = listings.find(x => x.slug === 'alextselegidis--apphold');
+const S = {
+  site: 'https://easyappointments.org',
+  pricing: 'https://easyappointments.org/pricing/',
+  install: 'https://easyappointments.org/documentation/installation/',
+  dockerDocs: 'https://easyappointments.org/documentation/docker/',
+  notifications: 'https://easyappointments.org/documentation/appointment-notifications/',
+  hub: 'https://hub.docker.com/r/alextselegidis/easyappointments',
+  release: 'https://github.com/alextselegidis/easyappointments/releases/tag/1.6.1',
+  dockerRepo: 'https://github.com/alextselegidis/easyappointments-docker',
+};
+const track = { 'data-track': 'outbound', 'data-tool': l.slug, 'data-kind': 'website' };
+---
+<section class="ea-guide">
+  <div class="wrap prose">
+    <h2>What it actually is</h2>
+    <p>Easy!Appointments is a booking page for your customers and a calendar for your staff, running on your own server. It’s been open source under GPL-3.0 since 2014. I didn’t install it myself for this page; the facts below come from its <a href={S.site} rel="nofollow" {...track}>website</a>, <a href={S.pricing} rel="nofollow" {...track}>pricing page</a>, <a href="https://easyappointments.org/documentation/" rel="nofollow" {...track}>docs</a> and <a href={l.repoUrl} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="repo">GitHub repo</a>, checked {CHECKED}.</p>
+
+    <figure class="ea-shot">
+      <img src="/img/easyappointments-calendar-week-from-official-site.jpg" alt="The Easy!Appointments calendar in week view: three providers' appointments, coloured by service" width="1400" height="875" loading="lazy" />
+      <figcaption class="note">The staff calendar in week view, with appointments for three providers. Screenshot from easyappointments.org, saved {CHECKED}.</figcaption>
+    </figure>
+    <figure class="ea-shot ea-shot-narrow">
+      <img src="/img/easyappointments-booking-mobile-from-official-site.jpg" alt="The booking page on a phone, on the date and time step" width="780" height="1688" loading="lazy" />
+      <figcaption class="note">The public booking page on a phone, at the date and time step. Screenshot from easyappointments.org, saved {CHECKED}.</figcaption>
+    </figure>
+
+    <h2>What’s in the free release</h2>
+    <p>All of this is in the download. There is no seat limit and no licence fee for running it yourself.</p>
+    <ul>
+      <li>A public booking page. Customers pick a time and leave their details; they don’t need an account.</li>
+      <li>Staff accounts with roles: administrators, providers and secretaries, described in the user manual.</li>
+      <li>Email notifications when a booking is created, changed or cancelled, sent to the customer and the relevant staff, if your server can send mail. That’s in the <a href={S.notifications} rel="nofollow" {...track}>notifications docs</a>.</li>
+      <li>A REST API and webhooks, LDAP login, and two-way Google Calendar and CalDAV sync.</li>
+      <li>Official WordPress, Joomla and Drupal add-ons, so the booking page can live on a site you already have.</li>
+      <li>The booking page and back office are translated into more than 40 languages, according to the project’s site.</li>
+    </ul>
+    <p>What I didn’t find in the free feature list: round-robin or routing forms. The site says scheduled reminder emails, SMS and online payments are paid custom development, not part of the core app. Confirmation emails are not the same as a reminder sent the day before.</p>
+
+    <h2>How you install it</h2>
+    <p>The <a href={S.install} rel="nofollow" {...track}>installation guide</a> (last updated Oct 21, 2026) asks for Apache 2.4 or Nginx, PHP 8.2+ with the curl, json, mbstring, gd, simplexml and fileinfo extensions, and MySQL. You create a database, upload the files, make the <code>storage</code> directory writable, fill in <code>config.php</code>, then open the site in a browser and run the installer. The homepage also notes you’ll want a cron job if you use calendar sync.</p>
+    <p>For production Docker, there’s an official image, <a href={S.hub} rel="nofollow" {...track}>alextselegidis/easyappointments</a>. When I queried Docker Hub’s API on {CHECKED}, the <code>latest</code> and <code>1.6.1</code> tags were last updated Oct 22, 2026. The image is documented in the <a href={S.dockerRepo} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="repo">easyappointments-docker</a> repo. The <a href={S.dockerDocs} rel="nofollow" {...track}>Docker page in the docs</a> is a development compose file, and it says that setup is not meant for production.</p>
+    <p>The latest GitHub release was <a href={S.release} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="repo">1.6.1</a> on Oct 19, 2026. The repo had a later push on {fmtDate(l.lastPush)}, so the source is a little ahead of that release.</p>
+
+    <h2>What the paid options cost</h2>
+    <p>You can run the same software yourself for free. These are optional services from the core team, read off <a href={S.pricing} rel="nofollow" {...track}>easyappointments.org/pricing</a> on {CHECKED}. The figures below are the official US dollar prices on that page, excluding VAT. They also sell the same services in euros and pounds.</p>
+  </div>
+  <div class="wrap">
+    <div class="compare-wrap"><table class="compare">
+      <thead><tr><th scope="col">Option</th><th scope="col">Price</th><th scope="col">What it’s for</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Self-hosted</th><td><b>Free</b></td><td>Download and run it on your own server. GPL-3.0, no licence fee, no seat limit.</td></tr>
+        <tr><th scope="row">Managed Hosting</th><td><b>$20/mo</b></td><td>Billed annually, $240 a year (also listed as €20 or £18 a month). They set it up, apply updates, keep daily backups for 30 days, and reply within one business day.</td></tr>
+        <tr><th scope="row">White Label, Regular</th><td><b>$50</b> one-time</td><td>One installation rebranded with your own name, plus a written commercial licence (also listed as €50 or £45).</td></tr>
+        <tr><th scope="row">White Label, Extended</th><td><b>$500</b> one-time</td><td>The same, for a SaaS or reseller with many end customers (also listed as €500 or £450).</td></tr>
+        <tr><th scope="row">Technical Support</th><td><b>$60</b> per session</td><td>Up to 60 minutes with the core team (also listed as €60 or £55).</td></tr>
+        <tr><th scope="row">Custom development / data migration</th><td>Fixed quote</td><td>Scoped before work starts. This is also how scheduled reminders, SMS and payments are sold.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Managed Hosting is billed once a year, in EUR, USD or GBP. I used the official dollar prices from their currency list, not a converted euro rate. Your card is charged in the currency you pick, with no exchange added by them.</p>
+  </div>
+  <div class="wrap prose">
+    <h2>Other projects from the same maintainer</h2>
+    <p>Alex Tselegidis also makes these, and they’re listed here too:</p>
+    <ul>
+      {clientverse && <li><a class="tool" href={`/tool/${clientverse.slug}/`}><img src={avatar(clientverse, 40)} alt="" width="20" height="20" />{clientverse.name}</a> — a self-hosted CRM, listed as a HubSpot alternative.</li>}
+      {timecrack && <li><a class="tool" href={`/tool/${timecrack.slug}/`}><img src={avatar(timecrack, 40)} alt="" width="20" height="20" />{timecrack.name}</a> — a self-hosted time tracker, listed as a Toggl alternative.</li>}
+      {plainpad && <li><a class="tool" href={`/tool/${plainpad.slug}/`}><img src={avatar(plainpad, 40)} alt="" width="20" height="20" />{plainpad.name}</a> — a self-hosted notes app, listed as an Evernote alternative.</li>}
+      {apphold && <li><a class="tool" href={`/tool/${apphold.slug}/`}><img src={avatar(apphold, 40)} alt="" width="20" height="20" />{apphold.name}</a> — a self-hosted uptime monitor, listed as an UptimeRobot alternative.</li>}
+    </ul>
+    <p class="note">I didn’t run Easy!Appointments for this page, so I can’t tell you how it feels day to day or how much RAM it uses. Check the docs and the repo before you deploy it.</p>
+  </div>
+</section>
+
+<style>
+  .ea-shot { margin: 1.2rem 0 1.5rem; max-width: 68ch; }
+  .ea-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line, #ddd); }
+  .ea-shot-narrow { max-width: 280px; }
+  .ea-guide .tool { display: inline-flex; gap: 6px; align-items: center; }
+  .ea-guide .tool img { border-radius: 2px; }
+</style>

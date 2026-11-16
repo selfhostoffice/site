@@ -1,7 +1,9 @@
 import raw from '../data/listings.json';
 export type L = typeof raw[number];
 export const SITE_NAME = 'SelfHost Office';
-export const listings: L[] = [...raw].sort((a, b) => b.stars - a.stars);
+/** Strip GitHub emoji shortcodes like :date: from repo descriptions. Requires a letter so times such as 10:30:00 stay intact. */
+export const cleanDesc = (s: string) => (s || '').replace(/:([a-z0-9_+-]*[a-z][a-z0-9_+-]*):/gi, '').replace(/[ \t]+/g, ' ').trim();
+export const listings: L[] = [...raw].map(l => ({ ...l, description: cleanDesc(l.description) })).sort((a, b) => b.stars - a.stars);
 export const CATS: Record<string, { name: string; icon: string; blurb: string }> = {
   'e-signature': { name: 'E-signature', icon: 'pen', blurb: 'Send, sign and archive contracts' },
   scheduling: { name: 'Scheduling', icon: 'calendar', blurb: 'Booking pages and polls' },
@@ -24,6 +26,8 @@ export const CATS: Record<string, { name: string; icon: string; blurb: string }>
   automation: { name: 'Workflow automation', icon: 'pulse', blurb: 'Zapier-style workflows and integrations' },
   passwords: { name: 'Password managers', icon: 'badge', blurb: 'Shared vaults and credentials' },
   backend: { name: 'App backends', icon: 'box', blurb: 'Postgres, auth and file storage for apps' },
+  notes: { name: 'Notes', icon: 'file', blurb: 'Personal notes on your own server' },
+  'uptime-monitoring': { name: 'Uptime monitoring', icon: 'pulse', blurb: 'Checks that tell you when a site goes down' },
 };
 export const catName = (c: string) => CATS[c]?.name ?? c;
 export const cats = Object.keys(CATS).filter(c => listings.some(l => l.category === c));

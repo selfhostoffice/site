@@ -23,6 +23,8 @@ freescout-helpdesk/freescout	helpdesk	Help Scout	FreeScout
 kimai/kimai	time-tracking	Harvest	Kimai
 solidtime-io/solidtime	time-tracking	Toggl	solidtime
 alextselegidis/timecrack	time-tracking	Toggl	Timecrack
+alextselegidis/plainpad	notes	Evernote	Plainpad
+alextselegidis/apphold	uptime-monitoring	UptimeRobot	Apphold
 frappe/hrms	hr	BambooHR	Frappe HR
 orangehrm/orangehrm	hr	BambooHR	OrangeHRM
 formbricks/formbricks	forms	Typeform	Formbricks

@@ -2210,5 +2210,58 @@
   "replaces": "Zapier",
   "source": "https://api.github.com/repos/node-red/node-red",
   "fetchedAt": "2026-11-16T14:03:59Z"
+ },
+ {
+  "slug": "alextselegidis--plainpad",
+  "name": "Plainpad",
+  "repo": "alextselegidis/plainpad",
+  "repoUrl": "https://github.com/alextselegidis/plainpad",
+  "homepage": "https://plainpad.org",
+  "description": "\ud83d\udcd3 Plainpad - Self Hosted Note Taking App",
+  "license": "GPL-3.0",
+  "stars": 454,
+  "lastPush": "2026-11-14T07:42:24Z",
+  "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/4527441?v=4",
+  "language": "PHP",
+  "forks": 43,
+  "openIssues": 13,
+  "topics": [
+   "javascript",
+   "laravel",
+   "note-taking",
+   "php",
+   "react",
+   "self-hosted"
+  ],
+  "category": "notes",
+  "replaces": "Evernote",
+  "source": "https://api.github.com/repos/alextselegidis/plainpad",
+  "fetchedAt": "2026-11-16T14:14:02Z"
+ },
+ {
+  "slug": "alextselegidis--apphold",
+  "name": "Apphold",
+  "repo": "alextselegidis/apphold",
+  "repoUrl": "https://github.com/alextselegidis/apphold",
+  "homepage": "https://apphold.org",
+  "description": "Online software telemetry app",
+  "license": "GPL-3.0",
+  "stars": 1,
+  "lastPush": "2026-11-02T20:59:43Z",
+  "archived": false,
+  "ownerAvatar": "https://avatars.githubusercontent.com/u/4527441?v=4",
+  "language": "PHP",
+  "forks": 0,
+  "openIssues": 0,
+  "topics": [
+   "php",
+   "self-hosted",
+   "software-telemetry"
+  ],
+  "category": "uptime-monitoring",
+  "replaces": "UptimeRobot",
+  "source": "https://api.github.com/repos/alextselegidis/apphold",
+  "fetchedAt": "2026-11-16T14:14:02Z"
  }
 ]
