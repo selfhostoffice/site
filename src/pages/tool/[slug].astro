@@ -1,5 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro';
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import EasyAppointmentsGuide from '../../components/tool/EasyAppointmentsGuide.astro';
 import affiliates from '../../data/affiliates.json';
 import { listings, catName, slugify, fmtDate, licLabel, licFamily, activity, activityLabel, avatar, kfmt, GUIDES } from '../../lib/data';
 export function getStaticPaths() { return listings.map(l => ({ params: { slug: l.slug }, props: { l } })); }
@@ -28,6 +28,7 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
   {GUIDES.filter(g => g.tools.includes(l.slug)).map(g => <p class="note"><b>Cost guide:</b> <a href={g.href}>{g.title}</a> (prices checked {g.checked})</p>)}
   <p class="note">Source: <a href={l.source}>{l.source}</a>, fetched {fmtDate(l.fetchedAt)}. "Active" means a push within 30 days of that fetch. Maintainer? <a href={`/claim/?tool=${l.slug}`}>Claim or get featured</a>.</p>
 </div>
+{l.slug === 'alextselegidis--easyappointments' && <EasyAppointmentsGuide l={l} />}
 {same.length > 0 && <section><div class="wrap"><div class="sec-head"><h2>Other {l.replaces} alternatives</h2><a href={`/alternatives/${slugify(l.replaces)}/`}>Side-by-side comparison →</a></div><div class="grid">{same.map(x => <Card l={x}/>)}</div></div></section>}
 {related.length > 0 && <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>Related in {catName(l.category)}</h2></div><div class="grid">{related.map(x => <Card l={x}/>)}</div></div></section>}
 </Base>

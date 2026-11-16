@@ -134,3 +134,10 @@ code{font-family:var(--mono);background:var(--surface-2);padding:1px 5px;font-si
   .onsh-license,.onsh-push{grid-column:1/-1;padding-left:40px}
   .onsh-push:empty{display:none}
 }
+
+/* Editorial pick on an alternatives page. Not a paid or featured slot. */
+.pick{max-width:68ch;margin:0 0 22px;padding:16px 18px 14px;border:1px solid var(--line);background:var(--surface)}
+.pick-kicker{margin:0 0 .4em;font:600 .76rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.pick .tool{display:inline-flex;gap:8px;align-items:center;font:600 1.05rem var(--sans)}
+.pick .tool img{border-radius:2px}
+.pick .muted{margin:.4em 0 0}
