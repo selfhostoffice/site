@@ -69,3 +69,6 @@ mettle/sendportal	email-marketing	Mailchimp	SendPortal
 phpList/phplist3	email-marketing	Mailchimp	phpList
 Billionmail/BillionMail	email-marketing	Mailchimp	BillionMail
 nhost/nhost	backend	Firebase	Nhost
+activepieces/activepieces	automation	Zapier	Activepieces
+huginn/huginn	automation	Zapier	Huginn
+node-red/node-red	automation	Zapier	Node-RED

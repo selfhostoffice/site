@@ -64,4 +64,5 @@ export const GUIDES = [
   { href: '/compare/proton-vs-fastmail-vs-mailcow/', title: 'Proton Mail vs Fastmail vs Mailcow: what business email costs for 1, 5 and 10 people', tools: [], checked: 'Nov 2026' },
   { href: '/compare/notion-vs-appflowy-vs-affine/', title: 'Notion vs AppFlowy vs AFFiNE: what a team wiki costs for 5, 10 and 25 people', tools: ['appflowy-io--appflowy', 'toeverything--affine'], checked: 'Nov 2026' },
   { href: '/compare/calendly-vs-cal-com-vs-cal-diy/', title: 'Calendly vs Cal.com vs Cal.diy: what scheduling costs for 1, 5, 10 and 25 people', tools: ['calcom--cal.diy'], checked: 'Nov 2026' },
+  { href: '/compare/zapier-vs-n8n-vs-activepieces/', title: 'Zapier vs n8n vs Activepieces: what automation costs at 1,000, 5,000 and 20,000 runs a month', tools: ['n8n-io--n8n', 'activepieces--activepieces'], checked: 'Nov 2026' },
 ];

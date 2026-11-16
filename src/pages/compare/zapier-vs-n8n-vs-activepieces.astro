@@ -1,0 +1,187 @@
+---
+import Base from '../../layouts/Base.astro';
+import OnSelfHost from '../../components/OnSelfHost.astro';
+import { listings } from '../../lib/data';
+const n8n = listings.find(l => l.slug === 'n8n-io--n8n');
+const ap = listings.find(l => l.slug === 'activepieces--activepieces');
+const hg = listings.find(l => l.slug === 'huginn--huginn');
+const nr = listings.find(l => l.slug === 'node-red--node-red');
+const CHECKED = 'Nov 16, 2026';
+const S = {
+  zapier: 'https://zapier.com/pricing',
+  zapierRates: 'https://zapier.com/pricing/rates',
+  zapierTasks: 'https://help.zapier.com/hc/en-us/articles/8496196837261',
+  n8n: 'https://n8n.io/pricing/',
+  n8nLicense: 'https://github.com/n8n-io/n8n/blob/master/LICENSE.md',
+  ap: 'https://www.activepieces.com/pricing',
+  apLicense: 'https://github.com/activepieces/activepieces/blob/main/LICENSE',
+  apCompose: 'https://www.activepieces.com/docs/install/options/docker-compose',
+  apProd: 'https://www.activepieces.com/docs/install/configure-operate/production-setup',
+  apHub: 'https://hub.docker.com/r/activepieces/activepieces/tags',
+  n8nHub: 'https://hub.docker.com/r/n8nio/n8n/tags',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+};
+// All read Nov 16, 2026, US$ per month.
+// Zapier Pro (annual / monthly): 750 tasks $19.99/$29.99, 1,500 $39/$58.50, 2K $49/$73.50, 5K $89/$133.50, 10K $129/$193.50,
+//   20K $189/$283.50, 50K $289/$433.50, 100K $489/$733.50. Team from $69/$103.50 (2K). Free 100 tasks, two-step Zaps.
+//   Overage (pay-per-task on): 1.25x base rate on annual, 2.5x on monthly; usage pauses at 3x the plan's tasks.
+// n8n Cloud (annual / monthly): Starter 2,500 executions $20/$24, Pro 10K $50/$60, Pro 50K $120.83 ($1,450 a year)/$145. Capped, no overage.
+// Activepieces Cloud (monthly): Free 1,000 credits, Plus $20 incl. 10,000, Team $200 incl. 50,000, then $0.007 a credit. 1 run = 1 credit (AI steps more).
+// DigitalOcean Basic Droplets: 2 GiB $12, 4 GiB $24, 8 GiB $48; weekly backups +20%.
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const rows = [
+  { who: 'Zapier Pro', how: 'per task: every successful action step (3 per run here)', c: ['$89 (5K tier)', '$189 (20K tier)', '$489 (100K tier)'], m: ['$133.50', '$283.50', '$733.50'] },
+  { who: 'n8n Cloud', how: 'per execution: one whole run, any number of steps', c: ['$20 (Starter, 2.5K)', '$50 (Pro, 10K)', '$120.83 (Pro, 50K)'], m: ['$24', '$60', '$145'] },
+  { who: 'Activepieces Cloud', how: 'per credit: one whole run = 1 credit (AI steps cost more)', c: ['$0 (Free, exactly 1K) or $20', '$20 (Plus, 10K)', '$90 (Plus + 10K extra)'], m: ['same', 'same', 'same'] },
+  { who: 'n8n self-hosted', how: 'Community edition, no license fee; 2 GiB server + backups', c: ['$14.40', '$14.40', '$14.40'], m: ['same', 'same', 'same'] },
+  { who: 'Activepieces self-hosted', how: 'Community edition, no license fee; 4 GiB server + backups', c: ['$28.80', '$28.80', '$28.80'], m: ['same', 'same', 'same'] },
+];
+const chart = [
+  { label: 'Zapier Pro', v: 89, t: '$89/mo ($133.50 monthly)' },
+  { label: 'n8n Cloud Pro', v: 50, t: '$50/mo ($60 monthly)' },
+  { label: 'Activepieces own server', v: 28.8, t: '$28.80/mo + your time' },
+  { label: 'Activepieces Plus', v: 20, t: '$20/mo' },
+  { label: 'n8n own server', v: 14.4, t: '$14.40/mo + your time' },
+];
+const maxC = 110;
+const mem = [
+  { label: 'n8n 2.44.7, idle', v: 524, t: '524 MB (Oct 27 test)' },
+  { label: 'n8n 2.44.7, peak', v: 735, t: '735 MB (300,000-row Code step)' },
+  { label: 'Activepieces, 1 slot, peak', v: 1545, t: '1,545 MB (300-run burst)' },
+  { label: 'Activepieces, 5 slots, idle', v: 2141, t: '2,141 MB (after the burst)' },
+  { label: 'Activepieces, 5 slots, peak', v: 2449, t: '2,449 MB (1,000-run burst)' },
+];
+const maxM = 2600;
+const faq = [
+  { q: 'Is n8n cheaper than Zapier?', a: `For anything past a few hundred runs a month, yes. Zapier bills per task, and every successful action step is a task, so a run with 3 app actions uses 3. n8n Cloud bills per execution, one run however many steps it has. At 5,000 runs a month of a 3-action workflow, Zapier Pro is $89 a month billed yearly ($133.50 monthly) and n8n Cloud Pro is $50 ($60 monthly), prices read ${CHECKED}. Self-hosted n8n has no license fee; I ran it in about 524 MB of RAM, so a $12 server does it.` },
+  { q: 'Is Activepieces cheaper than n8n?', a: `On their clouds, usually. Activepieces counts one credit per run, like n8n, but its Plus plan is $20 a month for 10,000 runs, where n8n Pro is $50 billed yearly for the same 10,000. Past 10,000, Activepieces charges $0.007 a run, so 20,000 runs is $90 against n8n's $120.83 (50,000-execution Pro tier, yearly). Self-hosted, n8n is cheaper because it needs a smaller server.` },
+  { q: 'How many Zapier tasks does a Zap use?', a: 'One for each action step that succeeds. The trigger doesn’t count, failed steps don’t count, and Zapier’s built-in tools (Formatter, Filter, Paths, Delay, Looping and a few others) don’t count either. AI steps and MCP tool calls can cost more than one task; Zapier lists the rates on its task usage rates page.' },
+  { q: 'Is Activepieces free to self-host?', a: 'The Community edition is. Everything outside the repository’s ee folders is under the MIT license, and you pay only for the server. The paid self-hosted options add things like SSO, SCIM, custom roles, audit logs and Git sync. n8n’s Community edition is also free to run, but under its Sustainable Use License rather than an open-source license; it allows internal business use and doesn’t let you sell n8n itself as a hosted service.' },
+  { q: 'What server do I need to self-host Activepieces?', a: `Activepieces documents 2 vCPU and 4 GB of RAM as the minimum. In my test on ${CHECKED}, Activepieces 0.93.0 peaked at about 1.5 GB with one worker slot and 2.4 GB with five, including its embedded database. I’d buy a 4 GiB server ($24 a month at DigitalOcean, $28.80 with backups) and cut the worker count from the compose file’s default of 5 replicas if you’re on one small machine.` },
+  { q: 'What happens if I go over my plan?', a: 'Zapier: with pay-per-task turned on, extra tasks cost 1.25 times your plan’s per-task rate on yearly billing or 2.5 times on monthly, and everything pauses at 3 times your plan’s tasks. With it off, Zaps stop until the next cycle. n8n Cloud Starter and Pro are capped, so you upgrade to the next tier. Activepieces Plus and Team keep running at $0.007 a credit; on Free, runs past the quota wait for credits to refresh.' },
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Zapier vs n8n vs Activepieces: what automation costs at 1,000, 5,000 and 20,000 runs a month', datePublished: '2026-11-16', dateModified: '2026-11-16', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/zapier-vs-n8n-vs-activepieces/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base title="Zapier vs n8n vs Activepieces (Nov 2026): cost at 1K, 5K and 20K runs a month" description="Prices read Nov 16, 2026 plus a test install of Activepieces 0.93.0: for 5,000 runs a month Zapier Pro is $89, n8n Cloud $50, Activepieces Plus $20. Self-hosted n8n fits a $12 server; Activepieces needed about 1.5 to 2.4 GB of RAM." schema={schema} crumbs={[['Home', '/'], ['Zapier vs n8n vs Activepieces', '/compare/zapier-vs-n8n-vs-activepieces/']]}>
+<div class="wrap page-head prose">
+  <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
+  <h1>Zapier vs n8n vs Activepieces: what automation costs at 1,000, 5,000 and 20,000 runs a month</h1>
+  <p class="muted">n8n and Activepieces are the two open-source Zapier alternatives most people end up choosing between. Both sell a hosted plan and let you run the server yourself. I read all three pricing pages on {CHECKED}, priced the same workflow at three volumes, and ran Activepieces 0.93.0 on my test machine to see what server it needs. My n8n memory numbers are from <a href="/pricing/n8n-server-requirements/">my earlier n8n test</a>. All prices are in US dollars, per month, billed yearly unless I say otherwise.</p>
+  <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. I’ve applied to n8n’s affiliate program; if it’s approved I’ll add a marked link and update this note. Zapier, Activepieces and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li><b>The billing unit decides it.</b> Zapier charges per task, which is every action step that runs. n8n and Activepieces charge per run, however many steps it has. The longer your workflows, the worse Zapier looks.</li>
+    <li><b>At 5,000 runs a month</b> of a workflow with 3 app actions: Zapier Pro <b>$89</b> ($133.50 monthly), n8n Cloud Pro <b>$50</b> ($60 monthly), Activepieces Plus <b>$20</b>.</li>
+    <li><b>Self-hosted, n8n is the lighter one.</b> It idled at 524 MB in my earlier test, so a $12 server does it. Activepieces peaked at 1.5 GB with one worker slot and 2.4 GB with five, so budget a 4 GiB server.</li>
+    <li><b>Zapier still wins on reach.</b> It lists 9,000+ apps, and its free plan (100 tasks, two-step Zaps) is enough for a couple of simple automations.</li>
+  </ul>
+</div>
+
+<section style="padding-top:6px"><div class="wrap">
+<h2>Monthly cost at 5,000 runs</h2>
+<figure class="chart" style="margin:0">
+<svg viewBox="0 0 640 172" width="100%" role="img" aria-labelledby="c-t">
+  <title id="c-t">Monthly cost of 5,000 runs of a 3-action workflow, prices read {CHECKED}, billed yearly: Zapier Pro $89, n8n Cloud Pro $50, Activepieces on your own server $28.80, Activepieces Plus $20, n8n on your own server $14.40</title>
+  {chart.map((b, i) => {
+    const y = 8 + i * 32; const w = Math.max(3, (b.v / maxC) * 270);
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="170" y={y + 2} width={w} height="16" fill={b.label.includes('own server') ? '#c2410c' : '#2f3a4a'} />
+      <text x={176 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">US$ per month, list prices read {CHECKED}. Zapier and n8n billed yearly; Activepieces shows monthly prices only. “Own server” is a DigitalOcean Droplet plus 20% for weekly backups: 2 GiB ($12) for n8n, 4 GiB ($24) for Activepieces, sized from the memory I measured.</figcaption>
+</figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+<h2>By volume</h2>
+<p class="muted">The workflow: a webhook or form trigger, then 3 app actions (say, create a CRM contact, post to Slack, add a sheet row). That’s 3 Zapier tasks a run, 1 n8n execution and 1 Activepieces credit. I priced Zapier and n8n at the smallest tier that covers the volume.</p>
+<div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">How it’s billed</th><th scope="col">1,000 runs</th><th scope="col">5,000 runs</th><th scope="col">20,000 runs</th></tr></thead>
+<tbody>{rows.map(r => <tr><th scope="row">{r.who}</th><td>{r.how}</td>{r.c.map((x, i) => <td><b class="usd">{x}</b>{r.m[i] !== 'same' && <><br/><small>{r.m[i]} monthly</small></>}</td>)}</tr>)}</tbody>
+</table></div>
+<p class="note">Zapier: 1,000 runs is 3,000 tasks (5K tier), 5,000 runs is 15,000 (20K tier), 20,000 runs is 60,000 (100K tier; Zapier has no tier between 50K and 100K). With pay-per-task on, a smaller tier plus overage can come out lower: the 2K tier plus 1,000 extra tasks is about $79.63 yearly, and the 50K tier plus 10,000 extra is about $361.25 yearly (my math from the 1.25× overage rule; on monthly billing the 2.5× rule makes overage the more expensive route). Activepieces Free includes 1,000 credits, exactly the first column, and its table also says Free credits reset daily, which doesn’t match the “1,000 a month” wording, so I’d budget Plus. Sources, read {CHECKED}: <a href={S.zapier}>Zapier pricing</a>, <a href={S.n8n}>n8n pricing</a>, <a href={S.ap}>Activepieces pricing</a>, <a href={S.do}>DigitalOcean Droplet pricing</a>.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap prose">
+<h2>What I measured</h2>
+<p>On {CHECKED} I pulled the official <code>activepieces/activepieces:0.93.0</code> image (the latest release, from Nov 8) and ran its app and worker on my Linux test box without Docker, using the image’s own code with the embedded database (PGlite) and in-memory Redis options instead of separate Postgres and Redis containers. I signed up, built a 4-step flow in the API (catch webhook, multiply a number, join some text, add a number) and fired webhooks at it from 20 threads at once, sampling the memory of every Activepieces process each second.</p>
+<figure style="margin:0 0 12px">
+<img src="/img/activepieces-0-93-bench-flow-2026-11-16.png" alt="The 4-step test flow in the Activepieces 0.93.0 flow builder on my test server: Catch Webhook, Multiply, Concat and Add" width="1280" height="800" loading="lazy" style="max-width:100%;height:auto;border:1px solid #ddd" />
+<figcaption class="note">The test flow in Activepieces’ own builder on my test server, {CHECKED}.</figcaption>
+</figure>
+<ul>
+  <li><b>Speed:</b> with the worker at its default of 5 slots, 1,000 runs all finished in 52.6 seconds, about 19 a second, with no failures. With 1 slot, 300 runs took 27.9 seconds, about 11 a second. The runs list showed most runs taking 11 to 16 ms.</li>
+  <li><b>Memory with 5 slots:</b> about 1.85 GB once warmed up, 2.45 GB at the peak of the 1,000-run burst, and 2.14 GB idle a minute later. Each of the 5 sandbox processes held about 200 MB, the worker 220 MB, and the app with its embedded database 870 MB.</li>
+  <li><b>Memory with 1 slot:</b> 1.55 GB at the peak of a 300-run burst. That’s the setting I’d use on a single 4 GiB server.</li>
+  <li><b>Disk:</b> the image is 525 MB compressed and 1.7 GB unpacked; n8n’s current image (2.47.7) is 319 MB compressed. The embedded database folder was 510 MB after 1,301 runs, counting the empty database and its migrations, which I didn’t measure separately.</li>
+  <li><b>Setup snag:</b> Code steps need the Deno binary that ships in the image, and I didn’t run it outside Docker, so my flow uses Activepieces’ Math Helper and Text Helper pieces instead. In the normal Docker install Code steps work out of the box.</li>
+</ul>
+<figure class="chart" style="margin:0 0 12px">
+<svg viewBox="0 0 640 172" width="100%" role="img" aria-labelledby="m-t">
+  <title id="m-t">Measured memory: n8n 2.44.7 524 MB idle and 735 MB peak in my Oct 27 test; Activepieces 0.93.0 on {CHECKED}: 1,545 MB peak with 1 worker slot, 2,141 MB idle and 2,449 MB peak with 5 slots</title>
+  {mem.map((b, i) => {
+    const y = 8 + i * 32; const w = (b.v / maxM) * 240;
+    return <g>
+      <text x="0" y={y + 14} font-size="12" fill="currentColor">{b.label}</text>
+      <rect x="190" y={y + 2} width={w} height="16" fill={b.label.startsWith('n8n') ? '#a0522d' : '#2f3a4a'} />
+      <text x={196 + w} y={y + 15} font-size="12" fill="currentColor">{b.t}</text>
+    </g>;
+  })}
+</svg>
+<figcaption class="note">Resident memory of all processes, from <code>/proc</code>. The n8n numbers are from a separate test on Oct 27, 2026 (npm install, SQLite, main process plus task runner), so this is a rough side-by-side, not a matched benchmark.</figcaption>
+</figure>
+<figure style="margin:0 0 12px">
+<img src="/img/activepieces-0-93-runs-2026-11-16.png" alt="Activepieces 0.93.0 runs list on my test server showing the test flow runs, all succeeded, 11 to 46 milliseconds each" width="1280" height="800" loading="lazy" style="max-width:100%;height:auto;border:1px solid #ddd" />
+<figcaption class="note">Part of the 1,301 test runs in Activepieces’ runs list, {CHECKED}.</figcaption>
+</figure>
+
+<h2>How each one charges</h2>
+<p><b>Zapier</b> (read {CHECKED}): Free is 100 tasks a month and two-step Zaps only, checking for new data every 15 minutes. Pro adds multi-step Zaps, premium apps and webhooks, and starts at $19.99 a month billed yearly for 750 tasks ($29.99 monthly); 2,000 tasks is $49, 10,000 is $129, 50,000 is $289. Team (25 users, shared Zaps, SAML SSO) starts at $69 for 2,000 tasks. Yearly billing is a third off the monthly price. A task is a successful action step; triggers and Zapier’s built-in tools don’t count (<a href={S.zapierTasks}>Zapier’s explanation</a>, <a href={S.zapierRates}>rate card</a>).</p>
+<p><b>n8n Cloud</b>: Starter is $20 a month billed yearly ($24 monthly) for 2,500 executions and 5 runs at once. Pro is $50 ($60) for 10,000 executions or $120.83 ($145) for 50,000. Both are capped: past the limit you move up a tier. Every plan has unlimited users and workflows. The self-hosted Business plan (SSO, environments, Git, queue mode) is €667 a month billed yearly; n8n’s page showed me euros for that one. The Community edition is free to self-host under n8n’s <a href={S.n8nLicense}>Sustainable Use License</a>. More detail in my <a href="/pricing/n8n/">n8n pricing</a> page. From my test box n8n’s page showed these prices with euro signs; when I read it in a US browser on Oct 22, the Starter and Pro numbers were the same in dollars, so I’ve used them as dollars here. Check the page in your own currency before you buy.</p>
+<p><b>Activepieces Cloud</b>: Free is 1,000 credits a month for up to 5 users. Plus is $20 a month for 10,000 credits, Team $200 for 50,000 with 25 users and SSO, both then $0.007 a credit. A run is one credit however many steps it has; an AI step costs 2, 10 or 20 credits depending on the model, or 1 if you bring your own API key (Plus and up). <b>Self-hosted</b>: the Community edition is free, and everything outside the <code>ee</code> folders is <a href={S.apLicense}>MIT-licensed</a>. Its <a href={S.apCompose}>Docker Compose guide</a> asks for 2 vCPU and 4 GB, and starts 5 worker replicas by default, which its own <a href={S.apProd}>production guide</a> says is more than one small machine wants.</p>
+
+<h2>Which I’d pick</h2>
+<ul>
+  <li><b>A few simple automations, no one technical:</b> Zapier. Free covers 100 tasks, and its app list is far longer than the other two.</li>
+  <li><b>Hosted, cheapest per run:</b> Activepieces Plus. $20 for 10,000 runs is less than half of n8n Pro, and a fraction of Zapier at that volume. Check it has the integrations you need first.</li>
+  <li><b>Hosted, more mature editor and code steps:</b> n8n Cloud. It costs more than Activepieces but less than Zapier once workflows have more than one action.</li>
+  <li><b>Self-hosted on a small server:</b> n8n. It ran in about half a gigabyte, so a $12 server is enough. Activepieces wants 4 GiB for the same job.</li>
+  <li><b>Self-hosted and you want an MIT license:</b> Activepieces. You can build on or embed the Community edition; n8n’s license doesn’t let you sell n8n itself as a service.</li>
+</ul>
+<p>If you’re weighing Make too, I priced it against n8n in <a href="/compare/n8n-vs-make/">n8n vs Make</a> (prices read Oct 22). Make’s pricing page didn’t show me prices tonight, so it isn’t in this table.</p>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I ran Activepieces with its embedded database and in-memory Redis, on Node 22 instead of the image’s Node 24, without Docker. A normal install with Postgres and Redis containers splits that memory across more processes and adds Docker’s overhead.</li>
+  <li>My test box has 8 CPU cores. A 2 vCPU server will run fewer flows a second than I saw.</li>
+  <li>My flow used simple built-in pieces. Flows that call slow outside APIs or do heavy code work hold a worker slot longer and use more memory.</li>
+  <li>I didn’t re-run n8n tonight; its numbers are from my Oct 27 test of n8n 2.44.7.</li>
+  <li>The self-hosted cost leaves out a domain name, time spent on updates and backups, and anything you pay for the apps your workflows connect to.</li>
+  <li>Prices change. The date at the top is when I read them; check again before you commit.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+</div></section>
+
+<OnSelfHost
+  tools={[
+    ...(n8n ? [{ listing: n8n, name: 'n8n', lastPush: true }] : []),
+    ...(ap ? [{ listing: ap, name: 'Activepieces', lastPush: true }] : []),
+    ...(hg ? [{ listing: hg, name: 'Huginn', lastPush: true }] : []),
+    ...(nr ? [{ listing: nr, name: 'Node-RED', lastPush: true }] : []),
+  ]}
+  fetchedAt={(n8n ?? ap)!.fetchedAt}
+>
+  <p>More options: <a href="/alternatives/zapier/">open-source Zapier alternatives</a> and the <a href="/category/automation/">workflow automation category</a>.</p>
+  <p>n8n in depth: <a href="/pricing/n8n/">n8n pricing</a>, <a href="/pricing/n8n-server-requirements/">n8n server requirements</a>, <a href="/compare/n8n-vs-make/">n8n vs Make</a>.</p>
+  <p>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a> or <a href="/compare/railway-vs-render-vs-fly/">Railway vs Render vs Fly.io</a>.</p>
+</OnSelfHost>
+</Base>
