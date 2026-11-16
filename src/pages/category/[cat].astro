@@ -18,6 +18,18 @@ const OVR: Record<string, { title: string; description: string; h1: string; intr
     h1: 'Open-source email marketing software',
     intro: 'Self-hosted email marketing tools you can run on your own server instead of paying Mailchimp per contact. The software is free; what you pay for is a small server and a sending service like Amazon SES, and I priced both below',
   },
+  notes: {
+    title: 'Open-source notes apps you can self-host',
+    description: 'Self-hosted note-taking tools compared by license, GitHub stars and recent activity. Facts from GitHub, checked against each project’s own site.',
+    h1: 'Open-source notes apps',
+    intro: 'Personal notes you keep on your own server, instead of a cloud notes app',
+  },
+  'uptime-monitoring': {
+    title: 'Open-source uptime monitoring you can self-host',
+    description: 'Self-hosted uptime monitoring tools compared by license, GitHub stars and recent activity. Facts from GitHub, checked against each project’s own site.',
+    h1: 'Open-source uptime monitoring',
+    intro: 'Uptime checks you run yourself, so the status of your sites isn’t sitting in someone else’s cloud',
+  },
 };
 const O = OVR[cat!];
 const reps = [...new Set(items.map(l => l.replaces))];

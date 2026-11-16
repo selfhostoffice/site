@@ -5,6 +5,8 @@ const { l } = Astro.props;
 const CHECKED = 'Nov 16, 2026';
 const clientverse = listings.find(x => x.slug === 'alextselegidis--clientverse');
 const timecrack = listings.find(x => x.slug === 'alextselegidis--timecrack');
+const plainpad = listings.find(x => x.slug === 'alextselegidis--plainpad');
+const apphold = listings.find(x => x.slug === 'alextselegidis--apphold');
 const S = {
   site: 'https://easyappointments.org',
   pricing: 'https://easyappointments.org/pricing/',
@@ -49,21 +51,21 @@ const track = { 'data-track': 'outbound', 'data-tool': l.slug, 'data-kind': 'web
     <p>The latest GitHub release was <a href={S.release} rel="nofollow" data-track="outbound" data-tool={l.slug} data-kind="repo">1.6.1</a> on Oct 19, 2026. The repo had a later push on {fmtDate(l.lastPush)}, so the source is a little ahead of that release.</p>
 
     <h2>What the paid options cost</h2>
-    <p>You can run the same software yourself for free. These are optional services from the core team, read off <a href={S.pricing} rel="nofollow" {...track}>easyappointments.org/pricing</a> on {CHECKED}. Prices are excluding VAT.</p>
+    <p>You can run the same software yourself for free. These are optional services from the core team, read off <a href={S.pricing} rel="nofollow" {...track}>easyappointments.org/pricing</a> on {CHECKED}. The figures below are the official US dollar prices on that page, excluding VAT. They also sell the same services in euros and pounds.</p>
   </div>
   <div class="wrap">
     <div class="compare-wrap"><table class="compare">
       <thead><tr><th scope="col">Option</th><th scope="col">Price</th><th scope="col">What it’s for</th></tr></thead>
       <tbody>
         <tr><th scope="row">Self-hosted</th><td><b>Free</b></td><td>Download and run it on your own server. GPL-3.0, no licence fee, no seat limit.</td></tr>
-        <tr><th scope="row">Managed Hosting</th><td><b>€20/mo</b></td><td>Billed annually, €240 a year. They set it up, apply updates, keep daily backups for 30 days, and reply within one business day.</td></tr>
-        <tr><th scope="row">White Label, Regular</th><td><b>€50</b> one-time</td><td>Help rebranding one installation, plus a written commercial licence.</td></tr>
-        <tr><th scope="row">White Label, Extended</th><td><b>€500</b> one-time</td><td>The same, for a SaaS or reseller with many end customers.</td></tr>
-        <tr><th scope="row">Technical Support</th><td><b>€60</b> per session</td><td>Up to 60 minutes with the core team.</td></tr>
+        <tr><th scope="row">Managed Hosting</th><td><b>$20/mo</b></td><td>Billed annually, $240 a year (also listed as €20 or £18 a month). They set it up, apply updates, keep daily backups for 30 days, and reply within one business day.</td></tr>
+        <tr><th scope="row">White Label, Regular</th><td><b>$50</b> one-time</td><td>One installation rebranded with your own name, plus a written commercial licence (also listed as €50 or £45).</td></tr>
+        <tr><th scope="row">White Label, Extended</th><td><b>$500</b> one-time</td><td>The same, for a SaaS or reseller with many end customers (also listed as €500 or £450).</td></tr>
+        <tr><th scope="row">Technical Support</th><td><b>$60</b> per session</td><td>Up to 60 minutes with the core team (also listed as €60 or £55).</td></tr>
         <tr><th scope="row">Custom development / data migration</th><td>Fixed quote</td><td>Scoped before work starts. This is also how scheduled reminders, SMS and payments are sold.</td></tr>
       </tbody>
     </table></div>
-    <p class="note">Managed Hosting is billed once a year, in EUR, USD or GBP. I quoted the euro prices as shown. I didn’t convert them.</p>
+    <p class="note">Managed Hosting is billed once a year, in EUR, USD or GBP. I used the official dollar prices from their currency list, not a converted euro rate. Your card is charged in the currency you pick, with no exchange added by them.</p>
   </div>
   <div class="wrap prose">
     <h2>Other projects from the same maintainer</h2>
@@ -71,6 +73,8 @@ const track = { 'data-track': 'outbound', 'data-tool': l.slug, 'data-kind': 'web
     <ul>
       {clientverse && <li><a class="tool" href={`/tool/${clientverse.slug}/`}><img src={avatar(clientverse, 40)} alt="" width="20" height="20" />{clientverse.name}</a> — a self-hosted CRM, listed as a HubSpot alternative.</li>}
       {timecrack && <li><a class="tool" href={`/tool/${timecrack.slug}/`}><img src={avatar(timecrack, 40)} alt="" width="20" height="20" />{timecrack.name}</a> — a self-hosted time tracker, listed as a Toggl alternative.</li>}
+      {plainpad && <li><a class="tool" href={`/tool/${plainpad.slug}/`}><img src={avatar(plainpad, 40)} alt="" width="20" height="20" />{plainpad.name}</a> — a self-hosted notes app, listed as an Evernote alternative.</li>}
+      {apphold && <li><a class="tool" href={`/tool/${apphold.slug}/`}><img src={avatar(apphold, 40)} alt="" width="20" height="20" />{apphold.name}</a> — a self-hosted uptime monitor, listed as an UptimeRobot alternative.</li>}
     </ul>
     <p class="note">I didn’t run Easy!Appointments for this page, so I can’t tell you how it feels day to day or how much RAM it uses. Check the docs and the repo before you deploy it.</p>
   </div>
