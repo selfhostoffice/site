@@ -1,0 +1,139 @@
+---
+import { listings, fmtDate, licLabel } from '../../lib/data';
+import affiliates from '../../data/affiliates.json';
+const CHECKED = 'Nov 18, 2026';
+const ECB = 1.0989; // ECB eurofxref USD per EUR, time=2026-11-17
+const eur = (n: number) => Math.round(n * ECB * 100) / 100;
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const get = (slug: string) => listings.find(l => l.slug === slug);
+const aff = (affiliates as Record<string, { href: string; label: string; terms: string }>)['chatwoot--chatwoot'];
+const S = {
+  zd: 'https://www.zendesk.com/pricing/',
+  cw: 'https://www.chatwoot.com/pricing',
+  cwReq: 'https://developers.chatwoot.com/self-hosted/deployment/requirements',
+  zm: 'https://zammad.com/en/pricing',
+  zmHw: 'https://docs.zammad.org/en/latest/prerequisites/hardware.html',
+  zmZd: 'https://docs.zammad.org/en/latest/migration/zendesk.html',
+  fh: 'https://frappe.io/helpdesk',
+  fhGit: 'https://github.com/frappe/helpdesk',
+  fs: 'https://freescout.net/',
+  fsMod: 'https://freescout.net/modules/',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  ecb: 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml',
+  hubCw: 'https://hub.docker.com/r/chatwoot/chatwoot/tags',
+  hubZm: 'https://hub.docker.com/r/zammad/zammad-docker-compose/tags',
+};
+// Prices read Nov 18, 2026 (1 AM CT).
+// Zendesk: Support Team $19, Suite Team $55, Suite Professional $115 per agent/mo paid yearly; monthly $25 / $69 / $149. Copilot add-on $50/agent/mo yearly.
+// Chatwoot Cloud: Hacker $0 (500 conversations/mo, live chat only, 30-day retention), Startups $19, Business $39, Enterprise $99 per agent/mo. Extra Captain AI credits $20 per 1,000.
+// Zammad Cloud (excl. VAT, yearly/monthly): Starter v2 EUR 7/9 (max 5 agents), Professional v2 EUR 16/18 (max 35), Plus v2 EUR 25/27 (unlimited). AI EUR 0.03 per call.
+// Frappe Helpdesk (frappe.io/helpdesk): no per-agent charge; hosting on Frappe Cloud "starting at $5/month"; 14-day trial.
+// DO Basic: 2 GiB $12, 4 GiB $24, 8 GiB $48; weekly backups +20%.
+// Docker Hub, amd64 compressed, read Nov 18: chatwoot/chatwoot latest-ce (v4.19.1, pushed Oct 24) 749.9 MB; zammad/zammad-docker-compose latest (pushed Nov 17) 311.1 MB. Frappe Helpdesk has no image under frappe/helpdesk on Docker Hub; the repo ships a docker-compose for local setup.
+const A = 5;
+const rows = [
+  { slug: 'chatwoot--chatwoot', name: 'Chatwoot', best: 'Live chat plus email, closest to Zendesk Suite', perAgent: '$19 / $39 / $99 per agent (cloud)', hosted5: money(A * 19) + ' to ' + money(A * 39), self5: '$28.80 (4 GiB)', sizeNote: 'min. 4 GB RAM (vendor)' },
+  { slug: 'zammad--zammad', name: 'Zammad', best: 'Ticketing, SLAs and reporting, closest to Zendesk Support', perAgent: `€7 / €16 / €25 per agent ≈ ${money(eur(7))} / ${money(eur(16))} / ${money(eur(25))}`, hosted5: money(eur(A * 7)) + ' to ' + money(eur(A * 16)), self5: '$57.60+ (8 GiB; more with Elasticsearch)', sizeNote: '6 GB + 4 GB for Elasticsearch (vendor)' },
+  { slug: 'frappe--helpdesk', name: 'Frappe Helpdesk', best: 'Flat cost for a bigger team, or you already run ERPNext', perAgent: 'No per-agent fee', hosted5: 'from $5 (flat)', self5: 'not published', sizeNote: 'not stated on the pages I read' },
+  { slug: 'freescout-help-desk--freescout', name: 'FreeScout', best: 'Shared email inbox on the cheapest server', perAgent: 'No per-agent fee; paid modules are one-time', hosted5: 'no official cloud; PikaPods from $3.05 (Nov 7)', self5: '$14.40 (2 GiB, my guess)', sizeNote: 'PHP + MySQL, no official floor' },
+].map(r => ({ ...r, l: get(r.slug) }));
+const fetched = rows.find(r => r.l)?.l?.fetchedAt;
+const zd = [
+  { plan: 'Zendesk Support Team', y: 19, m: 25 },
+  { plan: 'Zendesk Suite Team', y: 55, m: 69 },
+  { plan: 'Zendesk Suite Professional', y: 115, m: 149 },
+];
+const faq = [
+  { q: 'Is there a free open-source alternative to Zendesk?', a: 'Yes. Chatwoot (Community Edition), Zammad, Frappe Helpdesk and FreeScout can all be downloaded and self-hosted with no per-agent fee. Zammad, Frappe Helpdesk and FreeScout are AGPL-3.0; Chatwoot’s repo mixes an MIT core with separately licensed enterprise code, which is why GitHub shows its license as “other”. You still pay for a server and your own time on updates and backups.' },
+  { q: 'What is the closest open-source tool to Zendesk?', a: 'It depends which Zendesk you use. If you’re on Support (email tickets, triggers, SLAs, views), Zammad is the closest match. If you’re on Suite for live chat and messaging, Chatwoot is closer: its README describes one inbox for live chat, email, Facebook, Instagram, WhatsApp, Telegram, SMS and more.' },
+  { q: 'How much does Zendesk cost for 5 agents?', a: `On ${CHECKED} Zendesk’s pricing page showed $19, $55 and $115 per agent per month on yearly billing (Support Team, Suite Team, Suite Professional). For 5 agents that is $95, $275 or $575 a month. Paid month to month it’s $25, $69 and $149 per agent, so $125, $345 or $745.` },
+  { q: 'Can I move my tickets out of Zendesk?', a: 'Zammad documents a Zendesk importer that pulls over the Zendesk API with your Zendesk URL, email and API key. Its docs list the catches: your Zendesk plan must include API access, it can’t do differential (catch-up) migrations, and user passwords don’t come over. I haven’t run it. For Chatwoot, Frappe Helpdesk and FreeScout I didn’t find an official one-click Zendesk importer on the pages I read, so plan on the Zendesk export plus a script, or start fresh and keep Zendesk read-only for a while.' },
+  { q: 'Which one is cheapest to run?', a: 'On your own server, FreeScout: it’s PHP and MySQL, and the app image I unpacked earlier this month was 199 MB, so a 2 GiB box ($14.40 a month with DigitalOcean backups) is where I’d start for a small team. Hosted, Frappe Helpdesk is the cheapest I found because Frappe Cloud doesn’t charge per agent; its page says hosting starts at $5 a month.' },
+  { q: 'Is Chatwoot cheaper than Zendesk?', a: `Per seat, Chatwoot Cloud Startups ($19) matches Zendesk Support Team’s yearly price, and Chatwoot Business ($39) is $16 an agent less than Suite Team ($55), read ${CHECKED}. Self-hosted Chatwoot has no seat fee; Chatwoot asks for at least 4 GB of RAM, so about $28.80 a month on a 4 GiB Droplet with weekly backups.` },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<section style="padding-top:6px"><div class="wrap prose">
+<p class="note"><b>Checked on {CHECKED}.</b> GitHub numbers refresh nightly{fetched && <> (last fetch {fmtDate(fetched)})</>}. Prices are US dollars from each vendor’s page that night; Zammad lists euros, converted at the ECB rate of {ECB} USD per EUR (<a href={S.ecb} rel="nofollow">ECB reference rate</a>, 2026-11-17), before VAT. <b>Disclosure:</b> the Chatwoot Cloud link below is an affiliate link ({aff.terms}). Zendesk, Zammad, Frappe, FreeScout and DigitalOcean don’t pay us. <a href="/disclosure/">How this site makes money</a>.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li><b>You use Zendesk for live chat and messaging:</b> <a href="/tool/chatwoot--chatwoot/">Chatwoot</a>. Hosted from $19 an agent, or free to self-host.</li>
+  <li><b>You use Zendesk Support for email tickets, SLAs and reports:</b> <a href="/tool/zammad--zammad/">Zammad</a>. The most Zendesk-like ticketing of the four, but the heaviest to run yourself.</li>
+  <li><b>You have a lot of agents and hate seat pricing:</b> <a href="/tool/frappe--helpdesk/">Frappe Helpdesk</a>. No per-agent fee at all, hosted or not.</li>
+  <li><b>You just need a shared support inbox and have a small server:</b> <a href="/tool/freescout-help-desk--freescout/">FreeScout</a>. Cheapest to run.</li>
+</ul>
+
+<h2>The four, compared</h2>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Tool</th><th scope="col">Best for</th><th scope="col">Hosted price</th><th scope="col">Hosted, 5 agents/mo</th><th scope="col">Self-hosted server/mo</th><th scope="col">Server size</th><th scope="col">License</th><th scope="col">Last push</th></tr></thead>
+<tbody>
+{rows.map(r => <tr>
+  <th scope="row">{r.l ? <a href={`/tool/${r.slug}/`}>{r.name}</a> : r.name}</th>
+  <td>{r.best}</td>
+  <td>{r.perAgent}</td>
+  <td><span class="usd">{r.hosted5}</span></td>
+  <td><span class="usd">{r.self5}</span></td>
+  <td>{r.sizeNote}</td>
+  <td>{r.l ? licLabel(r.l.license) : '?'}</td>
+  <td>{r.l ? fmtDate(r.l.lastPush) : '?'}</td>
+</tr>)}
+</tbody></table></div>
+<p class="note">Hosted ranges are the cheapest and middle paid plan on yearly billing: Chatwoot Startups to Business (<a href={S.cw} rel="nofollow">pricing</a>), Zammad Starter to Professional (<a href={S.zm} rel="nofollow">pricing</a>; Starter caps at 5 agents). Frappe’s $5 is the starting hosting price on <a href={S.fh} rel="nofollow">frappe.io/helpdesk</a>; I couldn’t see the Frappe Cloud plan list itself. Server column is a DigitalOcean Basic Droplet plus 20% for weekly backups (<a href={S.do} rel="nofollow">prices</a>), sized from each vendor’s stated minimum (<a href={S.cwReq} rel="nofollow">Chatwoot</a>, <a href={S.zmHw} rel="nofollow">Zammad</a>). FreeScout’s 2 GiB is my own guess, not a vendor number.</p>
+</div>
+
+<div class="wrap prose">
+<h2>What you’re paying Zendesk now</h2>
+<p>From <a href={S.zd} rel="nofollow">zendesk.com/pricing</a> on {CHECKED}, per agent per month:</p>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Plan</th><th scope="col">Yearly billing</th><th scope="col">Monthly billing</th><th scope="col">5 agents, yearly</th><th scope="col">10 agents, yearly</th></tr></thead>
+<tbody>
+{zd.map(z => <tr><th scope="row">{z.plan}</th><td><span class="usd">{money(z.y)}</span></td><td><span class="usd">{money(z.m)}</span></td><td><span class="usd">{money(z.y * 5)}</span></td><td><span class="usd">{money(z.y * 10)}</span></td></tr>)}
+</tbody></table></div>
+<p class="note">Zendesk’s Copilot add-on was another $50 per agent per month (yearly). Suite plans are where the AI agents and messaging channels live; Support Team is the email-ticket plan. For the same math at 3, 10 and 25 agents with Help Scout included, see <a href="/compare/zendesk-vs-chatwoot-vs-freescout-vs-zammad/">Zendesk vs Chatwoot vs FreeScout vs Zammad</a>.</p>
+<p><a class="btn ghost" href={aff.href} rel="sponsored nofollow" data-track="outbound" data-tool="chatwoot--chatwoot" data-kind="affiliate">{aff.label} (affiliate link)</a></p>
+</div>
+
+<div class="wrap prose">
+<h2>What I checked myself</h2>
+<p>I can’t run Docker on the machine I test from, so tonight I read the current official images straight from Docker Hub (amd64, compressed download):</p>
+<ul>
+  <li><b>Chatwoot</b> <code>latest-ce</code> (v4.19.1, published Oct 24): 749.9 MB (<a href={S.hubCw} rel="nofollow">tags</a>). It also needs PostgreSQL and Redis.</li>
+  <li><b>Zammad</b> <code>latest</code> (published Nov 17): 311.1 MB (<a href={S.hubZm} rel="nofollow">tags</a>). Plus PostgreSQL, Redis, Memcached and, for good search, Elasticsearch.</li>
+  <li><b>Frappe Helpdesk:</b> no image under <code>frappe/helpdesk</code> on Docker Hub. The <a href={S.fhGit} rel="nofollow">repo</a> ships a docker-compose file for trying it, and production installs go through Frappe’s <code>bench</code> tool or Frappe Cloud.</li>
+  <li><b>FreeScout:</b> earlier this month I unpacked a community FreeScout 1.8.222 image: 199 MB on disk, PHP only, MySQL separate.</li>
+</ul>
+<p>Download size isn’t memory use, but it lines up with what the vendors ask for: Chatwoot’s Rails stack wants 4 GB, Zammad wants 6 GB before Elasticsearch, and FreeScout is a plain PHP app.</p>
+
+<h2>My picks, and why</h2>
+<ul>
+  <li><b>Best overall Zendesk replacement: Chatwoot.</b> It has both a priced cloud plan and a free self-hosted edition, so you can start hosted and move later. Its Business plan ($39) is cheaper per seat than Zendesk Suite Team ($55) and includes automation rules and teams. The free Hacker plan is too limited to run a support team on (500 conversations a month, live chat only).</li>
+  <li><b>Best for ticket-heavy email support: Zammad.</b> SLAs, roles, custom ticket fields and a knowledge base are in its Professional plan. Hosted it’s about {money(eur(16))} an agent. Self-hosted, budget a real server; it’s the only one here where the vendor tells you to plan for Elasticsearch.</li>
+  <li><b>Best for big teams on a budget: Frappe Helpdesk.</b> Not charging per agent is the whole pitch, and it’s real: hosting from $5 a month regardless of seats. It has the fewest GitHub stars of the four, and it’s built on the Frappe framework, so it fits best if you already run ERPNext.</li>
+  <li><b>Cheapest to self-host: FreeScout.</b> Feels like Help Scout, not Zendesk: a shared inbox, not omnichannel. Buy only the modules you need, once (<a href={S.fsMod} rel="nofollow">module list</a>).</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I didn’t install or load-test any of these tonight. Image sizes are downloads; RAM figures are the vendors’.</li>
+  <li>I haven’t tried any Zendesk import, including <a href={S.zmZd} rel="nofollow">Zammad’s</a>.</li>
+  <li>Chatwoot’s page doesn’t say whether its per-agent prices are monthly or yearly billing.</li>
+  <li>Zammad prices exclude VAT, and your card’s exchange rate won’t be exactly the ECB rate.</li>
+  <li>Server costs leave out a domain, an email sending service and your time.</li>
+  <li>Prices change. The date at the top is when I read them.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/compare/zendesk-vs-chatwoot-vs-freescout-vs-zammad/">Zendesk vs Chatwoot vs FreeScout vs Zammad: cost for 3, 10 and 25 agents</a></li>
+  <li><a href="/pricing/chatwoot/">Chatwoot pricing: cloud vs self-hosted</a></li>
+  <li><a href="/alternatives/help-scout/">Open-source Help Scout alternatives</a> and the full <a href="/category/helpdesk/">helpdesk category</a></li>
+  <li>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a></li>
+</ul>
+</div></section>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
