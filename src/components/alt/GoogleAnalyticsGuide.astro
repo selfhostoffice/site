@@ -1,0 +1,134 @@
+---
+import { listings, fmtDate, licLabel } from '../../lib/data';
+const CHECKED = 'Nov 19, 2026';
+const ECB = 1.0968; // ECB eurofxref USD per EUR, time=2026-11-18
+const eur = (n: number) => Math.round(n * ECB * 100) / 100;
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const get = (slug: string) => listings.find(l => l.slug === slug);
+const S = {
+  pl: 'https://plausible.io/#pricing',
+  plGa: 'https://plausible.io/docs/google-analytics-import',
+  um: 'https://umami.is/pricing',
+  umInst: 'https://umami.is/docs/install',
+  mt: 'https://matomo.org/pricing/',
+  mtGa: 'https://matomo.org/guide/installation-maintenance/import-google-analytics/',
+  ph: 'https://posthog.com/pricing',
+  phSelf: 'https://posthog.com/docs/self-host',
+  gaRet: 'https://support.google.com/analytics/answer/7667196?hl=en',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  ecb: 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml',
+  hubUm: 'https://hub.docker.com/r/umamisoftware/umami/tags',
+  hubMt: 'https://hub.docker.com/_/matomo/tags',
+  hubPh: 'https://hub.docker.com/r/posthog/posthog/tags',
+};
+// Prices read Nov 19, 2026, ~1 AM CT.
+// Plausible (volumesWithPrices on plausible.io, monthly billing; yearly = 10x monthly): 10k $9/$14/$19 (Starter/Growth/Business), 100k $19/$29/$39, 1M $69/$104/$139.
+// Umami Cloud: Hobby $0 (100K events, 1 site, 6-month retention), Pro $20 (1M events, $0.00003/extra), Business $200 (10M).
+// Matomo Cloud Business (box sees EUR; the page's schema.org data also lists USD), excl. tax, monthly: 50k EUR 22 / $26, 100k EUR 38 / $42, 1M EUR 172 / $204.
+// PostHog: free 1M analytics events/mo, 1-year retention on free; self-host hobby deploy needs ~4 vCPU, 16 GB RAM, 30 GB+ disk.
+// DO Basic: 2 GiB $12, 16 GiB/8 vCPU $96; weekly backups +20%.
+// Tracking script, compressed bytes measured tonight with curl (Accept-Encoding: gzip):
+//   plausible.io/js/script.js 1,283 B; cloud.umami.is/script.js 4,173 B; gtag.js 158,275 B; PostHog array.js 122,430 B.
+//   Matomo: matomo.js from matomo-org/matomo (5.x-dev), 68,294 B raw, 22,137 B after my own gzip -9.
+// Docker Hub amd64 compressed, read tonight: umamisoftware/umami 3.5.0 (Nov 12) 312.0 MB; matomo 5.14.3 apache (Nov 17) 205.2 MB, fpm-alpine 65.2 MB; posthog/posthog latest (Nov 19) 2,376.6 MB.
+const rows = [
+  { slug: 'plausible--analytics', name: 'Plausible', best: 'Simple GA replacement for a marketing site', h100: '$19 (Starter)', h1m: '$69 (Starter)', self: '$14.40 (2 GiB)', script: '1.3 KB', note: 'vendor says 2 GB RAM' },
+  { slug: 'umami-software--umami', name: 'Umami', best: 'Cheapest hosted, easiest to self-host', h100: '$0 (Hobby, 1 site) or $20', h1m: '$20 (Pro)', self: '$14.40 (2 GiB)', script: '4.2 KB', note: 'my test: 406 MB peak + Postgres' },
+  { slug: 'matomo-org--matomo', name: 'Matomo', best: 'Closest to GA’s depth: goals, ecommerce, GA import', h100: '€38 ≈ ' + money(eur(38)), h1m: '€172 ≈ ' + money(eur(172)), self: '$14.40 (2 GiB, my guess)', script: '22 KB', note: 'PHP + MySQL' },
+  { slug: 'posthog--posthog', name: 'PostHog', best: 'Product analytics for an app, not just page stats', h100: '$0 (1M free events)', h1m: '$0 if all events fit in 1M', self: '$115.20 (16 GiB)', script: '122 KB', note: 'vendor: 4 vCPU, 16 GB RAM' },
+].map(r => ({ ...r, l: get(r.slug) }));
+const fetched = rows.find(r => r.l)?.l?.fetchedAt;
+const scripts = [
+  { label: 'Plausible', v: 1.283 },
+  { label: 'Umami', v: 4.173 },
+  { label: 'Matomo (my gzip)', v: 22.137 },
+  { label: 'PostHog', v: 122.43 },
+  { label: 'Google Analytics 4 (gtag.js)', v: 158.275 },
+];
+const maxS = 160;
+const faq = [
+  { q: 'Is there a free open-source alternative to Google Analytics?', a: 'Yes. Plausible Community Edition, Umami, Matomo and PostHog can all be self-hosted with no license fee. You pay for the server. Hosted, Umami Cloud’s Hobby plan is free up to 100,000 events a month on one site, and PostHog’s free tier includes 1 million analytics events a month.' },
+  { q: 'Which open-source analytics tool is closest to Google Analytics?', a: 'Matomo. It has goals, ecommerce tracking, segments, custom dimensions and a Google Analytics importer, and its pricing page lists that importer on the cloud plan. Plausible and Umami are deliberately simpler: one dashboard of visitors, sources, pages and goals.' },
+  { q: 'Can I import my Google Analytics 4 history?', a: 'Plausible’s docs describe a GA4 importer that pulls historical stats into the dashboard; it can’t recover data GA4 never collected. Matomo documents a Google Analytics import, with a Quick Connect option on Matomo Cloud. Umami lists “Data import” on its paid plans but the pricing page doesn’t say from what. I haven’t run any of these imports myself.' },
+  { q: 'Do these need a cookie banner?', a: 'Plausible describes itself as cookie-free and Umami says “no cookies” in its GitHub description. That removes the most common reason for a banner, but whether you need one depends on where your visitors are and what else your site loads. I’m not a lawyer; check with someone who is if it matters for your business.' },
+  { q: 'How much do they cost at 100,000 pageviews a month?', a: 'Read ' + CHECKED + ': Plausible Starter $19 a month (monthly billing), Umami Cloud $0 on Hobby if it’s one site and you stay under 100K events, otherwise $20 for Pro, Matomo Cloud €38 (about ' + money(eur(38)) + '), PostHog $0 inside the free tier. Self-hosted Plausible, Umami or Matomo on a 2 GiB DigitalOcean Droplet with backups is about $14.40.' },
+  { q: 'How long does Google Analytics keep my data?', a: 'On standard GA4 you can set event-level data retention to 2 or 14 months; 26, 38 and 50 months are only on paid Analytics 360, per Google’s help page. Aggregated reports aren’t affected. Umami Cloud keeps 6 months on Hobby and 2 years on Pro; PostHog’s free plan keeps 1 year; Matomo Cloud Business keeps raw data 24 months and reports forever.' },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<section style="padding-top:6px"><div class="wrap prose">
+<p class="note"><b>Checked on {CHECKED}.</b> GitHub numbers refresh nightly{fetched && <> (last fetch {fmtDate(fetched)})</>}. Prices are from each vendor’s page that night, before tax. Matomo showed me euros, converted at the ECB rate of {ECB} USD per EUR (<a href={S.ecb} rel="nofollow">ECB reference rate</a>, 2026-11-18); Matomo’s own page data also lists a US price, a little higher ($42 at 100K hits). <b>Disclosure:</b> no affiliate links on this page. Plausible, Umami, Matomo, PostHog, Google and DigitalOcean don’t pay us. <a href="/disclosure/">How this site makes money</a>.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li><b>You want GA’s traffic report without GA:</b> <a href="/tool/plausible--analytics/">Plausible</a>. The smallest script I measured and a dashboard anyone can read.</li>
+  <li><b>You want it free or nearly free:</b> <a href="/tool/umami-software--umami/">Umami</a>. Free hosted for one small site, $20 a month up to 1M events, and the easiest of the four to run yourself.</li>
+  <li><b>You actually use GA’s goals, ecommerce and segments:</b> <a href="/tool/matomo-org--matomo/">Matomo</a>. The only one here that tries to be a full GA replacement.</li>
+  <li><b>You run a web app and care about funnels and retention, not just pageviews:</b> <a href="/tool/posthog--posthog/">PostHog</a>. Generous free cloud tier, heavy to self-host.</li>
+</ul>
+
+<h2>The four, compared</h2>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Tool</th><th scope="col">Best for</th><th scope="col">Hosted, 100K pageviews/mo</th><th scope="col">Hosted, 1M pageviews/mo</th><th scope="col">Self-hosted server/mo</th><th scope="col">Server size</th><th scope="col">Script (compressed)</th><th scope="col">License</th><th scope="col">Last push</th></tr></thead>
+<tbody>
+{rows.map(r => <tr>
+  <th scope="row">{r.l ? <a href={'/tool/' + r.slug + '/'}>{r.name}</a> : r.name}</th>
+  <td>{r.best}</td>
+  <td><span class="usd">{r.h100}</span></td>
+  <td><span class="usd">{r.h1m}</span></td>
+  <td><span class="usd">{r.self}</span></td>
+  <td>{r.note}</td>
+  <td>{r.script}</td>
+  <td>{r.l ? licLabel(r.l.license) : '?'}</td>
+  <td>{r.l ? fmtDate(r.l.lastPush) : '?'}</td>
+</tr>)}
+</tbody></table></div>
+<p class="note">Hosted prices are monthly billing, read {CHECKED}: <a href={S.pl} rel="nofollow">Plausible</a> (yearly billing is 10 months’ price), <a href={S.um} rel="nofollow">Umami</a>, <a href={S.mt} rel="nofollow">Matomo Cloud Business</a> (Matomo counts “hits”, which include events, not just pageviews; 2 months free on annual), <a href={S.ph} rel="nofollow">PostHog</a> (every pageview and autocaptured click is an event, so a busy site can pass 1M events on fewer pageviews). Google Analytics 4 is $0 at both levels. Server column is a DigitalOcean Basic Droplet plus 20% for weekly backups (<a href={S.do} rel="nofollow">prices</a>); PostHog’s size is from its <a href={S.phSelf} rel="nofollow">self-host docs</a>, and DigitalOcean’s smallest Basic plan with 16 GB is the $96 one. Matomo’s 2 GiB is my guess, not a vendor number.</p>
+</div>
+
+<div class="wrap prose">
+<h2>What I measured myself</h2>
+<p>Tonight I downloaded each tracking script the way a browser would (compressed) and wrote down the bytes. This is what every visitor to your site pays on each page load:</p>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Script</th><th scope="col">KB over the wire</th><th scope="col"><span class="muted small">Relative size</span></th></tr></thead>
+<tbody>
+{scripts.map(s => <tr><th scope="row">{s.label}</th><td>{s.v.toFixed(1)}</td><td><span style={'display:inline-block;height:10px;background:currentColor;opacity:.5;width:' + Math.max(2, Math.round(s.v / maxS * 220)) + 'px'}></span></td></tr>)}
+</tbody></table></div></div>
+<div class="wrap prose">
+<p class="note">Plausible, Umami and PostHog from their own CDNs, gtag.js from googletagmanager.com. Matomo’s script is served from your own server or Matomo Cloud, so I took <code>matomo.js</code> from the Matomo repo (68.3 KB raw) and gzipped it myself; your server’s compression may differ a little.</p>
+<ul>
+  <li><b>Docker images</b> (Docker Hub, amd64, compressed, read tonight): Umami 3.5.0 is 312.0 MB (<a href={S.hubUm} rel="nofollow">tags</a>); Matomo 5.14.3 is 205.2 MB for the Apache image or 65.2 MB for fpm-alpine (<a href={S.hubMt} rel="nofollow">tags</a>); the PostHog web image alone is 2,376.6 MB (<a href={S.hubPh} rel="nofollow">tags</a>). Plausible CE is published on GitHub’s registry, which I didn’t read tonight.</li>
+  <li><b>Umami memory</b>, from my install on Nov 1 (Umami 3.4.1, PostgreSQL 18.6): 223 MB idle, 406 MB peak at 5 pageviews a second, 876 MB during a burst of about 420 a second. Details in <a href="/compare/plausible-vs-umami-vs-google-analytics/">Plausible vs Umami vs Google Analytics</a>.</li>
+</ul>
+
+<h2>My picks, and why</h2>
+<ul>
+  <li><b>Best for most small business sites: Plausible.</b> If what you open GA for is “how many visitors, from where, to which pages”, Plausible answers that on one screen, and its 1.3 KB script is less than 1% of gtag.js. It isn’t free hosted ($9 a month at 10K pageviews), and the self-hosted Community Edition leaves out some cloud features.</li>
+  <li><b>Best free option: Umami.</b> MIT licensed, needs only Node and PostgreSQL (<a href={S.umInst} rel="nofollow">install docs</a>), and stayed under 1 GB in my test. Umami Cloud Pro at $20 covers 1M events, where Plausible Starter is $69.</li>
+  <li><b>Best if you’ll miss GA’s depth: Matomo.</b> It’s the one I’d hand to someone who lives in GA reports, and it has a documented <a href={S.mtGa} rel="nofollow">GA import</a>. Hosted it’s the most expensive of the four at real traffic (€172 at 1M hits), so self-hosting is where it gets attractive.</li>
+  <li><b>Skip PostHog for a brochure site.</b> It’s a product analytics suite with session replay and feature flags. Great for a SaaS app, overkill for page stats, and its self-hosted setup wants a 16 GB machine.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>Tonight I didn’t install anything. The script and image sizes are measured; RAM figures are the vendors’, except my Umami test from Nov 1.</li>
+  <li>I haven’t run a GA4 import into any of them (<a href={S.plGa} rel="nofollow">Plausible’s importer docs</a>).</li>
+  <li>“Pageviews” and “events” aren’t the same unit across vendors, so treat the 100K and 1M columns as a guide.</li>
+  <li>Matomo’s prices exclude tax, and your card’s exchange rate won’t be exactly the ECB rate.</li>
+  <li>GA4 retention figures are from <a href={S.gaRet} rel="nofollow">Google’s help page</a>.</li>
+  <li>Server costs leave out a domain and your time on updates and backups.</li>
+  <li>Prices change. The date at the top is when I read them.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/compare/plausible-vs-umami-vs-google-analytics/">Plausible vs Umami vs Google Analytics: cost at 10K to 5M pageviews, with my Umami test</a></li>
+  <li><a href="/category/analytics/">All web analytics tools on this site</a></li>
+</ul>
+</div></section>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

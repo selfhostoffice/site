@@ -1,5 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import ZendeskGuide from '../../components/alt/ZendeskGuide.astro';
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import ZendeskGuide from '../../components/alt/ZendeskGuide.astro'; import GoogleAnalyticsGuide from '../../components/alt/GoogleAnalyticsGuide.astro';
 import { listings, products, slugify, catName, licLabel, licFamily, kfmt, fmtDate, activityLabel, activity, avatar, daysSincePush, GUIDES } from '../../lib/data';
 export function getStaticPaths() { return products.map(p => ({ params: { p: slugify(p) }, props: { name: p } })); }
 const { name } = Astro.props; const items = listings.filter(l => l.replaces === name); const guides = GUIDES.filter(g => items.some(l => g.tools.includes(l.slug)));
@@ -12,12 +12,21 @@ const PICKS: Record<string, { slug: string; kicker: string; reason: string }> = 
   },
 };
 // Per-page copy matched to the query each page gets impressions for (GSC).
-const OVR: Record<string, { title: string; description: string; h1: string; intro: string }> = {
+const OVR: Record<string, { title: string; description: string; h1: string; intro: string; extra?: string }> = {
   Zendesk: {
     title: 'Open-source Zendesk alternatives: 4 self-hosted helpdesks compared (2026)',
     description: 'Chatwoot, Zammad, Frappe Helpdesk and FreeScout compared as Zendesk replacements: hosted price for 5 agents, self-hosted server cost, license and Zendesk import, prices read Nov 18, 2026.',
     h1: 'Open-source Zendesk alternatives',
     intro: 'Four self-hostable helpdesks people move to from Zendesk, with what each costs hosted and on your own server. Which one fits depends on whether you use Zendesk for email tickets or for live chat and messaging',
+
+    extra: 'FreeScout, which I file under Help Scout alternatives, is in the guide below.',
+  },
+  'Google Analytics': {
+    title: 'Open-source Google Analytics alternatives: 4 self-hosted tools compared (2026)',
+    description: 'Plausible, Umami, Matomo and PostHog as Google Analytics replacements: hosted price at 100K and 1M pageviews, self-hosted server cost, tracking script size I measured, prices read Nov 19, 2026.',
+    h1: 'Open-source Google Analytics alternatives',
+    intro: 'Four open-source analytics tools you can self-host instead of Google Analytics, with what each costs hosted and on your own server, and how big each tracking script is. Which one fits depends on whether you want simple traffic stats or GA-style goals and ecommerce reports',
+    extra: 'PostHog, which I file under product analytics, is in the guide below.',
   },
 };
 const O = OVR[name];
@@ -29,7 +38,7 @@ const fetched = fmtDate(items[0].fetchedAt);
 ---
 <Base title={O?.title ?? `${items.length} open-source alternatives to ${name} (self-hosted, compared)`} description={O?.description ?? `Compare ${items.map(l => l.name).join(', ')}: self-hostable open-source alternatives to ${name}, side by side on license, stars and activity.`} schema={schema} crumbs={[['Home', '/'], ['Alternatives', '/#alternatives'], [name, `/alternatives/${slugify(name)}/`]]}>
 <div class="wrap page-head"><span class="eyebrow">{catName(cat)}</span><h1>{O?.h1 ?? `Open-source alternatives to ${name}`}</h1>
-{O && <p class="muted">{O.intro}. FreeScout, which I file under Help Scout alternatives, is in the guide below.</p>}
+{O && <p class="muted">{O.intro}.{O.extra && ' ' + O.extra}</p>}
 <p class="muted">{items.length} self-hostable {items.length === 1 ? 'option' : 'options'} you can run on your own server, compared on facts from GitHub (fetched {fetched}).</p></div>
 <section style="padding-top:14px"><div class="wrap">
 {pick && pickTool && (
@@ -58,5 +67,6 @@ const fetched = fmtDate(items[0].fetchedAt);
 {related.length > 0 && <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>More in {catName(cat)}</h2></div><div class="grid">{related.map(l => <Card l={l}/>)}</div></div></section>}
 {cat === 'email-marketing' && <div class="wrap"><p class="note"><b>Full guide:</b> <a href="/category/email-marketing/">Open-source email marketing software compared, with real monthly costs</a></p></div>}
 {name === 'Zendesk' && <ZendeskGuide/>}
+{name === 'Google Analytics' && <GoogleAnalyticsGuide/>}
 {guides.length > 0 && <div class="wrap">{guides.map(g => <p class="note"><b>Cost guide:</b> <a href={g.href}>{g.title}</a> (prices checked {g.checked})</p>)}</div>}
 </Base>
