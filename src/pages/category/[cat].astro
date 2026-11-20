@@ -1,5 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro'; import Directory from '../../components/Directory.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import InventoryGuide from '../../components/cat/InventoryGuide.astro'; import EmailMarketingGuide from '../../components/cat/EmailMarketingGuide.astro';
+import Base from '../../layouts/Base.astro'; import Directory from '../../components/Directory.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import InventoryGuide from '../../components/cat/InventoryGuide.astro'; import EmailMarketingGuide from '../../components/cat/EmailMarketingGuide.astro'; import AutomationGuide from '../../components/cat/AutomationGuide.astro';
 import { listings, cats, CATS, slugify } from '../../lib/data';
 export function getStaticPaths() { return cats.map(cat => ({ params: { cat } })); }
 const { cat } = Astro.params; const items = listings.filter(l => l.category === cat); const C = CATS[cat!];
@@ -17,6 +17,12 @@ const OVR: Record<string, { title: string; description: string; h1: string; intr
     description: 'listmonk, Mautic, Keila, SendPortal, phpList and BillionMail compared on license, activity, hosting and real monthly cost vs Mailchimp and MailerLite, with Amazon SES prices read Nov 14, 2026.',
     h1: 'Open-source email marketing software',
     intro: 'Self-hosted email marketing tools you can run on your own server instead of paying Mailchimp per contact. The software is free; what you pay for is a small server and a sending service like Amazon SES, and I priced both below',
+  },
+  automation: {
+    title: 'Open-source workflow automation: n8n, Activepieces, Node-RED and Huginn compared (2026)',
+    description: 'Self-hosted Zapier alternatives compared on license, activity, hosted price and cost at 5,000 runs a month, with server memory from my own test installs. Prices read Nov 20, 2026.',
+    h1: 'Open-source workflow automation software',
+    intro: 'Self-hosted tools that do what Zapier does: connect your apps and run workflows on a trigger, on your own server. I priced each one at 5,000 runs a month and measured how much server three of them need',
   },
   notes: {
     title: 'Open-source notes apps you can self-host',
@@ -41,4 +47,5 @@ const schema = { '@context': 'https://schema.org', '@type': 'ItemList', name: `O
 <section style="padding-top:18px"><div class="wrap"><FeaturedSlot where={C.name}/><Directory items={items} showCat={false}/></div></section>
 {cat === 'inventory' && <InventoryGuide/>}
 {cat === 'email-marketing' && <EmailMarketingGuide/>}
+{cat === 'automation' && <AutomationGuide/>}
 </Base>

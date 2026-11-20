@@ -1,0 +1,132 @@
+---
+import { listings, fmtDate } from '../../lib/data';
+const CHECKED = 'Nov 20, 2026';
+const ECB = 1.0992; // ECB reference rate, Nov 19, 2026
+const get = (slug: string) => listings.find(l => l.slug === slug);
+const S = {
+  zapier: 'https://zapier.com/pricing',
+  n8n: 'https://n8n.io/pricing/',
+  n8nLicense: 'https://github.com/n8n-io/n8n/blob/master/LICENSE.md',
+  ap: 'https://www.activepieces.com/pricing',
+  apLicense: 'https://github.com/activepieces/activepieces/blob/main/LICENSE',
+  flowfuse: 'https://flowfuse.com/pricing/',
+  huginnDocker: 'https://github.com/huginn/huginn/blob/master/doc/docker/install.md',
+  huginnReadme: 'https://github.com/huginn/huginn#readme',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  ecb: 'https://data.ecb.europa.eu/data/datasets/EXR/EXR.D.USD.EUR.SP00.A',
+  hubN8n: 'https://hub.docker.com/r/n8nio/n8n/tags',
+  hubAp: 'https://hub.docker.com/r/activepieces/activepieces/tags',
+  hubNr: 'https://hub.docker.com/r/nodered/node-red/tags',
+  hubHg: 'https://hub.docker.com/r/huginn/huginn/tags',
+};
+const usd = (eur: number) => '$' + (eur * ECB).toFixed(2);
+const rows = [
+  { slug: 'n8n-io--n8n', name: 'n8n', best: 'Business workflows with lots of app integrations, AI steps and code when you need it', lic: 'Sustainable Use License (fair-code, not OSI open source)', release: '2.48.6 (Nov 19, 2026)', img: '378 MB', hosted: `n8n Cloud from €20/mo billed yearly (about ${usd(20)})` },
+  { slug: 'activepieces--activepieces', name: 'Activepieces', best: 'Zapier-style flows that non-technical people on the team can build', lic: 'MIT, except its enterprise folders', release: '0.93.0 (Nov 8, 2026)', img: '526 MB', hosted: 'Free (1,000 credits), Plus $20/mo, Team $200/mo' },
+  { slug: 'node-red--node-red', name: 'Node-RED', best: 'Webhooks, APIs, MQTT and devices; developers who like wiring nodes', lic: 'Apache-2.0', release: '5.0.10 (Nov 17, 2026)', img: '234 MB', hosted: 'FlowFuse (managed Node-RED), quote only' },
+  { slug: 'huginn--huginn', name: 'Huginn', best: 'Watching websites and feeds and reacting: alerts, digests, scrapers', lic: 'MIT', release: 'v2026.11.19 (Nov 19, 2026)', img: '1,354 MB (all-in-one)', hosted: 'None; self-host only' },
+].map(r => ({ ...r, l: get(r.slug) }));
+// 5,000 runs a month of a workflow with 3 app actions. Zapier counts 15,000 tasks; the others count 5,000 runs.
+const cost = [
+  { o: 'Zapier Pro (not open source, for reference)', p: '$189', n: '20,000-task tier; $283.50 on monthly billing' },
+  { o: 'n8n Cloud Pro', p: `€50 (about ${usd(50)})`, n: 'billed yearly; n8n’s page showed me euro prices tonight' },
+  { o: 'Activepieces Cloud Plus', p: '$20', n: '10,000 credits included; a run is 1 credit, AI steps cost more' },
+  { o: 'Node-RED on your own server', p: '$7.20', n: '1 GiB Droplet $6 + weekly backups (20%); my test peaked under 300 MB' },
+  { o: 'n8n on your own server', p: '$14.40', n: '2 GiB Droplet $12 + backups; 524 MB idle, 735 MB peak in my Oct 27 test' },
+  { o: 'Huginn on your own server', p: '$14.40 (my estimate)', n: '2 GiB Droplet + backups; web process, worker and MySQL/Postgres; not tested by me' },
+  { o: 'Activepieces on your own server', p: '$28.80', n: '4 GiB Droplet $24 + backups; 1.5 to 2.4 GB peak in my Nov 16 test' },
+];
+const faq = [
+  { q: 'What is the best open-source workflow automation tool?', a: 'For most small businesses, n8n. It has the most integrations, a big community and it runs on a $12 server. If you want a strict open-source license, or the people building flows aren’t technical, pick Activepieces instead. Node-RED is better when the work is webhooks, APIs or devices rather than SaaS apps.' },
+  { q: 'Is n8n really open source?', a: 'Not by the OSI definition. n8n uses its own Sustainable Use License: free to self-host and modify for your own business, but you can’t sell n8n itself as a service, and files marked “.ee” need a paid license. Activepieces (MIT outside its enterprise folders), Node-RED (Apache-2.0) and Huginn (MIT) are open source in the usual sense.' },
+  { q: 'Can I self-host Zapier?', a: 'No. Zapier is cloud only. The tools on this page are the self-hosted options, and n8n and Activepieces are the closest to how Zapier works.' },
+  { q: 'How much RAM does a self-hosted automation server need?', a: 'From my own test installs: Node-RED 5.0.10 idled at about 139 MB and peaked at about 297 MB while answering 10,000 webhook calls; n8n 2.44.7 idled at 524 MB and peaked at 735 MB; Activepieces 0.93.0 peaked between 1.5 and 2.4 GB depending on worker slots. So 1 GiB for Node-RED, 2 GiB for n8n, 4 GiB for Activepieces. I haven’t run Huginn.' },
+  { q: 'Is Node-RED only for IoT?', a: 'No. It started there and has strong MQTT and device support, but HTTP endpoints, function nodes and community nodes for many APIs make it fine for webhook and API glue. What it lacks next to n8n is a big library of ready-made SaaS app connectors with OAuth handled for you.' },
+  { q: 'Is Huginn still maintained?', a: `Yes. GitHub showed a code push on ${rows[3].l ? fmtDate(rows[3].l.lastPush) : 'Nov 19, 2026'} and it publishes dated releases, the latest being v2026.11.19. It is a different kind of tool, though: agents that watch things and emit events, not a visual flow builder.` },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<div class="wrap prose" style="padding-top:28px">
+<p class="note">Prices read {CHECKED}. Server memory numbers are from my own test installs (dates below). EUR converted at the ECB reference rate of {ECB} (Nov 19, 2026, <a href={S.ecb} rel="nofollow">source</a>). No affiliate links on this page: I’ve applied to n8n’s program, and nobody here pays us yet. <a href="/disclosure/">How we make money</a>.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li><b>Most small businesses replacing Zapier:</b> <a href="/tool/n8n-io--n8n/">n8n</a>. Biggest integration library of the four, and it ran in 524 MB on my test machine, so a $12 server is enough.</li>
+  <li><b>You want a real open-source license, or non-developers will build the flows:</b> <a href="/tool/activepieces--activepieces/">Activepieces</a>. Its builder is the most Zapier-like, and its hosted Plus plan is a flat $20 for 10,000 runs. Self-hosted, it needs more memory than n8n.</li>
+  <li><b>Webhooks, APIs, MQTT or hardware:</b> <a href="/tool/node-red--node-red/">Node-RED</a>. The lightest one I tested by far.</li>
+  <li><b>Monitoring websites and feeds and getting alerted:</b> <a href="/tool/huginn--huginn/">Huginn</a>. Not a Zapier clone, but very good at that one job.</li>
+</ul>
+
+<h2>Compared</h2>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th>Tool</th><th>Best for</th><th>License</th><th>GitHub stars</th><th>Last code push</th><th>Latest release</th><th>Docker image (amd64, compressed)</th><th>Hosted option</th></tr></thead>
+<tbody>
+{rows.map(r => <tr>
+  <td>{r.l ? <a href={`/tool/${r.slug}/`}>{r.name}</a> : r.name}</td>
+  <td>{r.best}</td>
+  <td>{r.lic}</td>
+  <td>{r.l ? r.l.stars.toLocaleString('en-US') : '?'}</td>
+  <td>{r.l ? fmtDate(r.l.lastPush) : '?'}</td>
+  <td>{r.release}</td>
+  <td>{r.img}</td>
+  <td>{r.hosted}</td>
+</tr>)}
+</tbody></table></div>
+<p class="note">Stars and push dates from the GitHub API at the last site rebuild; releases from each project’s GitHub releases and image sizes from Docker Hub (<a href={S.hubN8n} rel="nofollow">n8n 2.48.6</a>, <a href={S.hubAp} rel="nofollow">Activepieces 0.93.0</a>, <a href={S.hubNr} rel="nofollow">Node-RED latest</a>, <a href={S.hubHg} rel="nofollow">Huginn latest</a>; Huginn’s one-process-per-container image is 780 MB), read {CHECKED}. GitHub shows n8n’s and Activepieces’ licenses as unrecognized; I read the <a href={S.n8nLicense} rel="nofollow">n8n</a> and <a href={S.apLicense} rel="nofollow">Activepieces</a> license files. <a href={S.flowfuse} rel="nofollow">FlowFuse’s pricing page</a> only lists “Contact Us” tiers now, so I have no public price for hosted Node-RED.</p>
+</div>
+
+<div class="wrap prose">
+<h2>What 5,000 runs a month costs</h2>
+<p>Same job for every row: a workflow with a trigger and 3 app actions, run 5,000 times a month. Zapier bills every action as a task, so that’s 15,000 tasks there; the others bill per run. Per month, billed yearly where there’s a choice.</p>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th>Option</th><th>Per month</th><th>Notes</th></tr></thead>
+<tbody>
+{cost.map(c => <tr><td>{c.o}</td><td><span class="usd">{c.p}</span></td><td>{c.n}</td></tr>)}
+</tbody></table></div>
+<p class="note">Sources, read {CHECKED}: <a href={S.zapier} rel="nofollow">Zapier pricing</a>, <a href={S.n8n} rel="nofollow">n8n pricing</a> (Starter €20, Pro €50, billed yearly), <a href={S.ap} rel="nofollow">Activepieces pricing</a> ($0.007 per credit past the included amount) and <a href={S.do} rel="nofollow">DigitalOcean Droplets</a>. Self-hosted rows leave out a domain and your time. The volume-by-volume breakdown is in <a href="/compare/zapier-vs-n8n-vs-activepieces/">Zapier vs n8n vs Activepieces</a>.</p>
+</div>
+
+<div class="wrap prose">
+<h2>What I measured</h2>
+<p><b>Node-RED 5.0.10, tonight.</b> I installed it with npm on my Linux test machine (8 vCPU, 15 GB, Node 24). The install took 10 seconds and 122 MB of disk. I deployed one flow: an HTTP endpoint that takes an order as JSON, lowercases the email, totals the line items and answers. Then I sent it 10,000 requests, 20 at a time.</p>
+<ul>
+  <li>Idle with the flow loaded: about <b>139 MB</b> of memory.</li>
+  <li>During the burst: <b>1,884 requests a second</b>, median response 4.3 ms, 95th percentile 32 ms, peak memory about <b>297 MB</b>.</li>
+  <li>30 seconds later it was back to about 130 MB.</li>
+</ul>
+<p><b>n8n 2.44.7, Oct 27:</b> 524 MB idle, 735 MB peak on a 300,000-row Code step. Details in <a href="/pricing/n8n-server-requirements/">n8n server requirements</a>.</p>
+<p><b>Activepieces 0.93.0, Nov 16:</b> 1,545 MB peak with 1 worker slot, 2,449 MB peak with 5 slots on a 1,000-run burst. Details in <a href="/compare/zapier-vs-n8n-vs-activepieces/">the Zapier comparison</a>.</p>
+<p>These are separate tests with different workloads, so read them as server sizing, not a benchmark race.</p>
+
+<h2>My picks, and why</h2>
+<ul>
+  <li><b>Best overall: n8n.</b> It does what most people want from Zapier, the community is huge (most stars here by a wide margin), and the self-hosted server is cheap. The license is the catch: fine for your own business, not for reselling it.</li>
+  <li><b>Best open-source license and easiest builder: Activepieces.</b> MIT core, a builder anyone on the team can use, and a cheap hosted plan to fall back on. Budget a 4 GiB server if you run it yourself.</li>
+  <li><b>Best lightweight option: Node-RED.</b> Under 300 MB at peak in my test. It’s the one I’d put on a $6 server or a Raspberry Pi. You’ll write more yourself for SaaS apps.</li>
+  <li><b>Best for watching the web: Huginn.</b> Agents that check pages, feeds and APIs on a schedule and send you a digest or a Slack message when something changes.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I haven’t installed Huginn. Its server estimate is mine, based on what <a href={S.huginnReadme} rel="nofollow">its README</a> says it needs: a web process, a background worker and MySQL or PostgreSQL.</li>
+  <li>My Node-RED test ran on my test machine, not a 1 GiB Droplet. Heavy flows, many community nodes or big messages will use more.</li>
+  <li>Integration counts differ in what they count, so I left them out of the table.</li>
+  <li>n8n’s pricing page showed me euros tonight; on Nov 16 it showed the same numbers in dollars. Your checkout currency may differ.</li>
+  <li>Prices change. The date at the top is when I read them.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/compare/zapier-vs-n8n-vs-activepieces/">Zapier vs n8n vs Activepieces</a>: cost at 1,000, 5,000 and 20,000 runs a month</li>
+  <li><a href="/compare/n8n-vs-make/">n8n vs Make</a></li>
+  <li><a href="/pricing/n8n/">n8n pricing</a> and <a href="/pricing/n8n-server-requirements/">n8n server requirements</a></li>
+  <li><a href="/alternatives/zapier/">Open-source Zapier alternatives</a></li>
+  <li>Picking a server: <a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a></li>
+</ul>
+</div>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

@@ -37,13 +37,13 @@ const rows = [
   { who: 'Activepieces self-hosted', how: 'Community edition, no license fee; 4 GiB server + backups', c: ['$28.80', '$28.80', '$28.80'], m: ['same', 'same', 'same'] },
 ];
 const chart = [
-  { label: 'Zapier Pro', v: 89, t: '$89/mo ($133.50 monthly)' },
+  { label: 'Zapier Pro', v: 189, t: '$189/mo ($283.50 monthly)' },
   { label: 'n8n Cloud Pro', v: 50, t: '$50/mo ($60 monthly)' },
   { label: 'Activepieces own server', v: 28.8, t: '$28.80/mo + your time' },
   { label: 'Activepieces Plus', v: 20, t: '$20/mo' },
   { label: 'n8n own server', v: 14.4, t: '$14.40/mo + your time' },
 ];
-const maxC = 110;
+const maxC = 200;
 const mem = [
   { label: 'n8n 2.44.7, idle', v: 524, t: '524 MB (Oct 27 test)' },
   { label: 'n8n 2.44.7, peak', v: 735, t: '735 MB (300,000-row Code step)' },
@@ -53,7 +53,7 @@ const mem = [
 ];
 const maxM = 2600;
 const faq = [
-  { q: 'Is n8n cheaper than Zapier?', a: `For anything past a few hundred runs a month, yes. Zapier bills per task, and every successful action step is a task, so a run with 3 app actions uses 3. n8n Cloud bills per execution, one run however many steps it has. At 5,000 runs a month of a 3-action workflow, Zapier Pro is $89 a month billed yearly ($133.50 monthly) and n8n Cloud Pro is $50 ($60 monthly), prices read ${CHECKED}. Self-hosted n8n has no license fee; I ran it in about 524 MB of RAM, so a $12 server does it.` },
+  { q: 'Is n8n cheaper than Zapier?', a: `For anything past a few hundred runs a month, yes. Zapier bills per task, and every successful action step is a task, so a run with 3 app actions uses 3. n8n Cloud bills per execution, one run however many steps it has. At 5,000 runs a month of a 3-action workflow, that’s 15,000 Zapier tasks, so Zapier Pro is $189 a month billed yearly ($283.50 monthly) and n8n Cloud Pro is $50 ($60 monthly), prices read ${CHECKED}. Self-hosted n8n has no license fee; I ran it in about 524 MB of RAM, so a $12 server does it.` },
   { q: 'Is Activepieces cheaper than n8n?', a: `On their clouds, usually. Activepieces counts one credit per run, like n8n, but its Plus plan is $20 a month for 10,000 runs, where n8n Pro is $50 billed yearly for the same 10,000. Past 10,000, Activepieces charges $0.007 a run, so 20,000 runs is $90 against n8n's $120.83 (50,000-execution Pro tier, yearly). Self-hosted, n8n is cheaper because it needs a smaller server.` },
   { q: 'How many Zapier tasks does a Zap use?', a: 'One for each action step that succeeds. The trigger doesn’t count, failed steps don’t count, and Zapier’s built-in tools (Formatter, Filter, Paths, Delay, Looping and a few others) don’t count either. AI steps and MCP tool calls can cost more than one task; Zapier lists the rates on its task usage rates page.' },
   { q: 'Is Activepieces free to self-host?', a: 'The Community edition is. Everything outside the repository’s ee folders is under the MIT license, and you pay only for the server. The paid self-hosted options add things like SSO, SCIM, custom roles, audit logs and Git sync. n8n’s Community edition is also free to run, but under its Sustainable Use License rather than an open-source license; it allows internal business use and doesn’t let you sell n8n itself as a hosted service.' },
@@ -61,21 +61,22 @@ const faq = [
   { q: 'What happens if I go over my plan?', a: 'Zapier: with pay-per-task turned on, extra tasks cost 1.25 times your plan’s per-task rate on yearly billing or 2.5 times on monthly, and everything pauses at 3 times your plan’s tasks. With it off, Zaps stop until the next cycle. n8n Cloud Starter and Pro are capped, so you upgrade to the next tier. Activepieces Plus and Team keep running at $0.007 a credit; on Free, runs past the quota wait for credits to refresh.' },
 ];
 const schema = [
-  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Zapier vs n8n vs Activepieces: what automation costs at 1,000, 5,000 and 20,000 runs a month', datePublished: '2026-11-16', dateModified: '2026-11-16', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/zapier-vs-n8n-vs-activepieces/', Astro.site).toString() },
+  { '@context': 'https://schema.org', '@type': 'Article', headline: 'Zapier vs n8n vs Activepieces: what automation costs at 1,000, 5,000 and 20,000 runs a month', datePublished: '2026-11-16', dateModified: '2026-11-20', author: { '@type': 'Organization', name: 'SelfHost Office' }, mainEntityOfPage: new URL('/compare/zapier-vs-n8n-vs-activepieces/', Astro.site).toString() },
   { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
 ];
 ---
-<Base title="Zapier vs n8n vs Activepieces (Nov 2026): cost at 1K, 5K and 20K runs a month" description="Prices read Nov 16, 2026 plus a test install of Activepieces 0.93.0: for 5,000 runs a month Zapier Pro is $89, n8n Cloud $50, Activepieces Plus $20. Self-hosted n8n fits a $12 server; Activepieces needed about 1.5 to 2.4 GB of RAM." schema={schema} crumbs={[['Home', '/'], ['Zapier vs n8n vs Activepieces', '/compare/zapier-vs-n8n-vs-activepieces/']]}>
+<Base title="Zapier vs n8n vs Activepieces (Nov 2026): cost at 1K, 5K and 20K runs a month" description="Prices read Nov 16, 2026 plus a test install of Activepieces 0.93.0: for 5,000 runs a month Zapier Pro is $189, n8n Cloud $50, Activepieces Plus $20. Self-hosted n8n fits a $12 server; Activepieces needed about 1.5 to 2.4 GB of RAM." schema={schema} crumbs={[['Home', '/'], ['Zapier vs n8n vs Activepieces', '/compare/zapier-vs-n8n-vs-activepieces/']]}>
 <div class="wrap page-head prose">
   <span class="eyebrow">Comparison · Prices read on {CHECKED}</span>
   <h1>Zapier vs n8n vs Activepieces: what automation costs at 1,000, 5,000 and 20,000 runs a month</h1>
   <p class="muted">n8n and Activepieces are the two open-source Zapier alternatives most people end up choosing between. Both sell a hosted plan and let you run the server yourself. I read all three pricing pages on {CHECKED}, priced the same workflow at three volumes, and ran Activepieces 0.93.0 on my test machine to see what server it needs. My n8n memory numbers are from <a href="/pricing/n8n-server-requirements/">my earlier n8n test</a>. All prices are in US dollars, per month, billed yearly unless I say otherwise.</p>
   <p class="note"><b>Disclosure:</b> no affiliate or referral links on this page. I’ve applied to n8n’s affiliate program; if it’s approved I’ll add a marked link and update this note. Zapier, Activepieces and DigitalOcean don’t pay us. <a href="/disclosure/">How we make money</a>.</p>
+  <p class="note"><b>Correction, Nov 20, 2026:</b> the summary, chart and FAQ first said Zapier Pro was $89 at 5,000 runs. That was the price for 1,000 runs. 5,000 runs of a 3-action workflow is 15,000 tasks, which is the $189 tier. The table below was right.</p>
 
   <h2>The short version</h2>
   <ul>
     <li><b>The billing unit decides it.</b> Zapier charges per task, which is every action step that runs. n8n and Activepieces charge per run, however many steps it has. The longer your workflows, the worse Zapier looks.</li>
-    <li><b>At 5,000 runs a month</b> of a workflow with 3 app actions: Zapier Pro <b>$89</b> ($133.50 monthly), n8n Cloud Pro <b>$50</b> ($60 monthly), Activepieces Plus <b>$20</b>.</li>
+    <li><b>At 5,000 runs a month</b> of a workflow with 3 app actions: Zapier Pro <b>$189</b> ($283.50 monthly; 15,000 tasks), n8n Cloud Pro <b>$50</b> ($60 monthly), Activepieces Plus <b>$20</b>.</li>
     <li><b>Self-hosted, n8n is the lighter one.</b> It idled at 524 MB in my earlier test, so a $12 server does it. Activepieces peaked at 1.5 GB with one worker slot and 2.4 GB with five, so budget a 4 GiB server.</li>
     <li><b>Zapier still wins on reach.</b> It lists 9,000+ apps, and its free plan (100 tasks, two-step Zaps) is enough for a couple of simple automations.</li>
   </ul>
@@ -85,7 +86,7 @@ const schema = [
 <h2>Monthly cost at 5,000 runs</h2>
 <figure class="chart" style="margin:0">
 <svg viewBox="0 0 640 172" width="100%" role="img" aria-labelledby="c-t">
-  <title id="c-t">Monthly cost of 5,000 runs of a 3-action workflow, prices read {CHECKED}, billed yearly: Zapier Pro $89, n8n Cloud Pro $50, Activepieces on your own server $28.80, Activepieces Plus $20, n8n on your own server $14.40</title>
+  <title id="c-t">Monthly cost of 5,000 runs of a 3-action workflow, prices read {CHECKED}, billed yearly: Zapier Pro $189, n8n Cloud Pro $50, Activepieces on your own server $28.80, Activepieces Plus $20, n8n on your own server $14.40</title>
   {chart.map((b, i) => {
     const y = 8 + i * 32; const w = Math.max(3, (b.v / maxC) * 270);
     return <g>
