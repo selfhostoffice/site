@@ -1,0 +1,125 @@
+---
+import { listings, fmtDate, licLabel } from '../../lib/data';
+const CHECKED = 'Nov 22, 2026';
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const get = (slug: string) => listings.find(l => l.slug === slug);
+const S = {
+  odoo: 'https://www.odoo.com/pricing',
+  odooEd: 'https://www.odoo.com/page/editions',
+  odooDeploy: 'https://www.odoo.com/documentation/19.0/administration/on_premise/deploy.html',
+  erpPrice: 'https://frappe.io/erpnext/pricing',
+  fc: 'https://frappe.io/cloud/pricing',
+  frappeDocker: 'https://github.com/frappe/frappe_docker',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  hubOdoo: 'https://hub.docker.com/_/odoo/tags',
+  hubErp: 'https://hub.docker.com/r/frappe/erpnext/tags',
+};
+// Read Nov 22, 2026, ~1 AM CT.
+// Odoo pricing (USD, per user/month): Standard yearly $31.10 (promo $24.90 first 12 months), monthly billing $38.90 (promo $31.10);
+//   Custom yearly $61.00 (promo $49.00), monthly $76.20 (promo $61.10). One App Free: 1 app, unlimited users, Odoo Online. Odoo.sh hosting extra on Custom.
+//   Footnote: "The discount is valid for 12 months, for initial users ordered."
+// Frappe ERPNext pricing page: Frappe Cloud sites "$5 onwards /mo", servers "$20 onwards /mo" and "$125 onwards /mo"; "pay only for what you use, and not per user".
+// DigitalOcean Basic: 4 GiB / 2 vCPU $24, 8 GiB / 4 vCPU $48; weekly backups +20%.
+// Docker Hub amd64 compressed, read tonight: odoo 20.0 (Nov 20) 805.6 MB, odoo 19.0 700.3 MB, odoo 18.0 675.9 MB; frappe/erpnext v16.60.0 (Nov 19) 1,580.4 MB, v15.126.0 (Nov 22) 895.2 MB.
+// Odoo deploy docs: 1 worker ~= 6 concurrent users; workers <= (CPU*2)+1; light worker ~150 MB, heavy ~1 GB, 80/20 mix.
+const users = 10;
+const odooStd = 31.10, odooStdM = 38.90, odooCus = 61.00;
+const srv = 24 * 1.2;
+const rows = [
+  { slug: 'odoo--odoo', name: 'Odoo Online (Standard)', best: 'All apps hosted, no server to run', cost: money(odooStd * users) + ' (' + money(odooStdM * users) + ' monthly billing)', basis: 'per user', lic: 'Proprietary (Enterprise)' },
+  { slug: 'odoo--odoo', name: 'Odoo Community, self-hosted', best: 'Odoo’s core apps for free, if you can run Linux', cost: money(srv) + ' server', basis: 'flat', lic: null },
+  { slug: 'frappe--erpnext', name: 'ERPNext on Frappe Cloud', best: 'A full ERP hosted, priced by resources not seats', cost: 'from $5 (site) or $20 (server)', basis: 'flat', lic: null },
+  { slug: 'frappe--erpnext', name: 'ERPNext, self-hosted', best: 'Everything free, if you can run Docker', cost: money(srv) + ' server', basis: 'flat', lic: null },
+  { slug: '', name: 'NetSuite', best: 'Reference point', cost: 'Quote only', basis: 'annual license + per user', lic: 'Proprietary' },
+].map(r => ({ ...r, l: r.slug ? get(r.slug) : undefined }));
+const fetched = rows.find(r => r.l)?.l?.fetchedAt;
+const odooRam = Math.round(3 * (0.8 * 150 + 0.2 * 1024));
+const images = [
+  { label: 'Odoo 18.0', v: 675.9 },
+  { label: 'Odoo 19.0', v: 700.3 },
+  { label: 'Odoo 20.0', v: 805.6 },
+  { label: 'ERPNext v15.126.0', v: 895.2 },
+  { label: 'ERPNext v16.60.0', v: 1580.4 },
+];
+const maxI = 1600;
+const faq = [
+  { q: 'Is there a free open-source alternative to NetSuite?', a: 'Yes. ERPNext is GPL-3.0 and free to self-host with every module, and Odoo Community is free to self-host with Odoo’s core apps. You pay for the server and, realistically, for someone’s time to set it up. ERPNext is the closer match if you want everything NetSuite does without paying per user.' },
+  { q: 'How much does Odoo cost for 10 users?', a: 'Read ' + CHECKED + ' on Odoo’s pricing page: Standard is $31.10 per user per month on yearly billing, so ' + money(odooStd * users) + ' a month for 10 users, or ' + money(odooStdM * users) + ' on monthly billing. New customers get a discount for the first 12 months ($24.90 per user on yearly). Custom, which you need for Odoo.sh or on-premise Enterprise, Studio and multi-company, is $61.00 per user on yearly billing. One app on its own is free for unlimited users.' },
+  { q: 'How much does ERPNext cost?', a: 'The software is free. Frappe’s own pricing page says Frappe Cloud sites start at $5 a month and dedicated servers at $20, and that you pay for resources, not per user. Self-hosting on a 4 GiB DigitalOcean Droplet with backups is about ' + money(srv) + ' a month. The real cost is implementation: Frappe lists starter packs and 200+ partners for that.' },
+  { q: 'How much does NetSuite cost?', a: 'NetSuite doesn’t publish prices. You get a quote from Oracle NetSuite sales based on modules, users and edition, billed as an annual license. Any number you see on a third-party site is someone else’s estimate, so I haven’t put one in the table.' },
+  { q: 'Is Odoo Community enough to replace NetSuite?', a: 'Maybe, depending on the apps. Odoo’s editions page splits apps between Community and Enterprise, and some finance features are Enterprise-only. Check the apps you actually need on that page before planning a self-hosted Community install.' },
+  { q: 'What server do I need to self-host Odoo or ERPNext?', a: 'Odoo’s deployment docs estimate one worker per 6 concurrent users and about 150 MB of RAM for a light worker, 1 GB for a heavy one. For a 10-person company that works out to roughly ' + odooRam + ' MB for Odoo plus PostgreSQL, so 4 GB is comfortable. Frappe doesn’t give a number in the frappe_docker docs I read; I’d start ERPNext on 4 GB too, since it also runs MariaDB, Redis and background workers, and move up if it swaps.' },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<section style="padding-top:6px"><div class="wrap prose">
+<p class="note"><b>Checked on {CHECKED}.</b> GitHub numbers refresh nightly{fetched && <> (last fetch {fmtDate(fetched)})</>}. Prices are from each vendor’s page that night, in US dollars, before tax. <b>Disclosure:</b> no affiliate links on this page. Odoo, Frappe, Oracle NetSuite and DigitalOcean don’t pay us. <a href="/disclosure/">How this site makes money</a>.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li><b>You want NetSuite’s scope without per-user fees:</b> <a href="/tool/frappe--erpnext/">ERPNext</a>. Accounting, stock, buying, selling, manufacturing and projects in one GPL-3.0 codebase, hosted from $5 a month or free on your own server.</li>
+  <li><b>You want something polished that you don’t host:</b> <a href="/tool/odoo--odoo/">Odoo Online</a>. All apps for {money(odooStd)} per user a month on yearly billing, and one app is free.</li>
+  <li><b>You have someone who can run Linux:</b> self-host either one for about {money(srv)} a month in server costs.</li>
+</ul>
+
+<h2>What 10 users cost per month</h2>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">Best for</th><th scope="col">10 users, per month</th><th scope="col">Priced</th><th scope="col">License</th><th scope="col">Last push</th></tr></thead>
+<tbody>
+{rows.map(r => <tr>
+  <th scope="row">{r.l ? <a href={'/tool/' + r.slug + '/'}>{r.name}</a> : r.name}</th>
+  <td>{r.best}</td>
+  <td><span class="usd">{r.cost}</span></td>
+  <td>{r.basis}</td>
+  <td>{r.lic ?? (r.l ? licLabel(r.l.license) : '?')}</td>
+  <td>{r.l ? fmtDate(r.l.lastPush) : 'n/a'}</td>
+</tr>)}
+</tbody></table></div>
+<p class="note">Read {CHECKED}. <a href={S.odoo} rel="nofollow">Odoo pricing</a>: Standard $31.10/user on yearly billing, $38.90 on monthly; Odoo shows a lower price for the first 12 months for initial users ($24.90 yearly), which I left out because it ends. <a href={S.erpPrice} rel="nofollow">ERPNext pricing</a>: Frappe Cloud sites “$5 onwards”, servers “$20 onwards”, not per user; the exact site plan you need depends on storage and usage. Self-hosted rows are a DigitalOcean Basic 4 GiB Droplet ($24) plus 20% for weekly backups (<a href={S.do} rel="nofollow">prices</a>); 4 GiB is my sizing, worked out below. NetSuite publishes no price list. None of these include implementation, which is usually the biggest ERP cost.</p>
+</div>
+
+<div class="wrap prose">
+<h2>What I checked myself</h2>
+<p>I didn’t install either ERP tonight (no Docker on my test box), so here’s what I could measure: how big each official Docker image is, which is what you pull and store on every upgrade.</p>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Image (amd64, compressed)</th><th scope="col">MB</th><th scope="col"><span class="muted small">Relative size</span></th></tr></thead>
+<tbody>
+{images.map(s => <tr><th scope="row">{s.label}</th><td>{s.v.toLocaleString('en-US')}</td><td><span style={'display:inline-block;height:10px;background:currentColor;opacity:.5;width:' + Math.max(2, Math.round(s.v / maxI * 220)) + 'px'}></span></td></tr>)}
+</tbody></table></div></div>
+<div class="wrap prose">
+<p class="note">From Docker Hub tag pages, read {CHECKED}: <a href={S.hubOdoo} rel="nofollow">odoo</a> (official image, Community edition) and <a href={S.hubErp} rel="nofollow">frappe/erpnext</a>. ERPNext v16 nearly doubled in size over v15. Odoo needs PostgreSQL alongside it; ERPNext needs MariaDB and Redis (<a href={S.frappeDocker} rel="nofollow">frappe_docker</a>).</p>
+<ul>
+  <li><b>Server sizing math for Odoo</b>, from <a href={S.odooDeploy} rel="nofollow">Odoo’s deployment docs</a>: one worker handles about 6 concurrent users, so 10 people need 2 workers plus 1 for cron jobs. At their 80/20 mix of light (150 MB) and heavy (1 GB) requests that’s about {odooRam} MB for Odoo. Add PostgreSQL and the OS and a 4 GB server has room; 2 GB would be tight.</li>
+  <li><b>ERPNext</b> runs more processes (web, workers, scheduler, socket.io, MariaDB, Redis). I have no measured number for it yet, so the 4 GB figure is my estimate, not Frappe’s.</li>
+</ul>
+
+<h2>My picks, and why</h2>
+<ul>
+  <li><b>Best open-source NetSuite alternative overall: ERPNext.</b> It’s the only one here where every module is in the free version, and Frappe Cloud doesn’t charge per seat, so it stays cheap as you hire. The trade-off is that it feels like an accountant’s tool, and you’ll want help setting up the chart of accounts and stock settings.</li>
+  <li><b>Best if you won’t host anything: Odoo Online.</b> At 10 users it’s about {money(odooStd * users)} a month. That’s real money, but it includes hosting, upgrades and support.</li>
+  <li><b>Best free self-hosted option if Community has your apps: Odoo Community.</b> Check the <a href={S.odooEd} rel="nofollow">editions page</a> first. If a feature you need is Enterprise-only, you’re on the Custom plan ({money(odooCus)} per user) and self-hosting stops saving you money.</li>
+  <li><b>Stay on NetSuite if</b> you rely on its multi-subsidiary consolidation, SuiteCommerce or a big library of SuiteApps. Moving an ERP is months of work; do it for a clear reason, not to shave a bill.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I haven’t run either ERP with real data. Image sizes are measured; RAM numbers are Odoo’s docs and my own estimate for ERPNext.</li>
+  <li>I don’t have a NetSuite quote, so I can’t tell you how much you’d save. Ask for your renewal number and compare it with the table.</li>
+  <li>Implementation (data migration, setup, training) isn’t in any of these numbers and often costs more than a year of software.</li>
+  <li>Server costs leave out a domain, email sending and your time on updates and backups.</li>
+  <li>Prices change. The date at the top is when I read them.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/compare/akaunting-vs-invoice-ninja-vs-quickbooks/">Akaunting vs Invoice Ninja vs QuickBooks</a>, if you only need accounting and invoicing</li>
+  <li><a href="/category/inventory/">Open-source inventory management software</a>, if stock is the part you need</li>
+  <li><a href="/alternatives/quickbooks/">Open-source QuickBooks alternatives</a></li>
+</ul>
+</div></section>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

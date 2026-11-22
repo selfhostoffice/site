@@ -1,5 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import ZendeskGuide from '../../components/alt/ZendeskGuide.astro'; import GoogleAnalyticsGuide from '../../components/alt/GoogleAnalyticsGuide.astro';
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import ZendeskGuide from '../../components/alt/ZendeskGuide.astro'; import GoogleAnalyticsGuide from '../../components/alt/GoogleAnalyticsGuide.astro'; import NetSuiteGuide from '../../components/alt/NetSuiteGuide.astro';
 import { listings, products, slugify, catName, licLabel, licFamily, kfmt, fmtDate, activityLabel, activity, avatar, daysSincePush, GUIDES } from '../../lib/data';
 export function getStaticPaths() { return products.map(p => ({ params: { p: slugify(p) }, props: { name: p } })); }
 const { name } = Astro.props; const items = listings.filter(l => l.replaces === name); const guides = GUIDES.filter(g => items.some(l => g.tools.includes(l.slug)));
@@ -27,6 +27,12 @@ const OVR: Record<string, { title: string; description: string; h1: string; intr
     h1: 'Open-source Google Analytics alternatives',
     intro: 'Four open-source analytics tools you can self-host instead of Google Analytics, with what each costs hosted and on your own server, and how big each tracking script is. Which one fits depends on whether you want simple traffic stats or GA-style goals and ecommerce reports',
     extra: 'PostHog, which I file under product analytics, is in the guide below.',
+  },
+  NetSuite: {
+    title: 'Open-source NetSuite alternatives: ERPNext and Odoo cost for 10 users (2026)',
+    description: 'ERPNext and Odoo as NetSuite replacements: hosted and self-hosted monthly cost for 10 users, server sizing, Docker image sizes I checked, prices read Nov 22, 2026.',
+    h1: 'Open-source NetSuite alternatives',
+    intro: 'The two open-source ERPs that can actually stand in for NetSuite, with what each costs for a 10-person company hosted and on your own server. NetSuite doesn’t publish prices, so the comparison is against your own quote',
   },
 };
 const O = OVR[name];
@@ -68,5 +74,6 @@ const fetched = fmtDate(items[0].fetchedAt);
 {cat === 'email-marketing' && <div class="wrap"><p class="note"><b>Full guide:</b> <a href="/category/email-marketing/">Open-source email marketing software compared, with real monthly costs</a></p></div>}
 {name === 'Zendesk' && <ZendeskGuide/>}
 {name === 'Google Analytics' && <GoogleAnalyticsGuide/>}
+{name === 'NetSuite' && <NetSuiteGuide/>}
 {guides.length > 0 && <div class="wrap">{guides.map(g => <p class="note"><b>Cost guide:</b> <a href={g.href}>{g.title}</a> (prices checked {g.checked})</p>)}</div>}
 </Base>
