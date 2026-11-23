@@ -1,5 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import ZendeskGuide from '../../components/alt/ZendeskGuide.astro'; import GoogleAnalyticsGuide from '../../components/alt/GoogleAnalyticsGuide.astro'; import NetSuiteGuide from '../../components/alt/NetSuiteGuide.astro';
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import ZendeskGuide from '../../components/alt/ZendeskGuide.astro'; import GoogleAnalyticsGuide from '../../components/alt/GoogleAnalyticsGuide.astro'; import NetSuiteGuide from '../../components/alt/NetSuiteGuide.astro'; import ConfluenceGuide from '../../components/alt/ConfluenceGuide.astro';
 import { listings, products, slugify, catName, licLabel, licFamily, kfmt, fmtDate, activityLabel, activity, avatar, daysSincePush, GUIDES } from '../../lib/data';
 export function getStaticPaths() { return products.map(p => ({ params: { p: slugify(p) }, props: { name: p } })); }
 const { name } = Astro.props; const items = listings.filter(l => l.replaces === name); const guides = GUIDES.filter(g => items.some(l => g.tools.includes(l.slug)));
@@ -33,6 +33,12 @@ const OVR: Record<string, { title: string; description: string; h1: string; intr
     description: 'ERPNext and Odoo as NetSuite replacements: hosted and self-hosted monthly cost for 10 users, server sizing, Docker image sizes I checked, prices read Nov 22, 2026.',
     h1: 'Open-source NetSuite alternatives',
     intro: 'The two open-source ERPs that can actually stand in for NetSuite, with what each costs for a 10-person company hosted and on your own server. NetSuite doesn’t publish prices, so the comparison is against your own quote',
+  },
+  Confluence: {
+    title: 'Open-source Confluence alternatives: 4 self-hosted wikis compared (2026)',
+    description: 'Docmost, Outline, BookStack and Wiki.js as Confluence replacements: monthly cost for 25 users hosted and self-hosted, Confluence import, Docker image sizes I checked, prices read Nov 23, 2026.',
+    h1: 'Open-source Confluence alternatives',
+    intro: 'Four self-hostable wikis teams move to from Confluence, with what each costs for 25 people hosted and on your own server, and which ones can import your Confluence spaces',
   },
 };
 const O = OVR[name];
@@ -75,5 +81,6 @@ const fetched = fmtDate(items[0].fetchedAt);
 {name === 'Zendesk' && <ZendeskGuide/>}
 {name === 'Google Analytics' && <GoogleAnalyticsGuide/>}
 {name === 'NetSuite' && <NetSuiteGuide/>}
+{name === 'Confluence' && <ConfluenceGuide/>}
 {guides.length > 0 && <div class="wrap">{guides.map(g => <p class="note"><b>Cost guide:</b> <a href={g.href}>{g.title}</a> (prices checked {g.checked})</p>)}</div>}
 </Base>

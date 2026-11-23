@@ -1,0 +1,123 @@
+---
+import { listings, fmtDate, licLabel } from '../../lib/data';
+const CHECKED = 'Nov 23, 2026';
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const get = (slug: string) => listings.find(l => l.slug === slug);
+const S = {
+  conf: 'https://www.atlassian.com/software/confluence/pricing',
+  outline: 'https://www.getoutline.com/pricing',
+  outlineLic: 'https://github.com/outline/outline/blob/main/LICENSE',
+  docmost: 'https://docmost.com/pricing',
+  docmostInstall: 'https://docmost.com/docs/installation',
+  bookstack: 'https://www.bookstackapp.com/docs/admin/installation/',
+  wikijs: 'https://docs.requarks.io/install/requirements',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  hubOutline: 'https://hub.docker.com/r/outlinewiki/outline/tags',
+  hubDocmost: 'https://hub.docker.com/r/docmost/docmost/tags',
+  hubBookstack: 'https://hub.docker.com/r/linuxserver/bookstack/tags',
+  hubWiki: 'https://hub.docker.com/r/requarks/wiki/tags',
+};
+// Read Nov 23, 2026, ~1 AM CT, USD.
+// Confluence (schema.org offers on the pricing page): Free "Free forever for 10 users"; Standard $5.78/user/mo; Premium $11.16/user/mo.
+// Outline Cloud: Standard $3/user/mo monthly or $30/user yearly; Business $4 monthly or $40 yearly. Confluence importer: Business only (cloud table).
+// Outline On-Premises: Community $0 "limited features, no support"; Business $4/user/mo billed annually, 10 user min; Enterprise $5, 100 user min. License BSL 1.1 (no "Document Service").
+// Docmost: Community free (AGPL); Business $6/seat/mo annually, minimum 10 seats; FAQ: Confluence import, SSO, AI are Business features.
+// DigitalOcean Basic: 2 GiB/1 vCPU $12, 4 GiB/2 vCPU $24; weekly backups +20%.
+// Docker Hub amd64 compressed: outlinewiki/outline 1.13.0 (Nov 15) 269.6 MB; docmost/docmost 0.98.0 (Nov 20) 132.9 MB;
+//   linuxserver/bookstack v26.09.3-ls300 (Nov 20) 95.9 MB; requarks/wiki 3.6.0 (Nov 22) 819.7 MB.
+const users = 25;
+const small = 12 * 1.2, big = 24 * 1.2;
+const rows = [
+  { slug: '', name: 'Confluence Standard', best: 'Reference point (free up to 10 users)', cost: money(5.78 * users), lic: 'Proprietary' },
+  { slug: 'outline--outline', name: 'Outline Cloud', best: 'Cheapest hosted option, nothing to run', cost: money(30 * users / 12) + ' Standard, ' + money(40 * users / 12) + ' Business (yearly)', lic: 'BSL 1.1' },
+  { slug: 'outline--outline', name: 'Outline, self-hosted', best: 'Outline’s editor on your own server', cost: money(big) + ' server (Community)', lic: 'BSL 1.1' },
+  { slug: 'docmost--docmost', name: 'Docmost, self-hosted', best: 'Closest to Confluence: spaces, diagrams, real-time editing', cost: money(big) + ' server, +' + money(6 * users) + ' for Business', lic: null },
+  { slug: 'bookstackapp--bookstack', name: 'BookStack, self-hosted', best: 'Structured manuals and SOPs, smallest footprint', cost: money(small) + ' server', lic: null },
+  { slug: 'requarks--wiki', name: 'Wiki.js, self-hosted', best: 'A classic wiki on PostgreSQL', cost: money(small) + ' server', lic: null },
+].map(r => ({ ...r, l: r.slug ? get(r.slug) : undefined }));
+const fetched = rows.find(r => r.l)?.l?.fetchedAt;
+const images = [
+  { label: 'BookStack v26.09.3 (linuxserver)', v: 95.9 },
+  { label: 'Docmost 0.98.0', v: 132.9 },
+  { label: 'Outline 1.13.0', v: 269.6 },
+  { label: 'Wiki.js 3.6.0', v: 819.7 },
+];
+const maxI = 820;
+const faq = [
+  { q: 'Is there a free open-source alternative to Confluence?', a: 'Yes. BookStack (MIT), Wiki.js (AGPL-3.0) and Docmost’s Community edition (AGPL-3.0) are free to self-host with no user limit. Outline’s Community edition is free too, under the Business Source License 1.1, which allows internal use but not selling it as a hosted document service. You pay only for the server: about ' + money(small) + ' to ' + money(big) + ' a month on DigitalOcean with backups.' },
+  { q: 'How much does Confluence cost for 25 users?', a: 'Read ' + CHECKED + ' on Atlassian’s pricing page: Standard is $5.78 per user per month and Premium $11.16, so about ' + money(5.78 * users) + ' or ' + money(11.16 * users) + ' a month for 25 users. Atlassian prices by user tier, so your exact bill can differ a little. The Free plan covers up to 10 users.' },
+  { q: 'Which Confluence alternative can import my Confluence spaces?', a: 'Docmost and Outline both list a Confluence importer, but only on paid plans: Docmost’s pricing FAQ puts Confluence import in Business ($6 per seat a month, 10-seat minimum), and Outline’s pricing table shows the importer on its cloud Business plan, not Standard. I didn’t see a Confluence importer on the BookStack or Wiki.js pages I read, so plan on exporting from Confluence and moving pages by hand or through their APIs.' },
+  { q: 'What server do I need to self-host a Confluence alternative?', a: 'Wiki.js’s requirements page asks for at least 1 GB of RAM and says the process usually sits around 70 MB. BookStack needs PHP 8.2+ and MySQL 8.0 or MariaDB 10.6. Docmost’s official compose file runs the app with PostgreSQL 18 and Redis 8. For 25 people I’d use a 2 GB server for BookStack or Wiki.js and 4 GB for Docmost or Outline, since those run PostgreSQL and Redis next to a Node app. That sizing is my estimate, not the vendors’.' },
+  { q: 'Is Outline open source?', a: 'Not in the OSI sense. The repo is public, but the license is the Business Source License 1.1 from General Outline, Inc., with a grant that lets you use it as long as you don’t offer it as a commercial document service. For running it for your own team, that’s fine.' },
+  { q: 'Is Docmost a good Confluence replacement?', a: 'It’s the one built most directly as one: spaces, real-time editing, diagrams and a Confluence import. The catch is that import, SSO and granular page permissions are in the paid Business edition. If you need those, budget ' + money(6 * users) + ' a month for 25 users on top of the server, which is still about the same as Confluence Standard.' },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<section style="padding-top:6px"><div class="wrap prose">
+<p class="note"><b>Checked on {CHECKED}.</b> GitHub numbers refresh nightly{fetched && <> (last fetch {fmtDate(fetched)})</>}. Prices are from each vendor’s page that night, in US dollars, before tax. <b>Disclosure:</b> no affiliate links on this page. Atlassian, Outline, Docmost, BookStack, Wiki.js and DigitalOcean don’t pay us. <a href="/disclosure/">How this site makes money</a>.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li><b>You want the closest thing to Confluence:</b> <a href="/tool/docmost--docmost/">Docmost</a>. Spaces, real-time editing and diagrams, free to self-host; Confluence import is in the paid edition.</li>
+  <li><b>You don’t want to run a server:</b> <a href="/tool/outline--outline/">Outline Cloud</a> at $30 per user a year, about {money(30 * users / 12)} a month for 25 people.</li>
+  <li><b>You write manuals, SOPs and how-tos:</b> <a href="/tool/bookstackapp--bookstack/">BookStack</a>. MIT license, books-chapters-pages structure, and the smallest image here.</li>
+  <li><b>You’re 10 people or fewer:</b> Confluence Free may be all you need. Switching saves nothing until you outgrow it.</li>
+</ul>
+
+<h2>What 25 users cost per month</h2>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">Best for</th><th scope="col">25 users, per month</th><th scope="col">License</th><th scope="col">Last push</th></tr></thead>
+<tbody>
+{rows.map(r => <tr>
+  <th scope="row">{r.l ? <a href={'/tool/' + r.slug + '/'}>{r.name}</a> : r.name}</th>
+  <td>{r.best}</td>
+  <td><span class="usd">{r.cost}</span></td>
+  <td>{r.lic ?? (r.l ? licLabel(r.l.license) : '?')}</td>
+  <td>{r.l ? fmtDate(r.l.lastPush) : 'n/a'}</td>
+</tr>)}
+</tbody></table></div>
+<p class="note">Read {CHECKED}. <a href={S.conf} rel="nofollow">Confluence pricing</a>: Standard $5.78, Premium $11.16 per user per month (Premium for 25 users: {money(11.16 * users)}). <a href={S.outline} rel="nofollow">Outline pricing</a>: cloud Standard $3/user monthly or $30/user yearly, Business $4 or $40; self-hosted Business is $4/user a month billed annually with a 10-user minimum. <a href={S.docmost} rel="nofollow">Docmost pricing</a>: Community free, Business $6/seat a month billed annually, 10-seat minimum. Server rows are DigitalOcean Basic Droplets plus 20% for weekly backups (<a href={S.do} rel="nofollow">prices</a>): 2 GiB ($12) for BookStack and Wiki.js, 4 GiB ($24) for Outline and Docmost. The server sizes are my estimate, explained in the FAQ.</p>
+</div>
+
+<div class="wrap prose">
+<h2>What I checked myself</h2>
+<p>I didn’t install these tonight (my test box has no Docker), so I measured what I could: the size of each official Docker image, which is what you download and store on every upgrade. It’s also a fair hint at how much is inside each one.</p>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Image (amd64, compressed)</th><th scope="col">MB</th><th scope="col"><span class="muted small">Relative size</span></th></tr></thead>
+<tbody>
+{images.map(s => <tr><th scope="row">{s.label}</th><td>{s.v.toLocaleString('en-US')}</td><td><span style={'display:inline-block;height:10px;background:currentColor;opacity:.5;width:' + Math.max(2, Math.round(s.v / maxI * 220)) + 'px'}></span></td></tr>)}
+</tbody></table></div></div>
+<div class="wrap prose">
+<p class="note">From Docker Hub tag pages, read {CHECKED}: <a href={S.hubBookstack} rel="nofollow">linuxserver/bookstack</a> (BookStack doesn’t publish its own image; this is the common community one), <a href={S.hubDocmost} rel="nofollow">docmost/docmost</a>, <a href={S.hubOutline} rel="nofollow">outlinewiki/outline</a> and <a href={S.hubWiki} rel="nofollow">requarks/wiki</a>. None of these include the database: Docmost and Outline also need PostgreSQL and Redis, BookStack needs MySQL or MariaDB, and Wiki.js recommends PostgreSQL.</p>
+<p>Wiki.js 3.6.0 came out on Nov 22, 2026, and its image is about six times the size of Docmost’s. That doesn’t make it slow, but it is the heaviest download here by a wide margin.</p>
+
+<h2>My picks, and why</h2>
+<ul>
+  <li><b>Best open-source Confluence alternative overall: Docmost.</b> It’s the one that maps most directly onto how teams use Confluence (spaces, real-time editing, diagrams), and the free edition has no user cap. If you need Confluence import or SSO, the Business edition at $6 a seat still costs about what Confluence Standard does, so the reason to switch then is owning your data, not saving money.</li>
+  <li><b>Best hosted: Outline.</b> $30 per user a year is about half of Confluence Standard. Its Confluence importer is on the Business plan ($40 per user a year). Self-hosting the Community edition is allowed for your own team under its license.</li>
+  <li><b>Best for documentation people actually follow: BookStack.</b> The fixed shelves-books-chapters-pages structure is a limit for free-form notes but a help for manuals, onboarding and SOPs. It runs on a plain PHP and MySQL stack that a cheap server handles easily.</li>
+  <li><b>Wiki.js</b> if you want a traditional wiki and already run PostgreSQL. It needs at least 1 GB of RAM per its docs.</li>
+  <li><b>Stay on Confluence if</b> you live in Jira, you’re on the Free plan, or you depend on Marketplace apps. None of these replace Jira links and macros one for one.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I haven’t run these four with real content yet. Image sizes are measured; RAM figures are from the vendors’ docs, and the server sizes in the table are my estimate.</li>
+  <li>I didn’t test any Confluence import. Docmost and Outline say they have one on paid plans; how well macros, attachments and page history come across is something to try with one space before you commit.</li>
+  <li>Server costs leave out a domain, email sending, file storage for big attachments and your time on updates and backups.</li>
+  <li>Atlassian prices by user tier and changes them from time to time. The date at the top is when I read every price.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/compare/notion-vs-appflowy-vs-affine/">Notion vs AppFlowy vs AFFiNE</a>, if your team uses Notion rather than Confluence (includes a real AFFiNE self-host test)</li>
+  <li><a href="/alternatives/notion/">Open-source Notion alternatives</a></li>
+  <li><a href="/category/knowledge-base/">All open-source knowledge base and wiki tools</a></li>
+</ul>
+</div></section>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

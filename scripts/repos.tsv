@@ -76,3 +76,6 @@ nhost/nhost	backend	Firebase	Nhost
 activepieces/activepieces	automation	Zapier	Activepieces
 huginn/huginn	automation	Zapier	Huginn
 node-red/node-red	automation	Zapier	Node-RED
+BookStackApp/BookStack	knowledge-base	Confluence	BookStack
+requarks/wiki	knowledge-base	Confluence	Wiki.js
+docmost/docmost	knowledge-base	Confluence	Docmost
