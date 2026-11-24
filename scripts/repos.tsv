@@ -48,6 +48,8 @@ RocketChat/Rocket.Chat	team-chat	Slack	Rocket.Chat
 outline/outline	knowledge-base	Confluence	Outline
 AppFlowy-IO/AppFlowy	knowledge-base	Notion	AppFlowy
 opf/openproject	project-management	Microsoft Project	OpenProject
+redmine/redmine	project-management	Microsoft Project	Redmine
+bardsoftware/ganttproject	project-management	Microsoft Project	GanttProject
 go-vikunja/vikunja	project-management	Todoist	Vikunja
 frappe/helpdesk	helpdesk	Zendesk	Frappe Helpdesk
 heyform/heyform	forms	Typeform	HeyForm

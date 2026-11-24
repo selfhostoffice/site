@@ -1,0 +1,140 @@
+---
+import { listings, fmtDate, licLabel } from '../../lib/data';
+const CHECKED = 'Nov 24, 2026';
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const get = (slug: string) => listings.find(l => l.slug === slug);
+const S = {
+  msProject: 'https://www.microsoft.com/en-us/microsoft-365/project/compare-microsoft-project-management-software',
+  msPlanner: 'https://www.microsoft.com/en-us/microsoft-365/planner/microsoft-planner-plans-and-pricing',
+  op: 'https://www.openproject.org/pricing/',
+  opReq: 'https://www.openproject.org/docs/installation-and-operations/system-requirements/',
+  redmine: 'https://www.redmine.org/projects/redmine/wiki/',
+  redmineInstall: 'https://www.redmine.org/projects/redmine/wiki/RedmineInstall',
+  gantt: 'https://www.ganttproject.biz/',
+  plane: 'https://plane.so/pricing',
+  leantime: 'https://leantime.io/pricing/',
+  ecb: 'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/eurofxref-graph-usd.en.html',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  hubOp: 'https://hub.docker.com/r/openproject/openproject/tags',
+  hubRedmine: 'https://hub.docker.com/_/redmine/tags',
+  hubLeantime: 'https://hub.docker.com/r/leantime/leantime/tags',
+  hubPlane: 'https://hub.docker.com/r/makeplane/plane-backend/tags',
+};
+// Read Nov 24, 2026, ~1 AM CT, USD unless noted.
+// Microsoft (Planner pricing page): Planner Plan 1 $10.00/user/mo paid yearly; Planner and Project Plan 3 $30.00/user/mo paid yearly
+//   (adds baselines, critical path, lead/lag dependencies, Project desktop on up to 5 PCs). Project Standard 2024 $679.99 and
+//   Project Professional 2024 $1,129.99 one-time, one user, one PC.
+// OpenProject pricing: Community free, no minimum; Basic EUR 5.95, Professional EUR 10.95 (25-user minimum), Premium EUR 15.95 (100 min),
+//   per user per month; 1-month term only for Cloud Basic (+EUR 1/user). Gantt charts in every edition incl. Community;
+//   Community baseline = compare to yesterday only; Gantt PDF export not in Community.
+// OpenProject system requirements: 4 cores, 4096 MB RAM, 20 GB disk for one server up to 200 users.
+// ECB reference rate Nov 23, 2026: 1 EUR = 1.0939 USD.
+// Plane: Free $0, Pro $6, Business $13 per seat per month; Gantt is one of its five layouts. Leantime Pro: $10/user monthly, $8 yearly.
+// GanttProject site: free, Windows/macOS/Linux, reads MPX, MPP and XML/MSPDI, exports XML/MSPDI. Redmine wiki: GPL v2, Gantt + calendar.
+// DigitalOcean Basic: 2 GiB/1 vCPU $12, 8 GiB/4 vCPU $48; weekly backups +20%.
+// Docker Hub amd64 compressed: openproject 17 (Nov 19) 873.5 MB, 17-slim 404.8 MB; redmine 7.0.3 (Nov 19) 293.0 MB, 7.0.3-alpine 230.9 MB;
+//   leantime 3.17.0 (Nov 23) 315.7 MB; makeplane/plane-backend v1.5.0 (Nov 16) 106.2 MB + plane-frontend v1.5.0 66.6 MB.
+const users = 10;
+const ECB = 1.0939;
+const eur = (e: number) => Math.round(e * ECB * 100) / 100;
+const opBasic25 = Math.round(5.95 * ECB * 25 * 100) / 100;
+const opServer = 48 * 1.2, small = 12 * 1.2;
+const rows = [
+  { slug: '', name: 'Planner and Project Plan 3', best: 'Reference point: the cloud plan that includes Project desktop', cost: money(30 * users), lic: 'Proprietary' },
+  { slug: '', name: 'Planner Plan 1', best: 'Microsoft’s cheaper web plan with a Gantt timeline', cost: money(10 * users), lic: 'Proprietary' },
+  { slug: '', name: 'Project Standard 2024', best: 'Desktop, one-time purchase', cost: money(679.99 * users) + ' once (one PC each)', lic: 'Proprietary' },
+  { slug: 'opf--openproject', name: 'OpenProject Community, self-hosted', best: 'Closest web replacement: Gantt, dependencies, many projects', cost: money(opServer) + ' server', lic: null },
+  { slug: 'opf--openproject', name: 'OpenProject Enterprise Basic', best: 'Same, with vendor support and Enterprise add-ons', cost: money(opBasic25) + ' (25-user minimum, yearly)', lic: null },
+  { slug: 'redmine--redmine', name: 'Redmine, self-hosted', best: 'Issue tracking with a Gantt chart, small server', cost: money(small) + ' server', lic: 'GPL-2.0' },
+  { slug: 'bardsoftware--ganttproject', name: 'GanttProject', best: 'Desktop replacement that opens .mpp files', cost: '$0 (runs on each PC)', lic: null },
+  { slug: 'makeplane--plane', name: 'Plane Cloud Pro', best: 'Modern hosted tracker with a Gantt layout', cost: money(6 * users), lic: null },
+].map(r => ({ ...r, l: r.slug ? get(r.slug) : undefined }));
+const fetched = rows.find(r => r.l)?.l?.fetchedAt;
+const images = [
+  { label: 'Plane v1.5.0 (backend + frontend)', v: 172.8 },
+  { label: 'Redmine 7.0.3 (alpine)', v: 230.9 },
+  { label: 'Redmine 7.0.3', v: 293.0 },
+  { label: 'Leantime 3.17.0', v: 315.7 },
+  { label: 'OpenProject 17 (slim)', v: 404.8 },
+  { label: 'OpenProject 17 (all-in-one)', v: 873.5 },
+];
+const maxI = 874;
+const faq = [
+  { q: 'Is there a free open-source alternative to Microsoft Project?', a: 'Yes, three that are free with no user limit: OpenProject’s Community edition (GPL-3.0, web, self-hosted), Redmine (GPL v2, web, self-hosted) and GanttProject (GPL-3.0, a desktop app for Windows, macOS and Linux). If you want something that looks and works like the Project desktop app, start with GanttProject. If your team needs to update one shared plan in a browser, start with OpenProject.' },
+  { q: 'Can I open .mpp files without Microsoft Project?', a: 'GanttProject’s site says it reads MPX, MPP and XML (MSPDI) files from Microsoft Project and exports to XML (MSPDI), so you can trade files with people who still use Project. I haven’t tested an import myself, so try it on a copy of one real plan before you cancel anything. If you can, save from Project as XML too, since that’s the format GanttProject writes back.' },
+  { q: 'How much does Microsoft Project cost in 2026?', a: 'Read ' + CHECKED + ' on Microsoft’s pages: Planner Plan 1 is $10 per user a month and Planner and Project Plan 3 (the plan that includes the Project desktop app) is $30, both paid yearly. The one-time desktop versions are Project Standard 2024 at $679.99 and Project Professional 2024 at $1,129.99, each licensed for one user on one PC. For 10 people that is ' + money(300) + ' a month on Plan 3 or ' + money(6799.9) + ' up front for Standard.' },
+  { q: 'Does the free OpenProject edition have Gantt charts?', a: 'Yes. OpenProject’s pricing table marks Gantt charts and timelines as included in every edition, Community included. Two things related to scheduling are not in the free edition: full baseline comparison (Community can only compare to yesterday) and exporting the Gantt chart to PDF.' },
+  { q: 'What server do I need for OpenProject?', a: 'OpenProject’s system requirements ask for a quad-core CPU, 4,096 MB of RAM and 20 GB of disk for a single server with up to 200 users. On DigitalOcean that is the 8 GiB, 4 vCPU Basic Droplet at $48 a month, or ' + money(opServer) + ' with weekly backups. The docs say what really drives the size is how many people use it at the same time, not the total user count.' },
+  { q: 'OpenProject or Redmine?', a: 'Both are free, web-based and have a Gantt chart. OpenProject is the closer match to Microsoft Project: work package scheduling, dependencies and a Gantt view built for planning, plus a paid tier with support. Redmine is older and simpler, a Ruby on Rails issue tracker with Gantt and calendar views, and it runs on a much smaller server. Pick Redmine if your “project plan” is mostly a list of tasks with dates; pick OpenProject if you schedule real dependencies.' },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<section style="padding-top:6px"><div class="wrap prose">
+<p class="note"><b>Checked on {CHECKED}.</b> GitHub numbers refresh nightly{fetched && <> (last fetch {fmtDate(fetched)})</>}. Prices are from each vendor’s page that night, in US dollars, before tax; OpenProject prices in euros are converted at the ECB rate for Nov 23, 2026 (1 EUR = {ECB} USD). <b>Disclosure:</b> no affiliate links on this page. Microsoft, OpenProject, Redmine, GanttProject, Plane, Leantime and DigitalOcean don’t pay us. <a href="/disclosure/">How this site makes money</a>.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li><b>You use Project on your own PC and send .mpp files around:</b> <a href="/tool/bardsoftware--ganttproject/">GanttProject</a>. Free desktop app, and its site says it opens MPP files.</li>
+  <li><b>Your team updates one plan together in a browser:</b> <a href="/tool/opf--openproject/">OpenProject</a> Community. Gantt charts and dependencies are in the free edition.</li>
+  <li><b>You mostly track tasks with dates:</b> <a href="/tool/redmine--redmine/">Redmine</a> on a {money(small)}-a-month server.</li>
+  <li><b>You need baselines, critical path and resource leveling exactly as Project does them:</b> stay on Project. None of these copy all of it, and the free OpenProject edition only compares a baseline to yesterday.</li>
+</ul>
+
+<h2>What 10 users cost per month</h2>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">Best for</th><th scope="col">10 users</th><th scope="col">License</th><th scope="col">Last push</th></tr></thead>
+<tbody>
+{rows.map(r => <tr>
+  <th scope="row">{r.l ? <a href={'/tool/' + r.slug + '/'}>{r.name}</a> : r.name}</th>
+  <td>{r.best}</td>
+  <td><span class="usd">{r.cost}</span></td>
+  <td>{r.lic ?? (r.l ? licLabel(r.l.license) : '?')}</td>
+  <td>{r.l ? fmtDate(r.l.lastPush) : 'n/a'}</td>
+</tr>)}
+</tbody></table></div>
+<p class="note">Read {CHECKED}. <a href={S.msPlanner} rel="nofollow">Microsoft Planner and Project plans</a>: Planner Plan 1 $10, Planner and Project Plan 3 $30 per user a month, paid yearly. <a href={S.msProject} rel="nofollow">Project 2024 desktop</a>: Standard $679.99, Professional $1,129.99, one user, one PC. <a href={S.op} rel="nofollow">OpenProject pricing</a>: Community free; Basic €5.95 (about {money(eur(5.95))}) and Professional €10.95 (about {money(eur(10.95))}) per user a month with a 25-user minimum, so a 10-person team pays for 25. <a href={S.plane} rel="nofollow">Plane</a>: Free, Pro $6, Business $13 per seat a month. <a href={S.leantime} rel="nofollow">Leantime</a> hosted: $10 per user monthly or $8 yearly ({money(8 * users)} for 10). Server rows are DigitalOcean Basic Droplets plus 20% for weekly backups (<a href={S.do} rel="nofollow">prices</a>): 8 GiB / 4 vCPU ($48) for OpenProject, which is the smallest that meets its <a href={S.opReq} rel="nofollow">stated minimum</a> of 4 cores and 4 GB; 2 GiB ($12) for Redmine, which is my estimate.</p>
+</div>
+
+<div class="wrap prose">
+<h2>What I checked myself</h2>
+<p>I didn’t install these tonight (my test box has no Docker), so I measured what I could: the size of each official Docker image, which is what you download and store on every upgrade. GanttProject isn’t in the table because it’s a desktop app, not a server.</p>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Image (amd64, compressed)</th><th scope="col">MB</th><th scope="col"><span class="muted small">Relative size</span></th></tr></thead>
+<tbody>
+{images.map(s => <tr><th scope="row">{s.label}</th><td>{s.v.toLocaleString('en-US')}</td><td><span style={'display:inline-block;height:10px;background:currentColor;opacity:.5;width:' + Math.max(2, Math.round(s.v / maxI * 220)) + 'px'}></span></td></tr>)}
+</tbody></table></div></div>
+<div class="wrap prose">
+<p class="note">From Docker Hub tag pages, read {CHECKED}: <a href={S.hubOp} rel="nofollow">openproject/openproject</a> tags 17 and 17-slim, <a href={S.hubRedmine} rel="nofollow">redmine</a> (official image), <a href={S.hubLeantime} rel="nofollow">leantime/leantime</a> and <a href={S.hubPlane} rel="nofollow">makeplane/plane-backend</a> plus plane-frontend (Plane runs more containers than these two, so its real total is higher). OpenProject’s all-in-one image bundles its own database and services, which is why it’s more than twice the slim one.</p>
+<p>OpenProject also has an 18.0 release candidate on Docker Hub tonight; the numbers above are for the current 17 release.</p>
+
+<h2>My picks, and why</h2>
+<ul>
+  <li><b>Best open-source Microsoft Project alternative for teams: OpenProject.</b> It plans the way Project does, with work packages, dates, dependencies and a Gantt chart, and the Community edition has no user cap. The paid editions start at 25 users, so a small team either self-hosts the free one or pays for seats it doesn’t use.</li>
+  <li><b>Best desktop replacement: GanttProject.</b> If Project lives on one planner’s laptop and everyone else gets a PDF, this is the cheapest switch: free, cross-platform, and it says it reads your existing .mpp files. Its own site is upfront that it doesn’t copy every enterprise feature.</li>
+  <li><b>Best on a tiny server: Redmine.</b> A plain Rails app with Gantt and calendar views. It feels dated, but it has been around for years and fits on a {money(small)} server.</li>
+  <li><b>If you liked Planner more than Project:</b> <a href="/tool/makeplane--plane/">Plane</a> or <a href="/tool/leantime--leantime/">Leantime</a>, both AGPL and self-hostable. I file them under <a href="/alternatives/asana/">Asana alternatives</a>; they’re task trackers with timeline views, not schedulers.</li>
+  <li><b>Stay on Project if</b> you rely on resource leveling, earned value, Project Server or Project Online reporting. Nothing here replaces those one for one.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I haven’t run these with a real project plan yet. Image sizes are measured; hardware figures are from the vendors’ docs, and the Redmine server size is my estimate.</li>
+  <li>I didn’t test an .mpp import into any of them. GanttProject’s MPP support is its own claim.</li>
+  <li>Server costs leave out a domain, email sending, backups beyond DigitalOcean’s weekly ones and your time on updates.</li>
+  <li>OpenProject’s euro prices move with the exchange rate, and Microsoft changes Planner and Project plans from time to time. The date at the top is when I read every price.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/alternatives/asana/">Open-source Asana alternatives</a>, for lighter task tracking</li>
+  <li><a href="/category/project-management/">All open-source project management tools</a></li>
+  <li><a href="/category/time-tracking/">Open-source time tracking</a>, if you used Project’s timesheets</li>
+  <li><a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>, for picking the server</li>
+</ul>
+</div></section>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

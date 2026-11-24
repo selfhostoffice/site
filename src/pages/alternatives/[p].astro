@@ -1,5 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import ZendeskGuide from '../../components/alt/ZendeskGuide.astro'; import GoogleAnalyticsGuide from '../../components/alt/GoogleAnalyticsGuide.astro'; import NetSuiteGuide from '../../components/alt/NetSuiteGuide.astro'; import ConfluenceGuide from '../../components/alt/ConfluenceGuide.astro';
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import ZendeskGuide from '../../components/alt/ZendeskGuide.astro'; import GoogleAnalyticsGuide from '../../components/alt/GoogleAnalyticsGuide.astro'; import NetSuiteGuide from '../../components/alt/NetSuiteGuide.astro'; import ConfluenceGuide from '../../components/alt/ConfluenceGuide.astro'; import MicrosoftProjectGuide from '../../components/alt/MicrosoftProjectGuide.astro';
 import { listings, products, slugify, catName, licLabel, licFamily, kfmt, fmtDate, activityLabel, activity, avatar, daysSincePush, GUIDES } from '../../lib/data';
 export function getStaticPaths() { return products.map(p => ({ params: { p: slugify(p) }, props: { name: p } })); }
 const { name } = Astro.props; const items = listings.filter(l => l.replaces === name); const guides = GUIDES.filter(g => items.some(l => g.tools.includes(l.slug)));
@@ -39,6 +39,13 @@ const OVR: Record<string, { title: string; description: string; h1: string; intr
     description: 'Docmost, Outline, BookStack and Wiki.js as Confluence replacements: monthly cost for 25 users hosted and self-hosted, Confluence import, Docker image sizes I checked, prices read Nov 23, 2026.',
     h1: 'Open-source Confluence alternatives',
     intro: 'Four self-hostable wikis teams move to from Confluence, with what each costs for 25 people hosted and on your own server, and which ones can import your Confluence spaces',
+  },
+  'Microsoft Project': {
+    title: 'Open-source Microsoft Project alternatives: OpenProject, GanttProject, Redmine (2026)',
+    description: 'OpenProject, GanttProject and Redmine as Microsoft Project replacements: cost for 10 users vs Planner Plan 1 and Project Plan 3, .mpp file support, server sizing, Docker image sizes I checked, prices read Nov 24, 2026.',
+    h1: 'Open-source Microsoft Project alternatives',
+    intro: 'Three free, open-source tools that can take over from Microsoft Project, a web app for teams, a desktop app that opens .mpp files and a lightweight tracker, with what each costs for 10 people next to Microsoft’s plans',
+    extra: 'Plane and Leantime, which I file under Asana alternatives, are in the guide below.',
   },
 };
 const O = OVR[name];
@@ -82,5 +89,7 @@ const fetched = fmtDate(items[0].fetchedAt);
 {name === 'Google Analytics' && <GoogleAnalyticsGuide/>}
 {name === 'NetSuite' && <NetSuiteGuide/>}
 {name === 'Confluence' && <ConfluenceGuide/>}
+{name === 'Microsoft Project' && <MicrosoftProjectGuide/>}
+{name === 'Asana' && <div class="wrap"><p class="note"><b>Need Gantt charts and dependencies?</b> <a href="/alternatives/microsoft-project/">Open-source Microsoft Project alternatives</a>: OpenProject, GanttProject and Redmine, with cost for 10 users.</p></div>}
 {guides.length > 0 && <div class="wrap">{guides.map(g => <p class="note"><b>Cost guide:</b> <a href={g.href}>{g.title}</a> (prices checked {g.checked})</p>)}</div>}
 </Base>
