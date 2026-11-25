@@ -81,3 +81,4 @@ node-red/node-red	automation	Zapier	Node-RED
 BookStackApp/BookStack	knowledge-base	Confluence	BookStack
 requarks/wiki	knowledge-base	Confluence	Wiki.js
 docmost/docmost	knowledge-base	Confluence	Docmost
+frappe/crm	crm	HubSpot	Frappe CRM
