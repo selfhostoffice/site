@@ -1,5 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import ZendeskGuide from '../../components/alt/ZendeskGuide.astro'; import GoogleAnalyticsGuide from '../../components/alt/GoogleAnalyticsGuide.astro'; import NetSuiteGuide from '../../components/alt/NetSuiteGuide.astro'; import ConfluenceGuide from '../../components/alt/ConfluenceGuide.astro'; import MicrosoftProjectGuide from '../../components/alt/MicrosoftProjectGuide.astro'; import HubSpotGuide from '../../components/alt/HubSpotGuide.astro';
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import Icon from '../../components/Icon.astro'; import FeaturedSlot from '../../components/FeaturedSlot.astro'; import ZendeskGuide from '../../components/alt/ZendeskGuide.astro'; import GoogleAnalyticsGuide from '../../components/alt/GoogleAnalyticsGuide.astro'; import NetSuiteGuide from '../../components/alt/NetSuiteGuide.astro'; import ConfluenceGuide from '../../components/alt/ConfluenceGuide.astro'; import MicrosoftProjectGuide from '../../components/alt/MicrosoftProjectGuide.astro'; import HubSpotGuide from '../../components/alt/HubSpotGuide.astro'; import QuickBooksGuide from '../../components/alt/QuickBooksGuide.astro';
 import { listings, products, slugify, catName, licLabel, licFamily, kfmt, fmtDate, activityLabel, activity, avatar, daysSincePush, GUIDES } from '../../lib/data';
 export function getStaticPaths() { return products.map(p => ({ params: { p: slugify(p) }, props: { name: p } })); }
 const { name } = Astro.props; const items = listings.filter(l => l.replaces === name); const guides = GUIDES.filter(g => items.some(l => g.tools.includes(l.slug)));
@@ -54,6 +54,12 @@ const OVR: Record<string, { title: string; description: string; h1: string; intr
     intro: 'Free, self-hostable CRMs that can take over HubSpot’s sales side, with what each costs for a 5-person team hosted and on your own server next to HubSpot’s seat prices',
     extra: 'Twenty, which I file under Salesforce alternatives, is in the guide below.',
   },
+  QuickBooks: {
+    title: 'Open-source QuickBooks alternatives: Akaunting, Dolibarr, Bigcapital, Frappe Books (2026)',
+    description: 'Akaunting, Dolibarr, Bigcapital and Frappe Books as QuickBooks Online replacements: cost for 3 users vs QuickBooks Essentials at $85, hosted and self-hosted, Docker image sizes I checked, and why Midday is off the list. Prices read Nov 26, 2026.',
+    h1: 'Open-source QuickBooks alternatives',
+    intro: 'Free, self-hostable accounting software that can replace QuickBooks Online for a small business, with what each costs for 3 users hosted and on your own server next to QuickBooks’ own plans',
+  },
 };
 const O = OVR[name];
 const pick = PICKS[name];
@@ -98,6 +104,7 @@ const fetched = fmtDate(items[0].fetchedAt);
 {name === 'Confluence' && <ConfluenceGuide/>}
 {name === 'Microsoft Project' && <MicrosoftProjectGuide/>}
 {name === 'HubSpot' && <HubSpotGuide/>}
+{name === 'QuickBooks' && <QuickBooksGuide/>}
 {name === 'Salesforce' && <div class="wrap"><p class="note"><b>Smaller team?</b> <a href="/alternatives/hubspot/">Open-source HubSpot alternatives</a>: EspoCRM, Twenty, Frappe CRM and Krayin, with cost for 5 users.</p></div>}
 {name === 'Asana' && <div class="wrap"><p class="note"><b>Need Gantt charts and dependencies?</b> <a href="/alternatives/microsoft-project/">Open-source Microsoft Project alternatives</a>: OpenProject, GanttProject and Redmine, with cost for 10 users.</p></div>}
 {guides.length > 0 && <div class="wrap">{guides.map(g => <p class="note"><b>Cost guide:</b> <a href={g.href}>{g.title}</a> (prices checked {g.checked})</p>)}</div>}

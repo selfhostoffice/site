@@ -1,0 +1,150 @@
+---
+import { listings, fmtDate, licLabel } from '../../lib/data';
+const CHECKED = 'Nov 26, 2026';
+const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const get = (slug: string) => listings.find(l => l.slug === slug);
+const S = {
+  qb: 'https://quickbooks.intuit.com/pricing/',
+  ak: 'https://akaunting.com/pricing',
+  akOnprem: 'https://akaunting.com/plans-on-premise',
+  akReq: 'https://github.com/akaunting/akaunting#requirements',
+  doli: 'https://www.dolicloud.com/en-faq-pricing.php',
+  doliReq: 'https://wiki.dolibarr.org/index.php/Prerequisites',
+  bigcap: 'https://bigcapital.app/',
+  bigcapCompose: 'https://github.com/bigcapitalhq/bigcapital/blob/develop/docker-compose.prod.yml',
+  books: 'https://frappe.io/books',
+  midday: 'https://midday.ai/pricing',
+  ecb: 'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html',
+  do: 'https://www.digitalocean.com/pricing/droplets',
+  hubAk: 'https://hub.docker.com/r/akaunting/akaunting/tags',
+  hubDoli: 'https://hub.docker.com/r/dolibarr/dolibarr/tags',
+  hubBig: 'https://hub.docker.com/r/bigcapitalhq/server/tags',
+  booksRel: 'https://github.com/frappe/books/releases',
+};
+// Read Nov 26, 2026, ~1 AM CT, USD unless noted.
+// QuickBooks Online (US, quickbooks.intuit.com/pricing): Free $0 (1 user, 2 invoices/mo, 1 bank); Simple Start $38 (promo $11.40), access for 2 accountants;
+//   Essentials $85 (promo $25.50), 3 users; Plus $140 (promo $42), user cap not shown in tonight's copy (5 on Nov 6); Advanced $340 (promo $102), 25 users, 3 accountants.
+// Akaunting Cloud: Standard $12 mo / $8 yearly; Premium $36 / $24; Elite $84 / $56; Ultimate $218 / $145. Discount banner "until December 1st" ignored.
+// Akaunting On-Premise: Standard free (1 company, 1 user + 1 accountant, 1,000 invoices); Premium $72/yr or $756 lifetime (10 companies, 10 users, 10,000 invoices);
+//   Elite $168/yr; Ultimate $684/yr. Discounted figures on the page ignored.
+// DoliCloud: Basic EUR 14/user/mo (4 GB, 250 emails/day, daily backup 30 days, datacenter in France); Premium EUR 30/mo + EUR 15/user/mo (20 GB). Prices excl. tax.
+// ECB reference rate Nov 25, 2026: 1 EUR = 1.0935 USD.
+// Bigcapital: bigcapital.app has no pricing page tonight (/pricing returns 404); home page says self-hosting is free under AGPL-3.0 and a managed cloud exists.
+//   Third-party reviews (Apr-Oct 2026) list Capital Basic $20/mo with unlimited users; not confirmed on Bigcapital's own site, so not used in the table.
+//   docker-compose.prod.yml services: envoy proxy, webapp, server, migration, mysql, redis, gotenberg, garage (S3), clickhouse, watchtower.
+// Frappe Books (frappe.io/books): now runs on the Frappe Framework on your own server; "The old desktop app is no longer supported". Free, AGPL-3.0.
+// Midday (midday.ai/pricing now shows "Midday is joining Ramp"): product winding down over three months, accounts stay active 90 days with data export.
+// DigitalOcean Basic: 2 GiB $12, 4 GiB $24; weekly backups +20%.
+// Docker Hub amd64 compressed: akaunting/akaunting latest 313.7 MB, 3.3.2-fpm 307.7, 3-fpm-alpine 284.5 (Nov 22); dolibarr/dolibarr 24 332.9 MB (Nov 21, GitHub release 24.0.4 is Nov 25, no 24.0.4 tag yet);
+//   bigcapitalhq/server v0.25.48 349.1 MB + bigcapitalhq/webapp v0.25.48 30.2 MB (Nov 21). Frappe Books v0.36.0 desktop release (Nov 6, 2025): .deb 73.0 MB, AppImage 104.0 MB, Windows x64 75.6 MB.
+const users = 3;
+const eur = 1.0935;
+const small = 12 * 1.2, mid = 24 * 1.2;
+const rows = [
+  { slug: '', name: 'QuickBooks Online Essentials', best: 'Reference point: the 3-user plan', cost: money(85) + ' list', lic: 'Proprietary' },
+  { slug: '', name: 'QuickBooks Online Simple Start', best: 'Reference point: 1 user only', cost: money(38) + ' (1 user)', lic: 'Proprietary' },
+  { slug: 'akaunting--akaunting', name: 'Akaunting Cloud Premium', best: 'Hosted, simple invoicing and books', cost: money(36) + ' (' + money(24) + ' yearly)', lic: null },
+  { slug: 'akaunting--akaunting', name: 'Akaunting, self-hosted', best: 'Cheapest simple setup on your own server', cost: money(small + 72 / 12) + ' (' + money(72) + '/yr license + server)', lic: null },
+  { slug: 'dolibarr--dolibarr', name: 'Dolibarr, self-hosted', best: 'Books plus CRM, stock, orders, HR', cost: money(small) + ' server', lic: null },
+  { slug: 'dolibarr--dolibarr', name: 'DoliCloud Basic', best: 'Same, hosted in France', cost: money(Math.round(14 * users * eur * 100) / 100) + ' (€' + 14 * users + ')', lic: null },
+  { slug: 'bigcapitalhq--bigcapital', name: 'Bigcapital, self-hosted', best: 'Closest QuickBooks Online feature list', cost: money(mid) + ' server', lic: null },
+  { slug: 'frappe--books', name: 'Frappe Books, self-hosted', best: 'Free, POS and inventory built in', cost: money(small) + ' server', lic: null },
+].map(r => ({ ...r, l: r.slug ? get(r.slug) : undefined }));
+const fetched = rows.find(r => r.l)?.l?.fetchedAt;
+const images = [
+  { label: 'Bigcapital v0.25.48 webapp', v: 30.2 },
+  { label: 'Akaunting 3.3.2 (fpm-alpine)', v: 284.5 },
+  { label: 'Akaunting latest', v: 313.7 },
+  { label: 'Dolibarr 24', v: 332.9 },
+  { label: 'Bigcapital v0.25.48 server (plus MySQL, Redis, ClickHouse and 4 more)', v: 349.1 },
+];
+const maxI = 360;
+const faq = [
+  { q: 'Is there a free open-source alternative to QuickBooks?', a: 'Yes. Dolibarr (GPL-3.0), Bigcapital (AGPL-3.0) and Frappe Books (AGPL-3.0) are free to self-host with no user limit, and Akaunting’s self-hosted Standard edition is free for one user plus one accountant. You pay for the server: about ' + money(small) + ' a month for a 2 GiB DigitalOcean server with weekly backups, or ' + money(mid) + ' for 4 GiB.' },
+  { q: 'How much does QuickBooks Online cost in 2026?', a: 'On ' + CHECKED + ', Intuit’s US pricing page listed Simple Start at $38 a month, Essentials at $85 (3 users), Plus at $140 and Advanced at $340 (25 users). It also showed a lower first-months price beside each (for example $25.50 for Essentials); the higher number is what the plan renews at. The Free plan is $0 for 1 user and 2 invoices a month.' },
+  { q: 'Which open-source option is closest to QuickBooks Online?', a: 'By feature list, Bigcapital: bank feed syncing and reconciliation, purchase and sales invoices, inventory, multi-currency, branches and role-based access, according to its own site. The cost is a heavier server stack. Akaunting is simpler and closer to QuickBooks Simple Start. Dolibarr does more than accounting (CRM, orders, stock, HR) but feels like an ERP, not like QuickBooks.' },
+  { q: 'Can I move my QuickBooks data?', a: 'I haven’t tested a QuickBooks migration into any of these. The practical route is to start the new books at a clean date: export customers, vendors, items and the chart of accounts from QuickBooks as Excel or CSV, enter opening balances, and keep the old transaction history in a QuickBooks export. Ask your accountant before you cancel, especially near year end.' },
+  { q: 'Is Midday still a QuickBooks alternative?', a: 'Not for new users. When I checked on ' + CHECKED + ', Midday’s pricing page had been replaced by a note that Midday is joining Ramp and will wind the product down over three months, with accounts kept active for 90 days for data export. The code is still on GitHub under AGPL-3.0, but I wouldn’t start new books on it.' },
+  { q: 'Do these handle US payroll and sales tax?', a: 'I haven’t verified US payroll in any of them, so if QuickBooks runs your payroll, plan on keeping a separate payroll service. Each of them can add sales tax or VAT to invoices; check that its tax reports match what your state needs before you switch.' },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<section style="padding-top:6px"><div class="wrap prose">
+<p class="note"><b>Checked on {CHECKED}.</b> GitHub numbers refresh nightly{fetched && <> (last fetch {fmtDate(fetched)})</>}. Prices are from each vendor’s page that night, in US dollars, before tax. DoliCloud bills in euros; I converted at the ECB reference rate for Nov 25, 2026 (1 EUR = 1.0935 USD, <a href={S.ecb} rel="nofollow">source</a>). <b>Disclosure:</b> no affiliate links on this page. Intuit, Akaunting, Dolibarr, Bigcapital, Frappe and DigitalOcean don’t pay us. <a href="/disclosure/">How this site makes money</a>.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li><b>You want something like QuickBooks Simple Start, cheap:</b> <a href="/tool/akaunting--akaunting/">Akaunting</a>. Free self-hosted for one user plus your accountant, or {money(24)} a month hosted (billed yearly).</li>
+  <li><b>You want the closest match to QuickBooks Online’s features:</b> <a href="/tool/bigcapitalhq--bigcapital/">Bigcapital</a>, if someone on your team can run a multi-container Docker setup.</li>
+  <li><b>You need orders, stock and a CRM next to the books:</b> <a href="/tool/dolibarr--dolibarr/">Dolibarr</a>, self-hosted or on DoliCloud.</li>
+  <li><b>You mostly send invoices:</b> an invoicing app may be enough. See <a href="/compare/akaunting-vs-invoice-ninja-vs-quickbooks/">Akaunting vs Invoice Ninja vs QuickBooks</a>.</li>
+  <li><b>Skip Midday</b> for now: it’s being wound down (details below).</li>
+</ul>
+
+<h2>What 3 users cost per month</h2>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Option</th><th scope="col">Best for</th><th scope="col">3 users</th><th scope="col">License</th><th scope="col">Last push</th></tr></thead>
+<tbody>
+{rows.map(r => <tr>
+  <th scope="row">{r.l ? <a href={'/tool/' + r.slug + '/'}>{r.name}</a> : r.name}</th>
+  <td>{r.best}</td>
+  <td><span class="usd">{r.cost}</span></td>
+  <td>{r.lic ?? (r.l ? licLabel(r.l.license) : '?')}</td>
+  <td>{r.l ? fmtDate(r.l.lastPush) : 'n/a'}</td>
+</tr>)}
+</tbody></table></div>
+<p class="note">Read {CHECKED}. <a href={S.qb} rel="nofollow">QuickBooks Online</a> (US): Simple Start $38, Essentials $85 for 3 users, Plus $140, Advanced $340 for 25 users, per company a month; the page also shows first-months promo prices ($11.40, $25.50, $42, $102), which I left out because they don’t last. <a href={S.ak} rel="nofollow">Akaunting Cloud</a>: Standard $12, Premium $36, Elite $84 a month, or $8 / $24 / $56 billed yearly. <a href={S.akOnprem} rel="nofollow">Akaunting On-Premise</a>: Standard is free for 1 user plus 1 accountant, so 3 users need Premium at $72 a year (10 users). <a href={S.doli} rel="nofollow">DoliCloud</a>: Basic €14 per user a month, Premium €30 plus €15 per user. Server rows are DigitalOcean Basic Droplets plus 20% for weekly backups (<a href={S.do} rel="nofollow">prices</a>): 2 GiB ($12) for Akaunting, Dolibarr and Frappe Books, 4 GiB ($24) for Bigcapital. Those sizes are my estimates, not vendor numbers. Bigcapital’s site has no pricing page tonight, so its hosted plan isn’t in the table; reviews from earlier this year quote $20 a month with unlimited users, which I couldn’t confirm.</p>
+</div>
+
+<div class="wrap prose">
+<h2>What I checked myself</h2>
+<p>I didn’t install these tonight (my test box has no Docker), so I measured what I could from the outside: the official Docker images you’d pull, and how each stack is put together.</p>
+</div>
+<div class="wrap"><div class="compare-wrap"><table class="compare">
+<thead><tr><th scope="col">Image (amd64, compressed)</th><th scope="col">MB</th><th scope="col"><span class="muted small">Relative size</span></th></tr></thead>
+<tbody>
+{images.map(s => <tr><th scope="row">{s.label}</th><td>{s.v.toLocaleString('en-US')}</td><td><span style={'display:inline-block;height:10px;background:currentColor;opacity:.5;width:' + Math.max(2, Math.round(s.v / maxI * 220)) + 'px'}></span></td></tr>)}
+</tbody></table></div></div>
+<div class="wrap prose">
+<p class="note">From Docker Hub tag pages, read {CHECKED}: <a href={S.hubAk} rel="nofollow">akaunting/akaunting</a> (pushed Nov 22), <a href={S.hubDoli} rel="nofollow">dolibarr/dolibarr</a> (Nov 21) and <a href={S.hubBig} rel="nofollow">bigcapitalhq/server</a> (Nov 21).</p>
+<ul>
+  <li><b>Bigcapital is the heaviest to run.</b> Its <a href={S.bigcapCompose} rel="nofollow">production compose file</a> starts ten services: the web app and API, a migration job, MySQL, Redis, Gotenberg for PDFs, Garage for file storage, ClickHouse, an Envoy proxy and Watchtower for auto-updates. That’s why I’d give it 4 GiB.</li>
+  <li><b>Akaunting and Dolibarr are classic PHP apps</b> that need only a database next to them (<a href={S.akReq} rel="nofollow">Akaunting’s requirements</a>: PHP 8.2+, MySQL, MariaDB, PostgreSQL or SQLite; <a href={S.doliReq} rel="nofollow">Dolibarr’s</a>: PHP with MariaDB, MySQL or PostgreSQL). Both also run on ordinary shared PHP hosting.</li>
+  <li><b>Dolibarr’s Docker image trails its releases.</b> Version 24.0.4 was released on GitHub on Nov 25, but Docker Hub had no 24.0.4 tag yet; the <code>24</code> tag was last pushed Nov 21.</li>
+  <li><b>Frappe Books changed shape.</b> Its <a href={S.books} rel="nofollow">page</a> now says it runs on the Frappe Framework on your own server and that “the old desktop app is no longer supported.” The last desktop release on <a href={S.booksRel} rel="nofollow">GitHub</a> is v0.36.0 from Nov 6, 2025 (a 73 MB .deb, 76 MB for Windows x64). If you find an old guide calling it an offline desktop app, that’s out of date.</li>
+</ul>
+
+<h2>Midday is shutting down</h2>
+<p>Midday shows up on most “open-source QuickBooks alternative” lists, mine included, because of its GitHub star count. On {CHECKED} its <a href={S.midday} rel="nofollow">pricing page</a> had been replaced by a letter from the founders: Midday is joining Ramp, the product is being wound down over three months, annual plans get refunds, and accounts stay active for 90 days with full data export. The repository hasn’t had a push since {fmtDate(get('midday-ai--midday')?.lastPush)}. I’m keeping the listing so people searching for it find this, but I don’t recommend it for new books.</p>
+
+<h2>My picks, and why</h2>
+<ul>
+  <li><b>Best for a one- or two-person business: Akaunting.</b> Free self-hosted for a single user plus an accountant, a small PHP app, and a hosted plan if you don’t want a server. Watch the paid app store: some features are add-ons, and the free edition caps you at 1,000 invoices.</li>
+  <li><b>Closest to QuickBooks Online: Bigcapital.</b> Bank feeds, reconciliation, inventory, multi-currency, branches and role-based access are all on its own feature list. It’s the youngest of the four (v0.25 tonight) and the most work to host.</li>
+  <li><b>Best when accounting is only part of the job: Dolibarr.</b> Quotes, orders, stock, CRM, HR and accounting as modules you switch on. It’s a mature project that ships often (a new release came out the day before I checked), but the interface is plain and the accounting module takes some setup.</li>
+  <li><b>Worth a look if you sell over a counter: Frappe Books.</b> Free, with point of sale, batches and serial numbers built in, and GST reports for India. The move from desktop app to server app is recent, so I’d wait for that to settle before trusting it with a US business’s books.</li>
+  <li><b>Stay on QuickBooks if</b> your accountant lives in it, you use QuickBooks Payroll, or you rely on its bank feeds across several banks. The license savings are real (QuickBooks Essentials is {money(85 * 12)} a year at list) but switching books mid-year costs accountant time.</li>
+</ul>
+
+<h2>Honest limits</h2>
+<ul>
+  <li>I haven’t kept real books in any of these yet. Image sizes and the Bigcapital service list are measured; server sizes are my estimates.</li>
+  <li>I didn’t test a QuickBooks export into any of them.</li>
+  <li>Bigcapital’s hosted price isn’t on its own site tonight, so I left it out rather than quote a number I can’t source.</li>
+  <li>This isn’t tax or bookkeeping advice. Server costs leave out a domain, email sending, offsite backups and your time on updates.</li>
+</ul>
+
+<h2>FAQ</h2>
+{faq.map(x => <><h3>{x.q}</h3><p>{x.a}</p></>)}
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/compare/akaunting-vs-invoice-ninja-vs-quickbooks/">Akaunting vs Invoice Ninja vs QuickBooks</a>, with costs for 1, 3 and 10 people</li>
+  <li><a href="/alternatives/freshbooks/">Open-source FreshBooks alternatives</a>, if you mainly invoice</li>
+  <li><a href="/alternatives/netsuite/">Open-source NetSuite alternatives</a>, if you’re outgrowing QuickBooks into an ERP</li>
+  <li><a href="/category/accounting/">All open-source accounting software</a></li>
+  <li><a href="/compare/hetzner-vs-digitalocean-vs-vultr/">Hetzner vs DigitalOcean vs Vultr</a>, for picking the server</li>
+</ul>
+</div></section>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

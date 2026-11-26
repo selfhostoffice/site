@@ -28,6 +28,8 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
   {GUIDES.filter(g => g.tools.includes(l.slug)).map(g => <p class="note"><b>Cost guide:</b> <a href={g.href}>{g.title}</a> (prices checked {g.checked})</p>)}
   <p class="note">Source: <a href={l.source}>{l.source}</a>, fetched {fmtDate(l.fetchedAt)}. "Active" means a push within 30 days of that fetch. Maintainer? <a href={`/claim/?tool=${l.slug}`}>Claim or get featured</a>.</p>
 </div>
+{l.slug === 'midday-ai--midday' && <div class="wrap"><p class="note"><b>Heads up (checked Nov 26, 2026):</b> Midday’s pricing page now says Midday is joining Ramp and the product will be wound down over three months, with accounts kept active for 90 days for data export. I don’t recommend starting new books on it. See <a href="/alternatives/quickbooks/">open-source QuickBooks alternatives</a>.</p></div>}
+{l.slug === 'frappe--books' && <div class="wrap"><p class="note"><b>Note (checked Nov 26, 2026):</b> Frappe Books now runs on the Frappe Framework on your own server; its page says the old desktop app is no longer supported. More in <a href="/alternatives/quickbooks/">open-source QuickBooks alternatives</a>.</p></div>}
 {l.slug === 'alextselegidis--easyappointments' && <EasyAppointmentsGuide l={l} />}
 {same.length > 0 && <section><div class="wrap"><div class="sec-head"><h2>Other {l.replaces} alternatives</h2><a href={`/alternatives/${slugify(l.replaces)}/`}>Side-by-side comparison →</a></div><div class="grid">{same.map(x => <Card l={x}/>)}</div></div></section>}
 {related.length > 0 && <section style="padding-top:0"><div class="wrap"><div class="sec-head"><h2>Related in {catName(l.category)}</h2></div><div class="grid">{related.map(x => <Card l={x}/>)}</div></div></section>}
